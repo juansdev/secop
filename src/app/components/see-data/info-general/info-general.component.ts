@@ -7,6 +7,7 @@ import { BarChart, BarSeriesOption, LineChart, LineSeriesOption, PieChart, PieSe
 import { LabelLayout, UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
 import { SecopLocalService } from 'src/app/services/secop/secop-local.service';
+import { lastValueFrom, map } from 'rxjs';
 declare var $: any;
 
 use([GridComponent, TooltipComponent, LegendComponent, PieChart, BarChart, LineChart, CanvasRenderer, UniversalTransition, LabelLayout]);
@@ -54,7 +55,7 @@ export class InfoGeneralComponent {
 
   constructor(public _sharedFunctionsService: SharedFunctionsService, private _secopService: SecopService, private _secopLocalService: SecopLocalService) {}
 
-  ngOnChanges(changes: SimpleChanges) {
+  async ngOnChanges(changes: SimpleChanges) {
     if(this.myMap.getOption()){
       let department_selected = changes['department_selected']?.currentValue;
       let year_selected = changes['year_selected']?.currentValue;
@@ -72,7 +73,7 @@ export class InfoGeneralComponent {
           this._updateAllInfoDepartmentsByYear(data_by_departments, this.year_selected);
         }
         else {
-          this._loadInfoDepartmentSelectedByYear(changed_year);
+          await this._loadInfoDepartmentSelectedByYear(changed_year);
         }
       }
     }
@@ -226,7 +227,7 @@ export class InfoGeneralComponent {
     };
   }
 
-  private _loadInfoDepartmentSelectedByYear(changed_year: boolean): void {
+  private async _loadInfoDepartmentSelectedByYear(changed_year: boolean): Promise<void> {
     let dataByDepartments: any = this._sharedFunctionsService.getDataLocalOrRam('dataByDepartmentsAndYear');
     dataByDepartments = dataByDepartments ? JSON.parse(dataByDepartments) : {};
     if(!this.department_selected && this.year_selected) {
@@ -238,45 +239,11 @@ export class InfoGeneralComponent {
       // Verificar si año no existe en dataByDepartmentsAndYear
       if(Object.keys(dataByDepartments).length ? !array_years.includes(this.year_selected) && !(this.array_years.length === array_years.length) : true){
         this.is_load = true;
-        this._secopService.getDataByDepartmentsAndYear(this.department_selected, this.year_selected)
-        .subscribe((data_department: any)=>{
-          if(!this.year_selected) {
-            console.log('this.department_selected');
-            console.log(this.department_selected);
-            for (let index = 0; index < data_department.length; index++) {
-              const value_department_by_year = data_department[index];
-              const year = value_department_by_year['anno'];
-              dataByDepartments[year] = dataByDepartments[year] ? dataByDepartments[year] : {};
-              dataByDepartments[year][this.department_selected] = value_department_by_year;
-            }
-          }
-          else if(!this.department_selected) {
-            for (let index = 0; index < data_department.length; index++) {
-              const value_department_by_year = data_department[index];
-              const department = value_department_by_year['departamento'];
-              dataByDepartments[this.year_selected] = {};
-              dataByDepartments[this.year_selected][department] = value_department_by_year;
-            }
-          }
-          else {
-            dataByDepartments[this.year_selected][this.department_selected] = data_department;
-          }
-          this._sharedFunctionsService.setDataLocalOrRam('dataByDepartmentsAndYear', dataByDepartments);
-          this.is_load = false;
-          const info_department_selected = data_department;
-          this._updateInfoDepartmentSelected(info_department_selected);
-        });
-      }
-      else{
-        // Verificar si departamento no existe en año
-        const department_exist_in_year = this.year_selected 
-        ? 
-        (Object.keys(dataByDepartments[this.year_selected]).length ? Object.keys(dataByDepartments[this.year_selected]).includes(this.department_selected) : false)
-        : false;
-        if(!department_exist_in_year) {
-          this.is_load = true;
-          this._secopService.getDataByDepartmentsAndYear(this.department_selected, this.year_selected).subscribe((data_department: any)=>{
+        return await lastValueFrom(this._secopService.getDataByDepartmentsAndYear(this.department_selected, this.year_selected).pipe(
+          map((data_department: any)=>{
             if(!this.year_selected) {
+              console.log('this.department_selected');
+              console.log(this.department_selected);
               for (let index = 0; index < data_department.length; index++) {
                 const value_department_by_year = data_department[index];
                 const year = value_department_by_year['anno'];
@@ -296,9 +263,48 @@ export class InfoGeneralComponent {
               dataByDepartments[this.year_selected][this.department_selected] = data_department;
             }
             this._sharedFunctionsService.setDataLocalOrRam('dataByDepartmentsAndYear', dataByDepartments);
-            this.is_load = false;
             const info_department_selected = data_department;
             this._updateInfoDepartmentSelected(info_department_selected);
+          })
+        )).finally(()=>{
+          this.is_load = false;
+        });
+      }
+      else{
+        // Verificar si departamento no existe en año
+        const department_exist_in_year = this.year_selected 
+        ? 
+        (Object.keys(dataByDepartments[this.year_selected]).length ? Object.keys(dataByDepartments[this.year_selected]).includes(this.department_selected) : false)
+        : false;
+        if(!department_exist_in_year) {
+          this.is_load = true;
+          return await lastValueFrom(this._secopService.getDataByDepartmentsAndYear(this.department_selected, this.year_selected).pipe(
+            map((data_department: any)=>{
+              if(!this.year_selected) {
+                for (let index = 0; index < data_department.length; index++) {
+                  const value_department_by_year = data_department[index];
+                  const year = value_department_by_year['anno'];
+                  dataByDepartments[year] = dataByDepartments[year] ? dataByDepartments[year] : {};
+                  dataByDepartments[year][this.department_selected] = value_department_by_year;
+                }
+              }
+              else if(!this.department_selected) {
+                for (let index = 0; index < data_department.length; index++) {
+                  const value_department_by_year = data_department[index];
+                  const department = value_department_by_year['departamento'];
+                  dataByDepartments[this.year_selected] = {};
+                  dataByDepartments[this.year_selected][department] = value_department_by_year;
+                }
+              }
+              else {
+                dataByDepartments[this.year_selected][this.department_selected] = data_department;
+              }
+              this._sharedFunctionsService.setDataLocalOrRam('dataByDepartmentsAndYear', dataByDepartments);
+              const info_department_selected = data_department;
+              this._updateInfoDepartmentSelected(info_department_selected);
+            })
+          )).finally(()=>{
+            this.is_load = false;
           });
         }
         // Si existe año y departamento en dataByDepartments
@@ -325,17 +331,19 @@ export class InfoGeneralComponent {
     }
   }
 
-  private _updateAllInfoDepartmentsByYear(data_by_departments: any, year_selected: string, load_all_departments: boolean = false): void {
+  private async _updateAllInfoDepartmentsByYear(data_by_departments: any, year_selected: string, load_all_departments: boolean = false): Promise<void> {
     let list_name_departments_selected = this.array_departments_selected;
     list_name_departments_selected = load_all_departments ? this.array_departments_by_map.filter((val) => this.array_departments_selected.indexOf(val) === -1) : list_name_departments_selected;
     if(year_selected) {
+      console.log('data_by_departments');
+      console.log(data_by_departments);
       for (let index = 0; index < list_name_departments_selected.length; index++) {
         const name_department = list_name_departments_selected[index];
         const info_department_selected = data_by_departments[year_selected][name_department];
         if(!info_department_selected) {
           const department_selected_original = this.department_selected;
           this.department_selected = name_department;
-          this._loadInfoDepartmentSelectedByYear(false);
+          await this._loadInfoDepartmentSelectedByYear(false);
           this.department_selected = department_selected_original;
         }
         else {
@@ -376,21 +384,20 @@ export class InfoGeneralComponent {
         const name_departments: any = [...new Set(array_departments_without_data['without_year'])];
         // Debe permitir iterar el arreglo en un subscription, esperar que se reciba respuesta de la peticion y continuar con el siguiente...
         for (let index = 0; index < name_departments.length; index++) {
-          const element = name_departments[index];
-          
+          const name_department = name_departments[index];
+          const department_selected_original = this.department_selected;
+          this.department_selected = name_department;
+          console.log('this.department_selected');
+          console.log(this.department_selected);
+          await this._loadInfoDepartmentSelectedByYear(false);
+          this.department_selected = department_selected_original;          
         }
-        this._loadInfoDepartmentSelectedByYear(false);
-        // const name_department = array_departments_without_data['without_year'][0];
-        // const department_selected_original = this.department_selected;
-        // this.department_selected = name_department;
-        // this._loadInfoDepartmentSelectedByYear(false);
-        // this.department_selected = department_selected_original;
       }
       if(array_departments_without_data['without_department_in_year'].length){
         // Arreglar problema de async, await.
         const name_department = array_departments_without_data['without_department_in_year'];
         // Debe permitir iterar el arreglo en un subscription, esperar que se reciba respuesta de la peticion y continuar con el siguiente...
-        this._loadInfoDepartmentSelectedByYear(false);
+        await this._loadInfoDepartmentSelectedByYear(false);
       }
     }
   }

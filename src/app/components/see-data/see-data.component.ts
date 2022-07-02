@@ -31,17 +31,40 @@ type EChartsOption = echarts.ComposeOption<
 export class SeeDataComponent implements OnInit {
 
   @ViewChild('infoGeneral', { static: false }) infoGeneral: any;
+  @ViewChild('loadDate', { static: false }) loadDate: any;
 
   public department_selected: string = '';
   public myMap: any;
   public name_departments: Array<string> = [];
   public array_years: Array<string> = ['2017', '2018', '2019', '2020', '2021'];
   public year_selected: string = '';
+  public loaded_date: any = {};
 
-  constructor(private _secopService: SecopService, private _secopLocalService: SecopLocalService, private _sharedFunctionsService: SharedFunctionsService) { }
+  constructor(private _secopService: SecopService, private _secopLocalService: SecopLocalService, private _sharedFunctionsService: SharedFunctionsService) {
+    for (let index = 0; index < this.array_years.length; index++) {
+      const year = this.array_years[index];
+      this.loaded_date[year] = false;
+    }
+    this.loaded_date['Todos'] = false;
+  }
 
   ngOnInit(): void {
     this.mapFunction();
+  }
+
+  updateLoadDate(year: string): void {
+    if(!Object.values(this.loaded_date).every(Boolean)){
+      if(year === 'Todos'){
+        for (const key in this.loaded_date) {
+          if (Object.prototype.hasOwnProperty.call(this.loaded_date, key)) {
+            this.loaded_date[key] = true;
+          }
+        }
+      }
+      else {
+        this.loaded_date[year] = !this.loaded_date[year];
+      }
+    }
   }
 
   setDepartmentSelected(department_selected: string): void {

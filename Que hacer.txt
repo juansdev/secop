@@ -27,7 +27,7 @@ Con el tema de optimizar eso, he creado esta nueva tabla ya con los conteos, y t
 
 2. Que al dar clic en establecer un año, los datos que se carguen después corresponderían a ese año, los datos que ya habían sido cargados anteriormente mostrar solo los que corresponden al año establecido. LISTO.
 
-3. Dar opción al usuario de que mediante un botón se cargue todos los datos del año indicado de todos los departamentos (Si no hay un año definido, se cargaria de todos los años por defecto).
+3. Dar opción al usuario de que mediante un botón se cargue todos los datos del año indicado de todos los departamentos (Si no hay un año definido, se cargaria de todos los años por defecto). LISTO.
 
 4. Que al dar clic en un departamento en el desplegable izquierdo, se coloree el departamento seleccionado y además se seleccion en el mapa el departamento seleccionado y se carguen los datos correspondientes.
 

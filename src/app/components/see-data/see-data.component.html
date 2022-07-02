@@ -17,7 +17,7 @@
       </div>
       <div id="main_map" style="z-index: 1;"></div>
       <div class="position-absolute w-100 text-start d-block" style="bottom: 5vh;">
-        <button mat-raised-button color="warn" style="z-index: 3;" (click)="infoGeneral.loadAllInfoDepartmentsByYear()">
+        <button mat-raised-button #loadDate color="warn" style="z-index: 3;" (click)="infoGeneral.loadAllInfoDepartmentsByYear(); updateLoadDate(year_selected?year_selected:'Todos');" [disabled]="loaded_date[year_selected?year_selected:'Todos']">
           {{year_selected?'CARGAR TODOS LOS DATOS DEL AÑO '+year_selected:'CARGAR TODOS LOS DATOS'}}
         </button>
       </div>
