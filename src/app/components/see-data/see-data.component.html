@@ -1,0 +1,26 @@
+<div class="container-map-main">
+    <app-extension-panel (department_selected)="setDepartmentSelected($event)" id="accordion-vertical"></app-extension-panel>
+    <div class="position-relative">
+      <!-- Mostrar Años -->
+      <div class="position-absolute w-100 text-center d-block">
+        <mat-form-field appearance="fill" style="z-index: 3;">
+          <mat-label>Filtrar Datos por Año</mat-label>
+          <mat-select>
+            <mat-option value="year" (click)="year_selected='';">
+              Todos
+            </mat-option>
+            <mat-option *ngFor="let year of array_years;" [value]="year" (click)="year_selected=year;">
+              {{year}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div id="main_map" style="z-index: 1;"></div>
+      <div class="position-absolute w-100 text-start d-block" style="bottom: 5vh;">
+        <button mat-raised-button color="warn" style="z-index: 3;" (click)="infoGeneral.loadAllInfoDepartmentsByYear()">
+          {{year_selected?'CARGAR TODOS LOS DATOS DEL AÑO '+year_selected:'CARGAR TODOS LOS DATOS'}}
+        </button>
+      </div>
+    </div>
+    <app-info-general #infoGeneral [myMap]='myMap' [department_selected]="department_selected" [array_years]="array_years" [year_selected]="year_selected" id="info-general"></app-info-general>
+</div>

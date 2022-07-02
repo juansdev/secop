@@ -1,0 +1,22 @@
+.container-map-main {
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+    grid-template-rows: auto;
+}
+
+#accordion-vertical {
+    height: 100%;
+    width: 100vh;
+    transform: rotate(-90deg);
+}
+
+#main_map {
+    z-index: 3;
+    height: 100vh;
+}
+
+#info-general {
+  resize: horizontal;
+  height: 100vh;
+  overflow-y: auto;
+}

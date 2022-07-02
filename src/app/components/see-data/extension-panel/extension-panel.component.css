@@ -1,0 +1,25 @@
+/* Accordion with 3 panels, stretching from top to bottom */
+
+.panel-vertical {
+    flex-direction: column;
+}
+
+.extension-panel-vertical {
+    height: calc(110vw / 3 - 100px);
+}
+
+.panel-content-main {
+    background-color: lightblue;
+    transform-origin: top left;
+    /* rotate back */
+    margin-left: 100%;
+    /* position it */
+    height: 45vw;
+    /* real height of the content */
+    width: calc(90vw / 3 - 100px);
+    /* real width of the content, 3 is panel amount */
+}
+
+.panel-content {
+    transform: rotate(90deg);
+}

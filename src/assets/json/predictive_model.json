@@ -1,0 +1,340 @@
+{
+  "modalidades": [
+    {
+      "modalidadDeContratacion": "Concurso de diseño Arquitectónico",
+      "id": 1
+    },
+    {
+      "modalidadDeContratacion": "Selección Abreviada de Menor Cuantía (Ley 1150 de 2007)",
+      "id": 2
+    },
+    {
+      "modalidadDeContratacion": "Selección Abreviada del literal h del numeral 2 del artículo 2 de la Ley 1150 de 2007",
+      "id": 3
+    },
+    {
+      "modalidadDeContratacion": "Contratación Directa (Ley 1150 de 2007)",
+      "id": 4
+    },
+    {
+      "modalidadDeContratacion": "Selección Abreviada servicios de Salud",
+      "id": 5
+    },
+    {
+      "modalidadDeContratacion": "Otras Formas de Contratación Directa",
+      "id": 6
+    },
+    {
+      "modalidadDeContratacion": "Asociación Público Privada",
+      "id": 7
+    },
+    {
+      "modalidadDeContratacion": "Licitación obra pública",
+      "id": 8
+    },
+    {
+      "modalidadDeContratacion": "Licitación Pública",
+      "id": 9
+    },
+    {
+      "modalidadDeContratacion": "Contratos y convenios con más de dos partes",
+      "id": 10
+    },
+    {
+      "modalidadDeContratacion": "Contratación Mínima Cuantía",
+      "id": 11
+    },
+    {
+      "modalidadDeContratacion": "Concurso de Méritos con Lista Corta",
+      "id": 12
+    },
+    {
+      "modalidadDeContratacion": "Régimen Especial",
+      "id": 13
+    },
+    {
+      "modalidadDeContratacion": "Concurso de Méritos Abierto",
+      "id": 14
+    },
+    {
+      "modalidadDeContratacion": "Subasta",
+      "id": 15
+    }
+  ],
+  "objetos": [
+    {
+      "objetoAContratar": "Equipo Médico, Accesorios y Suministros",
+      "id": 1
+    },
+    {
+      "objetoAContratar": "Productos para Relojería, Joyería y Piedras Preciosas",
+      "id": 2
+    },
+    {
+      "objetoAContratar": "Artículos Domésticos, Suministros y Productos Electrónicos de Consumo",
+      "id": 3
+    },
+    {
+      "objetoAContratar": "Servicios de Minería, Petróleo y Gas",
+      "id": 4
+    },
+    {
+      "objetoAContratar": "Material Vivo Vegetal y Animal, Accesorios y Suministros",
+      "id": 5
+    },
+    {
+      "objetoAContratar": "Componentes y Suministros de Manufactura",
+      "id": 6
+    },
+    {
+      "objetoAContratar": "Servicios Políticos y de Asuntos Cívicos",
+      "id": 7
+    },
+    {
+      "objetoAContratar": "Servicios Públicos y Servicios Relacionados con el Sector Público",
+      "id": 8
+    },
+    {
+      "objetoAContratar": "Servicios Editoriales, de Diseño, de Artes Graficas y Bellas Artes",
+      "id": 9
+    },
+    {
+      "objetoAContratar": "Servicios Basados en Ingeniería, Investigación y Tecnología",
+      "id": 10
+    },
+    {
+      "objetoAContratar": "Servicios Personales y Domésticos",
+      "id": 11
+    },
+    {
+      "objetoAContratar": "Servicios de Edificación, Construcción de Instalaciones y Mantenimiento",
+      "id": 12
+    },
+    {
+      "objetoAContratar": "Medicamentos y Productos Farmacéuticos",
+      "id": 13
+    },
+    {
+      "objetoAContratar": "Equipos, Suministros y Accesorios para Deportes y Recreación",
+      "id": 14
+    },
+    {
+      "objetoAContratar": "Maquinaria y Accesorios para Generación y Distribución de Energía",
+      "id": 15
+    },
+    {
+      "objetoAContratar": "Maquinaria, Accesorios y Suministros para Manejo, Acondicionamiento y Almacenamiento de Materiales",
+      "id": 16
+    },
+    {
+      "objetoAContratar": "Materiales Combustibles, Aditivos para Combustibles, Lubricantes y Anticorrosivos",
+      "id": 17
+    },
+    {
+      "objetoAContratar": "Maquinaria y Accesorios para Agricultura, Pesca, Silvicultura y Fauna",
+      "id": 18
+    },
+    {
+      "objetoAContratar": "Servicios de Viajes, Alimentación, Alojamiento y Entretenimiento",
+      "id": 19
+    },
+    {
+      "objetoAContratar": "Ropa, Maletas y Productos de Aseo Personal",
+      "id": 20
+    },
+    {
+      "objetoAContratar": "Servicios de Limpieza, Descontaminación y Tratamiento de Residuos",
+      "id": 21
+    },
+    {
+      "objetoAContratar": "Servicios de Producción Industrial y Manufactura",
+      "id": 22
+    },
+    {
+      "objetoAContratar": "Equipos y Suministros de Defensa, Orden Publico, Proteccion, Vigilancia y Seguridad",
+      "id": 23
+    },
+    {
+      "objetoAContratar": "Difusión de Tecnologías de Información y Telecomunicaciones",
+      "id": 24
+    },
+    {
+      "objetoAContratar": "Servicios Financieros y de Seguros",
+      "id": 25
+    },
+    {
+      "objetoAContratar": "Servicios de Defensa Nacional, Orden Publico, Seguridad y Vigilancia",
+      "id": 26
+    },
+    {
+      "objetoAContratar": "Publicaciones Impresas, Publicaciones Electronicas y Accesorios",
+      "id": 27
+    },
+    {
+      "objetoAContratar": "Herramientas y Maquinaria General",
+      "id": 28
+    },
+    {
+      "objetoAContratar": "Servicios Educativos y de Formación",
+      "id": 29
+    },
+    {
+      "objetoAContratar": "Alimentos, Bebidas y Tabaco",
+      "id": 30
+    },
+    {
+      "objetoAContratar": "Equipos y Suministros para Limpieza",
+      "id": 31
+    },
+    {
+      "objetoAContratar": "Materiales de Resina, Colofonia, Caucho, Espuma, Película y Elastómericos",
+      "id": 32
+    },
+    {
+      "objetoAContratar": "Instrumentos Musicales, Juegos, Artes, Artesanías y Equipo educativo, Materiales, Accesorios y Suministros",
+      "id": 33
+    },
+    {
+      "objetoAContratar": "Componentes y Equipos para Distribución y Sistemas de Acondicionamiento",
+      "id": 34
+    },
+    {
+      "objetoAContratar": "Componentes y Suministros Electrónicos",
+      "id": 35
+    },
+    {
+      "objetoAContratar": "Servicios de Transporte, Almacenaje y Correo",
+      "id": 36
+    },
+    {
+      "objetoAContratar": "Maquinaria y Accesorios para Construcción y Edificación",
+      "id": 37
+    },
+    {
+      "objetoAContratar": "Equipos de Oficina, Accesorios y Suministros",
+      "id": 38
+    },
+    {
+      "objetoAContratar": "Terrenos, Edificios, Estructuras y Vías",
+      "id": 39
+    },
+    {
+      "objetoAContratar": "Servicios de Salud",
+      "id": 40
+    },
+    {
+      "objetoAContratar": "Componentes, Accesorios y Suministros de Sistemas Eléctricos e Iluminación",
+      "id": 41
+    },
+    {
+      "objetoAContratar": "Vehículos Comerciales, Militares y Particulares, Accesorios y Componentes",
+      "id": 42
+    },
+    {
+      "objetoAContratar": "Maquinaria, Equipo y Suministros para la Industria de Servicios",
+      "id": 43
+    },
+    {
+      "objetoAContratar": "Servicios de Gestion, Servicios Profesionales de Empresa y Servicios Administrativos",
+      "id": 44
+    },
+    {
+      "objetoAContratar": "Componentes y Suministros para Estructuras, Edificación, Construcción y Obras Civiles",
+      "id": 45
+    },
+    {
+      "objetoAContratar": "Equipos y Suministros de Laboratorio, de Medición, de Observación y de Pruebas",
+      "id": 46
+    },
+    {
+      "objetoAContratar": "Organizaciones y Clubes",
+      "id": 47
+    },
+    {
+      "objetoAContratar": "Material Químico incluyendo Bioquímicos y Materiales de Gas",
+      "id": 48
+    },
+    {
+      "objetoAContratar": "Servicios de Contratacion Agrícola, Pesquera, Forestal y de Fauna",
+      "id": 49
+    },
+    {
+      "objetoAContratar": "Servicios Medioambientales",
+      "id": 50
+    },
+    {
+      "objetoAContratar": "Maquinaria y Accesorios para Manufactura y Procesamiento Industrial",
+      "id": 51
+    },
+    {
+      "objetoAContratar": "Equipos y Suministros para Impresión, Fotografia y Audiovisuales",
+      "id": 52
+    },
+    {
+      "objetoAContratar": "Materiales y Productos de Papel",
+      "id": 53
+    },
+    {
+      "objetoAContratar": "Material Mineral, Textil y  Vegetal y Animal No Comestible",
+      "id": 54
+    },
+    {
+      "objetoAContratar": "Maquinaria y Accesorios de Minería y Perforación de Pozos",
+      "id": 55
+    },
+    {
+      "objetoAContratar": "Muebles, Mobiliario y Decoración",
+      "id": 56
+    }
+  ],
+  "ordenEntidades": [
+    {
+      "ordenEntidad": "NACIONAL CENTRALIZADO",
+      "id": 1
+    },
+    {
+      "ordenEntidad": "TERRITORIAL DEPARTAMENTAL DESCENTRALIZADO",
+      "id": 2
+    },
+    {
+      "ordenEntidad": "AREA METROPOLITANA",
+      "id": 3
+    },
+    {
+      "ordenEntidad": "TERRITORIAL DISTRITAL MUNICIPAL NIVEL 3",
+      "id": 4
+    },
+    {
+      "ordenEntidad": "TERRITORIAL DISTRITAL MUNICIPAL NIVEL 4",
+      "id": 5
+    },
+    {
+      "ordenEntidad": "TERRITORIAL DEPARTAMENTAL CENTRALIZADO",
+      "id": 6
+    },
+    {
+      "ordenEntidad": "TERRITORIAL DISTRITAL MUNICIPAL NIVEL 1",
+      "id": 7
+    },
+    {
+      "ordenEntidad": "TERRITORIAL DISTRITAL MUNICIPAL NIVEL 6",
+      "id": 8
+    },
+    {
+      "ordenEntidad": "DISTRITO CAPITAL",
+      "id": 9
+    },
+    {
+      "ordenEntidad": "NACIONAL DESCENTRALIZADO",
+      "id": 10
+    },
+    {
+      "ordenEntidad": "TERRITORIAL DISTRITAL MUNICIPAL NIVEL 5",
+      "id": 11
+    },
+    {
+      "ordenEntidad": "TERRITORIAL DISTRITAL MUNICIPAL NIVEL 2",
+      "id": 12
+    }
+  ]
+}

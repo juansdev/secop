@@ -1,0 +1,14 @@
+<mat-accordion multi="true">
+    <mat-expansion-panel [class]="(extension_panel_vertical_opened ? 'extension-panel-vertical' : '') +' rounded-0'" (opened)="extension_panel_vertical_opened = true" (closed)="extension_panel_vertical_opened = false">
+        <mat-expansion-panel-header class="p-0 panel-vertical">
+            <mat-panel-title class="justify-content-center fw-bold">CLIC PARA EXPANDIR VER LOS DEPARTAMENTOS
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="panel-content overflow-auto panel-content-main">
+            <mat-toolbar color="accent">LOCALIDADES - DEPARTAMENTOS</mat-toolbar>
+            <button *ngFor="let name_department of name_departments" mat-button color="accent" class="d-block w-100 border border-1 border-dark rounded-0 py-2" (click)="department_selected.emit(name_department);">
+                <span class="fs-5 text-dark fw-bold">{{name_department}}</span>
+            </button>
+        </div>
+    </mat-expansion-panel>
+</mat-accordion>

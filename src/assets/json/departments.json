@@ -1,0 +1,142 @@
+[
+    {
+        "id": 1,
+        "departamentoEjecucion": "Casanare"
+    },
+    {
+        "id": 2,
+        "departamentoEjecucion": "Cundinamarca"
+    },
+    {
+        "id": 3,
+        "departamentoEjecucion": "Otros Paises"
+    },
+    {
+        "id": 4,
+        "departamentoEjecucion": "Guainía"
+    },
+    {
+        "id": 5,
+        "departamentoEjecucion": "Meta"
+    },
+    {
+        "id": 6,
+        "departamentoEjecucion": "Tolima"
+    },
+    {
+        "id": 7,
+        "departamentoEjecucion": "Antioquia"
+    },
+    {
+        "id": 8,
+        "departamentoEjecucion": "Chocó"
+    },
+    {
+        "id": 9,
+        "departamentoEjecucion": "Boyacá"
+    },
+    {
+        "id": 10,
+        "departamentoEjecucion": "Quindío"
+    },
+    {
+        "id": 11,
+        "departamentoEjecucion": "Santander"
+    },
+    {
+        "id": 12,
+        "departamentoEjecucion": "Caquetá"
+    },
+    {
+        "id": 13,
+        "departamentoEjecucion": "Córdoba"
+    },
+    {
+        "id": 14,
+        "departamentoEjecucion": "Colombia"
+    },
+    {
+        "id": 15,
+        "departamentoEjecucion": "Guaviare"
+    },
+    {
+        "id": 16,
+        "departamentoEjecucion": "Sucre"
+    },
+    {
+        "id": 17,
+        "departamentoEjecucion": "Arauca"
+    },
+    {
+        "id": 18,
+        "departamentoEjecucion": "Amazonas"
+    },
+    {
+        "id": 19,
+        "departamentoEjecucion": "Nariño"
+    },
+    {
+        "id": 20,
+        "departamentoEjecucion": "Bogotá D.C."
+    },
+    {
+        "id": 21,
+        "departamentoEjecucion": "Magdalena"
+    },
+    {
+        "id": 22,
+        "departamentoEjecucion": "Norte De Santander"
+    },
+    {
+        "id": 23,
+        "departamentoEjecucion": "Risaralda"
+    },
+    {
+        "id": 24,
+        "departamentoEjecucion": "Vichada"
+    },
+    {
+        "id": 25,
+        "departamentoEjecucion": "Vaupés"
+    },
+    {
+        "id": 26,
+        "departamentoEjecucion": "Cesar"
+    },
+    {
+        "id": 27,
+        "departamentoEjecucion": "La Guajira"
+    },
+    {
+        "id": 28,
+        "departamentoEjecucion": "San Andrés, Providencia y Santa Catalina"
+    },
+    {
+        "id": 29,
+        "departamentoEjecucion": "Cauca"
+    },
+    {
+        "id": 30,
+        "departamentoEjecucion": "Putumayo"
+    },
+    {
+        "id": 31,
+        "departamentoEjecucion": "Caldas"
+    },
+    {
+        "id": 32,
+        "departamentoEjecucion": "Huila"
+    },
+    {
+        "id": 33,
+        "departamentoEjecucion": "Valle del Cauca"
+    },
+    {
+        "id": 34,
+        "departamentoEjecucion": "Bolívar"
+    },
+    {
+        "id": 35,
+        "departamentoEjecucion": "Atlántico"
+    }
+]
