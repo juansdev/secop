@@ -8,6 +8,7 @@ export class SecopLocalService {
   private data_by_departments_and_year_RAM: string = '';
   private max_value_by_addition_RAM: string = '';
   private max_value_by_addition_total_map_RAM: string = '';
+  private graphic_values_departments_by_year_RAM: string = '';
 
   constructor() { }
 
@@ -53,6 +54,16 @@ export class SecopLocalService {
     return localStorage.getItem('max_value_by_addition');
   }
 
+  public set setGraphicValuesDepartmentsByYearLocal(graphic_values_departments_by_year: string) {
+    console.log('graphic_values_departments_by_year');
+    console.log(graphic_values_departments_by_year);
+    localStorage.setItem('graphic_values_departments_by_year', graphic_values_departments_by_year);
+  }
+
+  public get getGraphicValuesDepartmentsByYearLocal() {
+    return localStorage.getItem('graphic_values_departments_by_year');
+  }
+
   // Se ejecutara despues para guardar datos en Memoria RAM
 
   public setDataByDepartmentsAndYearRAM(data_by_departments_and_year: string) {
@@ -69,6 +80,14 @@ export class SecopLocalService {
 
   public getMaxValueByAdditionRAM(): string {
     return this.max_value_by_addition_RAM;
+  }
+
+  public setGraphicValuesDepartmentsByYearRAM(graphic_values_departments_by_year: string) {
+    this.graphic_values_departments_by_year_RAM = graphic_values_departments_by_year;
+  }
+
+  public getGraphicValuesDepartmentsByYearRAM(): string {
+    return this.graphic_values_departments_by_year_RAM;
   }
 
 }

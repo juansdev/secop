@@ -38,6 +38,10 @@ export class SharedFunctionsService {
         data = this._secopLocalService.getMaxValueByAdditionRAM();
         data = Object.keys(data).length ? data : this._secopLocalService.getMaxValueByAdditionLocal;
       }
+      else if(name_data = 'graphicValuesDepartmentsByYear') {
+        data = this._secopLocalService.getGraphicValuesDepartmentsByYearRAM();
+        data = Object.keys(data).length ? data : this._secopLocalService.getGraphicValuesDepartmentsByYearLocal;
+      }
     }
     else {
       if (name_data === 'dataByDepartmentsAndYear') {
@@ -45,6 +49,9 @@ export class SharedFunctionsService {
       }
       else if (name_data === 'maxValueByAddition') {
         data = this._secopLocalService.getMaxValueByAdditionLocal;
+      }
+      else if (name_data === 'graphicValuesDepartmentsByYear') {
+        data = this._secopLocalService.getGraphicValuesDepartmentsByYearLocal;
       }
     }
     return data;

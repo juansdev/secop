@@ -9,16 +9,16 @@
         <div *ngIf="is_load" class="d-flex justify-content-center align-items-center" style="height: 90vh;">
             <mat-spinner mode="indeterminate"></mat-spinner>
         </div>
-        <div *ngFor="let value_by_year of values_by_year | keyvalue; let year_i = index;">
-          <div *ngIf="value_by_year.key.toString() === year_selected || !year_selected">
+        <div *ngFor="let graphic_value_department of graphic_values_departments_by_year | keyvalue; let year_i = index;">
+          <div *ngIf="graphic_value_department.key === year_selected || !year_selected">
             <mat-expansion-panel class="rounded-0 m-0">
               <mat-expansion-panel-header class="p-0 panel-vertical">
-                <mat-panel-title class="justify-content-center fw-bold text-center">{{value_by_year.key}}</mat-panel-title>
+                <mat-panel-title class="justify-content-center fw-bold text-center">{{graphic_value_department.key}}</mat-panel-title>
               </mat-expansion-panel-header>
               <div class="panel-content overflow-auto panel-content-main">
                   <mat-accordion multi="true">
-                      <div *ngFor="let value_by_field of value_by_year.value | keyvalue; let field_i = index;">
-                          <mat-expansion-panel class="rounded-0 m-0" (opened)="createGraphicWithValues(value_by_year.key, value_by_field.key, year_i+'_'+field_i)">
+                      <div *ngFor="let value_by_field of graphic_value_department.value | keyvalue; let field_i = index;">
+                          <mat-expansion-panel class="rounded-0 m-0" (opened)="createGraphicWithValues(graphic_value_department.key, value_by_field.key, year_i+'_'+field_i)">
                               <mat-expansion-panel-header class="p-0 panel-vertical">
                                   <mat-panel-title class="justify-content-center fw-bold text-center">{{value_by_field.key}}</mat-panel-title>
                               </mat-expansion-panel-header>

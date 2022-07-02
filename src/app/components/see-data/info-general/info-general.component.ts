@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { SecopService } from 'src/app/services/secop/secop.service';
 import { SharedFunctionsService } from 'src/app/services/shared-functions.service';
 import { use, init } from 'echarts/core';
@@ -35,6 +35,7 @@ export class InfoGeneralComponent {
   @Input() array_years: Array<string> = [];
 
   public is_load: boolean = false;
+  public graphic_values_departments_by_year: ValuesByYear;
   private options_map_changed: boolean = false;
 
   public parseInt = parseInt;
@@ -42,7 +43,6 @@ export class InfoGeneralComponent {
   public array_fields: Array<string> = [];
   public array_name_graphics: Array<string> = ['barChart','pieChart'];
 
-  public values_by_year: ValuesByYear = {};  
   private fields_for_graphics: any = {
     'Marcacion Adiciones': 'adiciones',
     'Tipo De Contrato': 'contratos',
@@ -53,7 +53,10 @@ export class InfoGeneralComponent {
   private array_departments_by_map: Array<string> = [];
 
 
-  constructor(public _sharedFunctionsService: SharedFunctionsService, private _secopService: SecopService, private _secopLocalService: SecopLocalService) {}
+  constructor(public _sharedFunctionsService: SharedFunctionsService, private _secopService: SecopService, private _secopLocalService: SecopLocalService) {
+    const graphic_values_departments_by_year = JSON.parse(this._sharedFunctionsService.getDataLocalOrRam('graphicValuesDepartmentsByYear'));
+    this.graphic_values_departments_by_year = graphic_values_departments_by_year ? graphic_values_departments_by_year : {};
+  }
 
   async ngOnChanges(changes: SimpleChanges) {
     if(this.myMap.getOption()){
@@ -102,7 +105,8 @@ export class InfoGeneralComponent {
   }
 
   public createGraphicWithValues(year: string, field: string, index_field: string): void {
-    const value_field = this.values_by_year[parseInt(year)][field];
+    const graphic_values_departments_by_year: any = this.graphic_values_departments_by_year;
+    const value_field = graphic_values_departments_by_year[parseInt(year)][field];
     let label_x: Array<string> = [];
     let data: Array<number> = [];
     let data_pie: any = [];
@@ -242,12 +246,10 @@ export class InfoGeneralComponent {
         return await lastValueFrom(this._secopService.getDataByDepartmentsAndYear(this.department_selected, this.year_selected).pipe(
           map((data_department: any)=>{
             if(!this.year_selected) {
-              console.log('this.department_selected');
-              console.log(this.department_selected);
               for (let index = 0; index < data_department.length; index++) {
                 const value_department_by_year = data_department[index];
                 const year = value_department_by_year['anno'];
-                dataByDepartments[year] = dataByDepartments[year] ? dataByDepartments[year] : {};
+                dataByDepartments[year] = dataByDepartments[year] ? dataByDepartments[year] : {[this.department_selected]:{}};
                 dataByDepartments[year][this.department_selected] = value_department_by_year;
               }
             }
@@ -255,11 +257,12 @@ export class InfoGeneralComponent {
               for (let index = 0; index < data_department.length; index++) {
                 const value_department_by_year = data_department[index];
                 const department = value_department_by_year['departamento'];
-                dataByDepartments[this.year_selected] = {};
+                dataByDepartments[this.year_selected] = dataByDepartments[this.year_selected] ? dataByDepartments[this.year_selected] : {[department]:{}};
                 dataByDepartments[this.year_selected][department] = value_department_by_year;
               }
             }
             else {
+              dataByDepartments[this.year_selected] = dataByDepartments[this.year_selected] ? dataByDepartments[this.year_selected] : {[this.department_selected]:{}};
               dataByDepartments[this.year_selected][this.department_selected] = data_department;
             }
             this._sharedFunctionsService.setDataLocalOrRam('dataByDepartmentsAndYear', dataByDepartments);
@@ -284,7 +287,7 @@ export class InfoGeneralComponent {
                 for (let index = 0; index < data_department.length; index++) {
                   const value_department_by_year = data_department[index];
                   const year = value_department_by_year['anno'];
-                  dataByDepartments[year] = dataByDepartments[year] ? dataByDepartments[year] : {};
+                  dataByDepartments[year] = dataByDepartments[year] ? dataByDepartments[year] : {[this.department_selected]:{}};
                   dataByDepartments[year][this.department_selected] = value_department_by_year;
                 }
               }
@@ -292,11 +295,12 @@ export class InfoGeneralComponent {
                 for (let index = 0; index < data_department.length; index++) {
                   const value_department_by_year = data_department[index];
                   const department = value_department_by_year['departamento'];
-                  dataByDepartments[this.year_selected] = {};
+                  dataByDepartments[this.year_selected] = dataByDepartments[this.year_selected] ? dataByDepartments[this.year_selected] : {[department]:{}};
                   dataByDepartments[this.year_selected][department] = value_department_by_year;
                 }
               }
               else {
+                dataByDepartments[this.year_selected] = dataByDepartments[this.year_selected] ? dataByDepartments[this.year_selected] : {[this.department_selected]:{}};
                 dataByDepartments[this.year_selected][this.department_selected] = data_department;
               }
               this._sharedFunctionsService.setDataLocalOrRam('dataByDepartmentsAndYear', dataByDepartments);
@@ -335,11 +339,10 @@ export class InfoGeneralComponent {
     let list_name_departments_selected = this.array_departments_selected;
     list_name_departments_selected = load_all_departments ? this.array_departments_by_map.filter((val) => this.array_departments_selected.indexOf(val) === -1) : list_name_departments_selected;
     if(year_selected) {
-      console.log('data_by_departments');
-      console.log(data_by_departments);
       for (let index = 0; index < list_name_departments_selected.length; index++) {
         const name_department = list_name_departments_selected[index];
-        const info_department_selected = data_by_departments[year_selected][name_department];
+        let info_department_selected = Object.keys(data_by_departments).length ? data_by_departments[year_selected] : {[year_selected]: {}};
+        info_department_selected = info_department_selected[name_department];
         if(!info_department_selected) {
           const department_selected_original = this.department_selected;
           this.department_selected = name_department;
@@ -387,8 +390,6 @@ export class InfoGeneralComponent {
           const name_department = name_departments[index];
           const department_selected_original = this.department_selected;
           this.department_selected = name_department;
-          console.log('this.department_selected');
-          console.log(this.department_selected);
           await this._loadInfoDepartmentSelectedByYear(false);
           this.department_selected = department_selected_original;          
         }
@@ -410,7 +411,7 @@ export class InfoGeneralComponent {
     for (let index = 0; index < info_department_selected.length; index++) {
       const contract = info_department_selected[index];
       const year_contract: number = parseInt(contract['anno']);
-      this.values_by_year[year_contract] = {};
+      this.graphic_values_departments_by_year[year_contract] = this.graphic_values_departments_by_year[year_contract] ? this.graphic_values_departments_by_year[year_contract] : {[year_contract]: {}};
       // Loop by contract
       for (const field in contract) {
         if (Object.prototype.hasOwnProperty.call(contract, field)) {
@@ -421,21 +422,22 @@ export class InfoGeneralComponent {
             continue;
           }
           else if (Object.prototype.hasOwnProperty.call(contract, field)) {
-            let values_by_year = this.values_by_year[year_contract];
+            let graphic_values_departments = this.graphic_values_departments_by_year[year_contract];
             const field_used = this._getFullField(field);
             if(index === 0) {
               this.array_fields.push(field_used);
             }
-            if(!values_by_year[field_used]){
-              values_by_year[field_used] = {};
+            if(!graphic_values_departments[field_used]){
+              graphic_values_departments[field_used] = graphic_values_departments[field_used] ? graphic_values_departments[field_used] : {};
             }
-            const values_for_graphics = values_by_year[field_used];
+            const values_for_graphics = graphic_values_departments[field_used];
             values_for_graphics[field] = contract[field];
-            this.values_by_year[year_contract] = values_by_year;
+            this.graphic_values_departments_by_year[year_contract] = graphic_values_departments;
           }
         }
       }
     }
+    this._sharedFunctionsService.setDataLocalOrRam('graphicValuesDepartmentsByYear', JSON.stringify(this.graphic_values_departments_by_year));
     this._updateValueInMapByDepartmentSelected(department_selected, 'Marcacion Adiciones');
   }
 
@@ -447,20 +449,22 @@ export class InfoGeneralComponent {
         }
       }
     }
+    let graphic_values_departments_by_year: any = this.graphic_values_departments_by_year;
     // Agregar dato a max_value_by_addition
     if(!Object.keys(max_value_by_addition).includes(year.toString())){
       max_value_by_addition[year.toString()] = {};
     }
     max_value_by_addition[year.toString()][name_department_selected] = {
-      'conAdiciones': this.values_by_year[year][field_to_sum]['conAdiciones']
+      'conAdiciones': graphic_values_departments_by_year[year][field_to_sum]['conAdiciones']
     }
     // Si no esta guardado...
-    if(Object.keys(this.values_by_year[year]).includes(field_to_sum)) {
-      return [max_value_by_addition, this.values_by_year[year][field_to_sum]['conAdiciones']];
+    if(Object.keys(graphic_values_departments_by_year[year]).includes(field_to_sum)) {
+      return [max_value_by_addition, graphic_values_departments_by_year[year][field_to_sum]['conAdiciones']];
     }
   }
 
   private _updateValueInMapByDepartmentSelected(name_department_selected: string, field_to_sum: string): void {
+    let graphic_values_departments_by_year: any = this.graphic_values_departments_by_year;
     let option_map = this.myMap.getOption();
     const index_department_selected = this.array_departments_by_map.map(e => e.toLowerCase()).indexOf(name_department_selected.toLowerCase());
     if(index_department_selected) {
@@ -478,9 +482,9 @@ export class InfoGeneralComponent {
           sum_total_field += data_max_value[1];
         }
         else {
-          for (let index = 0; index < Object.keys(this.values_by_year).length; index++) {
+          for (let index = 0; index < Object.keys(graphic_values_departments_by_year).length; index++) {
             // Verificar si dato ya esta guardado
-            const year: number = parseInt(Object.keys(this.values_by_year)[index]);
+            const year: number = parseInt(Object.keys(graphic_values_departments_by_year)[index]);
             const data_max_value = this._verifyIfDataSaveInMaxValue(max_value_by_addition, year, name_department_selected, field_to_sum);
             max_value_by_addition = data_max_value[0];
             sum_total_field += data_max_value[1];
