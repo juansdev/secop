@@ -195,6 +195,7 @@ export class SeeDataComponent implements OnInit {
           new_option_map['visualMap']['max'] = max_value;
           this.myMap.setOption(new_option_map);
         }
+        this.myMap.resize();
       });
   }
 

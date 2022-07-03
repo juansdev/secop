@@ -1,0 +1,4 @@
+.mat-tab-body-content {
+  display: flex;
+  flex-wrap: wrap;
+}

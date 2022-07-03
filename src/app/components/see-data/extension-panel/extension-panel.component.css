@@ -1,14 +1,7 @@
 /* Accordion with 3 panels, stretching from top to bottom */
 
-.panel-vertical {
-    flex-direction: column;
-}
-
-.extension-panel-vertical {
-    height: calc(110vw / 3 - 100px);
-}
-
-.panel-content-main {
+@media (min-width: 769px) {
+  .panel-content-main {
     background-color: lightblue;
     transform-origin: top left;
     /* rotate back */
@@ -18,8 +11,17 @@
     /* real height of the content */
     width: calc(90vw / 3 - 100px);
     /* real width of the content, 3 is panel amount */
-}
+  }
 
-.panel-content {
+  .panel-content {
     transform: rotate(90deg);
+  }
+
+  .panel-vertical {
+      flex-direction: column;
+  }
+
+  .extension-panel-vertical {
+      height: calc(110vw / 3 - 100px);
+  }
 }

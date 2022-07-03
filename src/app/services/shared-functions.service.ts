@@ -66,6 +66,9 @@ export class SharedFunctionsService {
       else if (name_data === 'maxValueByAddition') {
         this._secopLocalService.setMaxValueByAdditionRAM(JSON.stringify(data));
       }
+      else if (name_data === 'graphicValuesDepartmentsByYear') {
+        this._secopLocalService.setGraphicValuesDepartmentsByYearRAM(JSON.stringify(data));
+      }
     }
     else {
       if (name_data === 'dataByDepartmentsAndYear') {
@@ -88,6 +91,19 @@ export class SharedFunctionsService {
           if (error instanceof DOMException) {
             this._secopLocalService.setErrorLoad = 'error_exceded_cuota_limit';
             this._secopLocalService.setMaxValueByAdditionRAM(JSON.stringify(data));
+          }
+          else {
+            console.error(error);
+          }
+        }
+      }
+      else if (name_data === 'graphicValuesDepartmentsByYear') {
+        try {
+          this._secopLocalService.setGraphicValuesDepartmentsByYearLocal = this._secopLocalService.setGraphicValuesDepartmentsByYearLocal ? this._secopLocalService.setGraphicValuesDepartmentsByYearLocal+JSON.stringify(data) : JSON.stringify(data);
+        } catch (error) {
+          if (error instanceof DOMException) {
+            this._secopLocalService.setErrorLoad = 'error_exceded_cuota_limit';
+            this._secopLocalService.setGraphicValuesDepartmentsByYearRAM(JSON.stringify(data));
           }
           else {
             console.error(error);

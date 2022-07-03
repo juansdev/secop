@@ -55,8 +55,6 @@ export class SecopLocalService {
   }
 
   public set setGraphicValuesDepartmentsByYearLocal(graphic_values_departments_by_year: string) {
-    console.log('graphic_values_departments_by_year');
-    console.log(graphic_values_departments_by_year);
     localStorage.setItem('graphic_values_departments_by_year', graphic_values_departments_by_year);
   }
 

@@ -1,25 +1,23 @@
-INICIO:
+HECHO:
+
+Inicio:
 Jhosep Granda Parra. Listo.
 Ivan Daniel Pacheco Durango. Listo.
 Kelly Johana Vergara Torres. Listo.
 Juan Fernando Varela Joven. Listo.
 Juan Pablo Ramírez Escobar. Listo.
 
-MOSTRAR DATOS:
+Mostrar Datos:
 
 - Quitar municipios. LISTO.
 
-Mapa Interactivo: Cargar info de contratos por años. LISTO.
+Cargar info de contratos por años. LISTO.
 
 Y ese menu lateral que muestra detalles desglosado por contrato no se hace, nunca se mostrara la lista de contratos desglosado, solo estadisticas generales en graficos, con los conteos de cada propiedad. LISTO.
 
 - No quiero que entre tantas veces en _updateValueInMapByDepartmentSelected (Cuando año no existe). LISTO.
 
-Optimizar: _updateValueInMapByDepartmentSelected (Cuando se selecciona un año, se carga 5 veces, solo debería cargarse 1 vez).
-
-Los valores en graficos además tambien mostrarlo en porcentaje.
-
-El desplegable derecho debería de quedar abajo, y en lugar de desplegar datos en acordion sean por tabs.
+El desplegable derecho debería de quedar abajo, y en lugar de desplegar datos en acordion sean por tabs. LISTO.
 
 Con el tema de optimizar eso, he creado esta nueva tabla ya con los conteos, y tendrias una consulta directa sobre esta por año y departamento: LISTO.
 
@@ -29,23 +27,31 @@ Con el tema de optimizar eso, he creado esta nueva tabla ya con los conteos, y t
 
 3. Dar opción al usuario de que mediante un botón se cargue todos los datos del año indicado de todos los departamentos (Si no hay un año definido, se cargaria de todos los años por defecto). LISTO.
 
-4. Que al dar clic en un departamento en el desplegable izquierdo, se coloree el departamento seleccionado y además se seleccion en el mapa el departamento seleccionado y se carguen los datos correspondientes.
+4. Que al dar clic en un departamento en el desplegable izquierdo, se coloree el departamento seleccionado y además se seleccion en el mapa el departamento seleccionado y se carguen los datos correspondientes. LISTO.
 
-5. Version Móvil en sección "Ver Datos":
+5. Version Móvil en sección "Ver Datos": LISTO.
 
-5.1. Quitar grid del contenedor padre y dejarlo por defecto.
+5.1. Quitar grid del contenedor padre y dejarlo por defecto. LISTO.
 
-5.2. Desplegable izquierdo dejarlo en su orientación original así como también su contenido.
+5.2. Ocultar desplegable de la izquierda en móvil. LISTO.
 
-6. Investigar como cambiar la orientación del resize, si hay manera de dejarlo como resize: horientation-reverse.
+Graficos a mostrar:
+
+Cantidad de contratos:
+Por estado del proceso. LISTO.
+Por Nivel Entidad. LISTO.
+Por Modalidad de Contratación. LISTO.
+Por Tipo del contrato. LISTO.
+
+PENDIENTE:
+
+Pequeño error, al cargar datos de un departamento en un año, al cambiarse a todos (Estando seleccionando otro departamento), no se carga todos los datos de ese departamento que solo cargo un año.
+
+Optimizar: _updateValueInMapByDepartmentSelected (Cuando se selecciona un año, se carga 5 veces, solo debería cargarse 1 vez).
 
 7. Versión móvil en sección "Modelo Predictivo":
 
 7.1. Ajustar tamaño en móvil del Dialog calcular, resultado y dragndrop.
-
-8. Versión móvil en sección "Inicio":
-
-8.1. Ajustar tamaño de imagenes en móvil.
 
 9. Convertir todos los CSS en SCSS.
 
@@ -57,22 +63,42 @@ Con el tema de optimizar eso, he creado esta nueva tabla ya con los conteos, y t
 
 12. Realizar documentación en código fuente y subirlo al GitHub con README.me documentado.
 
-Graficos a mostrar:
-
-Cantidad de contratos:
-Por estado del proceso. LISTO.
-Por Nivel Entidad. LISTO.
-Por Modalidad de Contratación. LISTO.
-Por Tipo del contrato. LISTO.
-
 GENERAR PROBABILIDAD:
 
 * Generar probabilidad es mediante el endpoint del modelo. Sin necesidad de conexión a backend. Todavía no esta el modelo listo para procesar predicción.
 
 * Cambiar mensaje de probabilidad generado. LISTO.
-- Cuidado el contrato tiene una mayor probabilidad de que se le agregue adición presupuestal. LISTO.
-- El contrato tiene una probabilidad muy menor de que se agregue adición presupuestal. LISTO.
+- Cuidado el contrato tiene una alta probabilidad de que se le agregue adición presupuestal. LISTO.
+- El contrato tiene una probabilidad muy menor de que se le agregue adición presupuestal. LISTO.
 
 * Cambiar IMPORTAR CSV por EXCEL. LISTO.
 - Permitir importar archivos Excel. LISTO.
 - Es necesario conexión al endpoint del backend.
+
+PRIORIDAD:
+
+Mostrar Datos:
+Los valores en graficos además tambien mostrarlo en porcentaje.
+
+Modelo Predictivo:
+1.
+Agregar los campos que faltan en modelo predictivo.
+
+2.
+Metodo http POST:
+url para consumirlo: https://forest.eastus.inference.ml.azure.com/score
+header de autenticación: Authorization Bearer QsiuUHgtvw32IzBtuLb2dwS4UIkAo68i
+json de ejemplo: {
+  "Orden Entidad": "DISTRITO CAPITAL",
+  "Modalidad de Contratacion": "Licitación Pública",
+  "Objeto a Contratar": "Componentes y Suministros para Estructuras, Edificación, Construcción y Obras Civiles",
+  "Departamento Entidad": "Cundinamarca",
+  "Departamento Ejecución": "Córdoba",
+  "Rango val contratos": "> 1000 MCOP hasta 5000 MCOP",
+  "Rango tiempo contratos": "> 2 años"
+}
+
+3.
+Exito desplegando el modelo usando excel tambien, aqui se procesaron 3 contratos. @Juan Serrano  para que por favor ya ajustes el front para visualizar el "tiene adicion" y "no tiene adicion" dependiendo de ese json de respuesta.
+
+El 1, 2 3 es el numero de la fila del excel, y el valor seria 1 con adicion y 0 sin adicion.

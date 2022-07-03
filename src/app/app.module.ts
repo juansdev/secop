@@ -22,9 +22,11 @@ import { ExtensionPanelComponent } from './components/see-data/extension-panel/e
 // Directive
 import { DndDirective } from './directive/dnd.directive';
 import { InfoGeneralComponent } from './components/see-data/info-general/info-general.component';
+import { ToolsDirective } from './directive/tools.directive';
 
 @NgModule({
   declarations: [
+    ToolsDirective,
     AppComponent,
     HomeComponent,
     SeeDataComponent,

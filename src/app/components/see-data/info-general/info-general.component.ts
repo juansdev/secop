@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { SecopService } from 'src/app/services/secop/secop.service';
 import { SharedFunctionsService } from 'src/app/services/shared-functions.service';
 import { use, init } from 'echarts/core';
@@ -37,6 +37,7 @@ export class InfoGeneralComponent {
   public is_load: boolean = false;
   public graphic_values_departments_by_year: ValuesByYear;
   private options_map_changed: boolean = false;
+  private graphics_rendered: Array<string> = [];
 
   public parseInt = parseInt;
   public array_departments_selected: Array<string> = [];
@@ -98,6 +99,10 @@ export class InfoGeneralComponent {
     }
   }
 
+  onResize() {
+    this.myMap.resize();
+  }
+
   public loadAllInfoDepartmentsByYear(): void {
     let data_by_departments: any = this._sharedFunctionsService.getDataLocalOrRam('dataByDepartmentsAndYear');
     data_by_departments = data_by_departments ? JSON.parse(data_by_departments) : {};
@@ -122,94 +127,102 @@ export class InfoGeneralComponent {
       const type_graphic = this.array_name_graphics[index];
       const id_element_for_render = `graphic_${type_graphic}_${index_field}`;
       const chartDom = document.getElementById(id_element_for_render)!;
-      const myChart = init(chartDom);
-      let option: EChartsOption;
-      if(type_graphic === 'lineChart') {
-        option = {
-          xAxis: {
-            type: 'category',
-            data: label_x
-          },
-          yAxis: {
-            type: 'value'
-          },
-          series: [
-            {
-              data: data,
-              type: 'line'
-            }
-          ]
-        };
-        option && myChart.setOption(option);
-      }
-      else if(type_graphic === 'barChart') {
-        option = {
-          xAxis: {
-            type: 'category',
-            splitLine: { show: false },
-            data: label_x
-          },
-          yAxis: {
-            type: 'value'
-          },
-          series: [
-            {
-              type: 'bar',
-              stack: 'Total',
-              label: {
-                show: true,
-                position: 'inside'
-              },
-              data: data.length === 2 ?
-              [
-                data[0],
-                {
-                  value: data[1],
-                  itemStyle: {
-                    color: '#a90000'
-                  }
-                }
-              ] : data
-            }
-          ]
-        };
-        if(data.length !== 2){
-          option['tooltip'] = {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'shadow'
+      if(chartDom && !this.graphics_rendered.includes(id_element_for_render)) {
+        const myChart = init(chartDom);
+        this.graphics_rendered.push(id_element_for_render);
+        let option: EChartsOption;
+        if(type_graphic === 'lineChart') {
+          option = {
+            xAxis: {
+              type: 'category',
+              data: label_x
             },
-            formatter: function (params: any) {
-              const tar = params[0];
-              return tar.name + ' : ' + tar.value;
-            }
-          }
+            yAxis: {
+              type: 'value'
+            },
+            series: [
+              {
+                data: data,
+                type: 'line'
+              }
+            ]
+          };
+          option && myChart.setOption(option);
         }
-        option && myChart.setOption(option);
-      }
-      else if(type_graphic === 'pieChart') {
-        option = {
-          legend: {
-            orient: 'vertical',
-            left: 'left'
-          },
-          series: [
-            {
-              name: this._sharedFunctionsService.camelize(field),
-              type: 'pie',
-              radius: '50%',
-              data: data_pie,
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
+        else if(type_graphic === 'barChart') {
+          option = {
+            xAxis: {
+              type: 'category',
+              splitLine: { show: false },
+              data: label_x
+            },
+            yAxis: {
+              type: 'value'
+            },
+            series: [
+              {
+                type: 'bar',
+                stack: 'Total',
+                label: {
+                  show: true,
+                  position: 'inside'
+                },
+                data: data.length === 2 ?
+                [
+                  data[0],
+                  {
+                    value: data[1],
+                    itemStyle: {
+                      color: '#a90000'
+                    }
+                  }
+                ] : data
+              }
+            ]
+          };
+          if(data.length !== 2){
+            option['tooltip'] = {
+              trigger: 'axis',
+              axisPointer: {
+                type: 'shadow'
+              },
+              formatter: function (params: any) {
+                const tar = params[0];
+                return tar.name + ' : ' + tar.value;
               }
             }
-          ]
-        };
-        option && myChart.setOption(option);
+          }
+          option && myChart.setOption(option);
+        }
+        else if(type_graphic === 'pieChart') {
+          option = {
+            legend: {
+              orient: 'vertical',
+              left: 'left'
+            },
+            series: [
+              {
+                name: this._sharedFunctionsService.camelize(field),
+                type: 'pie',
+                radius: '50%',
+                data: data_pie,
+                emphasis: {
+                  itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                  }
+                }
+              }
+            ]
+          };
+          option && myChart.setOption(option);
+        }
+        let observer = new ResizeObserver(function(mutations) {
+          myChart.resize();
+        });
+        let child: any = document.querySelector('#'+id_element_for_render);
+        observer.observe(child);
       }
     }
   }
@@ -275,8 +288,8 @@ export class InfoGeneralComponent {
       }
       else{
         // Verificar si departamento no existe en año
-        const department_exist_in_year = this.year_selected 
-        ? 
+        const department_exist_in_year = this.year_selected
+        ?
         (Object.keys(dataByDepartments[this.year_selected]).length ? Object.keys(dataByDepartments[this.year_selected]).includes(this.department_selected) : false)
         : false;
         if(!department_exist_in_year) {
@@ -355,7 +368,8 @@ export class InfoGeneralComponent {
       }
     }
     else {
-      const array_departments_with_data = [];
+      let array_departments_with_all_data_years: any = [];
+      const array_departments_with_data: any = [];
       const array_departments_without_data: any = {
         'without_year': [],
         'without_department_in_year': []
@@ -374,12 +388,19 @@ export class InfoGeneralComponent {
               array_departments_without_data['without_department_in_year'].push(name_department);
             }
           }
-          else {
-            array_departments_with_data.push(data_by_departments[year][name_department]);
-          }
         }
       }
-      if(array_departments_with_data.length){
+      array_departments_with_all_data_years = array_departments_without_data['without_year'].concat(array_departments_without_data['without_department_in_year']);
+      array_departments_with_all_data_years = [...new Set(array_departments_with_all_data_years)];
+      array_departments_with_all_data_years = list_name_departments_selected.filter((val) => array_departments_with_all_data_years.indexOf(val) === -1);
+      if(array_departments_with_all_data_years.length){
+        for (let index = 0; index < array_departments_with_all_data_years.length; index++) {
+          const department_with_all_data_year = array_departments_with_all_data_years[index];
+          for (let index = 0; index < this.array_years.length; index++) {
+            const year = this.array_years[index];
+            array_departments_with_data.push(data_by_departments[year][department_with_all_data_year]);
+          }
+        }
         this._updateInfoDepartmentSelected(array_departments_with_data);
       }
       if(array_departments_without_data['without_year'].length){
@@ -391,7 +412,7 @@ export class InfoGeneralComponent {
           const department_selected_original = this.department_selected;
           this.department_selected = name_department;
           await this._loadInfoDepartmentSelectedByYear(false);
-          this.department_selected = department_selected_original;          
+          this.department_selected = department_selected_original;
         }
       }
       if(array_departments_without_data['without_department_in_year'].length){
@@ -411,7 +432,7 @@ export class InfoGeneralComponent {
     for (let index = 0; index < info_department_selected.length; index++) {
       const contract = info_department_selected[index];
       const year_contract: number = parseInt(contract['anno']);
-      this.graphic_values_departments_by_year[year_contract] = this.graphic_values_departments_by_year[year_contract] ? this.graphic_values_departments_by_year[year_contract] : {[year_contract]: {}};
+      this.graphic_values_departments_by_year[year_contract] = this.graphic_values_departments_by_year[year_contract] ? this.graphic_values_departments_by_year[year_contract] : {};
       // Loop by contract
       for (const field in contract) {
         if (Object.prototype.hasOwnProperty.call(contract, field)) {
@@ -437,7 +458,7 @@ export class InfoGeneralComponent {
         }
       }
     }
-    this._sharedFunctionsService.setDataLocalOrRam('graphicValuesDepartmentsByYear', JSON.stringify(this.graphic_values_departments_by_year));
+    this._sharedFunctionsService.setDataLocalOrRam('graphicValuesDepartmentsByYear', this.graphic_values_departments_by_year);
     this._updateValueInMapByDepartmentSelected(department_selected, 'Marcacion Adiciones');
   }
 
@@ -508,7 +529,7 @@ export class InfoGeneralComponent {
     max_value_updated = Math.max.apply(null, max_value_updated);
     if(changed_year){
       this._secopLocalService.setMaxValueByAdditionTotalMapRAM(max_value_updated.toString());
-    } 
+    }
     else {
       if(parseInt(max_value_current) < max_value_updated.toString() || !max_value_current) {
         this._secopLocalService.setMaxValueByAdditionTotalMapRAM(max_value_updated.toString());
