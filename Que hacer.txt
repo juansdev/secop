@@ -45,8 +45,6 @@ Por Tipo del contrato. LISTO.
 
 PENDIENTE:
 
-Pequeño error, al cargar datos de un departamento en un año, al cambiarse a todos (Estando seleccionando otro departamento), no se carga todos los datos de ese departamento que solo cargo un año.
-
 Optimizar: _updateValueInMapByDepartmentSelected (Cuando se selecciona un año, se carga 5 veces, solo debería cargarse 1 vez).
 
 7. Versión móvil en sección "Modelo Predictivo":
@@ -81,10 +79,10 @@ Mostrar Datos:
 Los valores en graficos además tambien mostrarlo en porcentaje.
 
 Modelo Predictivo:
-1.
+1. LISTO.
 Agregar los campos que faltan en modelo predictivo.
 
-2.
+2. LISTO. JHOSEP TENDRA QUE ARREGLAR PROBLEMA DE CORS.
 Metodo http POST:
 url para consumirlo: https://forest.eastus.inference.ml.azure.com/score
 header de autenticación: Authorization Bearer QsiuUHgtvw32IzBtuLb2dwS4UIkAo68i
@@ -98,7 +96,21 @@ json de ejemplo: {
   "Rango tiempo contratos": "> 2 años"
 }
 
-3.
+3. LISTO.
 Exito desplegando el modelo usando excel tambien, aqui se procesaron 3 contratos. @Juan Serrano  para que por favor ya ajustes el front para visualizar el "tiene adicion" y "no tiene adicion" dependiendo de ese json de respuesta.
 
 El 1, 2 3 es el numero de la fila del excel, y el valor seria 1 con adicion y 0 sin adicion.
+
+4.
+Arreglar problema de subscribe, cambiarlos a .then cuando es POST, map usar cuando es GET. Ponerles a todos async await.
+
+Pequeño error, al cargar datos de un departamento en un año, al cambiarse a todos (Estando seleccionando otro departamento), no se carga todos los datos de ese departamento que solo cargo un año.
+
+Error al cambiarse a cualquier filtro por año, no se actualiza los valores de todos los departamentos. (Sin tener departamento seleccionado).
+Teniendo departamento seleccionado al cambiarse el filtro carga en todos excepto en el filtro de "Todos".
+
+Detectar si ya esta cargado todos los años de X filtro, para deshabilitar el botón de filtro automaticamente.
+
+Graficar con todos los datos del mapa en un TAB especifico que diga "TODOS".
+
+Por alguna razón al cargarse todos los datos, no se cargan los graficos el año 2017.

@@ -22,17 +22,14 @@ export class AppComponent {
   isHandset$: Observable<boolean> = this.SharedFunctionsService.isHandset$;
 
   ngAfterViewInit() {
-    this.observer
-      .observe(Breakpoints.Handset)
-      .pipe(delay(1), untilDestroyed(this))
-      .subscribe((res: any) => {
-        if (!res.matches) {
-          this.sidenav.mode = 'side';
-          this.sidenav.close();
-        } else {
-          this.sidenav.mode = 'over';
-        }
-      });
+    this.observer.observe(Breakpoints.Handset).pipe(delay(1), untilDestroyed(this)).subscribe((res: any) => {
+      if (!res.matches) {
+        this.sidenav.mode = 'side';
+        this.sidenav.close();
+      } else {
+        this.sidenav.mode = 'over';
+      }
+    });
 
     this.router.events
       .pipe(

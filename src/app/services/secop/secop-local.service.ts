@@ -9,6 +9,7 @@ export class SecopLocalService {
   private max_value_by_addition_RAM: string = '';
   private max_value_by_addition_total_map_RAM: string = '';
   private graphic_values_departments_by_year_RAM: string = '';
+  private fields_predictive_model_RAM: string = '';
 
   constructor() { }
 
@@ -62,6 +63,14 @@ export class SecopLocalService {
     return localStorage.getItem('graphic_values_departments_by_year');
   }
 
+  public set setFieldsPredictiveModelLocal(fields_predictive_model: string) {
+    localStorage.setItem('fields_predictive_model', fields_predictive_model);
+  }
+
+  public get getFieldsPredictiveModelLocal() {
+    return localStorage.getItem('fields_predictive_model');
+  }
+
   // Se ejecutara despues para guardar datos en Memoria RAM
 
   public setDataByDepartmentsAndYearRAM(data_by_departments_and_year: string) {
@@ -86,6 +95,14 @@ export class SecopLocalService {
 
   public getGraphicValuesDepartmentsByYearRAM(): string {
     return this.graphic_values_departments_by_year_RAM;
+  }
+
+  public setFieldsPredictiveModelRAM(fields_predictive_model: string) {
+    this.fields_predictive_model_RAM = fields_predictive_model;
+  }
+
+  public getFieldsPredictiveModelRAM(): string {
+    return this.fields_predictive_model_RAM;
   }
 
 }

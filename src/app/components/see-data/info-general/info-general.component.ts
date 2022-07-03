@@ -417,9 +417,24 @@ export class InfoGeneralComponent {
       }
       if(array_departments_without_data['without_department_in_year'].length){
         // Arreglar problema de async, await.
-        const name_department = array_departments_without_data['without_department_in_year'];
+        const name_departments: any = [...new Set(array_departments_without_data['without_department_in_year'])];
         // Debe permitir iterar el arreglo en un subscription, esperar que se reciba respuesta de la peticion y continuar con el siguiente...
-        await this._loadInfoDepartmentSelectedByYear(false);
+        for (let index = 0; index < name_departments.length; index++) {
+          const name_department = name_departments[index];
+          for (let index = 0; index < this.array_years.length; index++) {
+            const year = this.array_years[index];
+            let exist_data_department = data_by_departments[year];
+            if(!exist_data_department[name_department]){
+              const department_selected_original = this.department_selected;
+              const year_selected_original = this.year_selected;
+              this.department_selected = name_department;
+              this.year_selected = year;
+              await this._loadInfoDepartmentSelectedByYear(false);
+              this.department_selected = department_selected_original;
+              this.year_selected = year_selected_original;
+            }
+          }
+        }
       }
     }
   }
@@ -427,7 +442,7 @@ export class InfoGeneralComponent {
   private _updateInfoDepartmentSelected(info_department_selected: any): void {
     let department_selected: string = '';
     if(!Array.isArray(info_department_selected)) {
-      info_department_selected = [info_department_selected,];
+      info_department_selected = [info_department_selected];
     }
     for (let index = 0; index < info_department_selected.length; index++) {
       const contract = info_department_selected[index];

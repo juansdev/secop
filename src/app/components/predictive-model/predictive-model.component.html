@@ -4,15 +4,24 @@
             <h1 class="w-75 mx-auto" style="white-space:break-spaces;"><span class="fw-bold">RELLENA EL FORMULARIO PARA GENERAR LA PROBABILIDAD DE ADICIÓN PRESUPUESTAL A SU CONTRATO</span></h1>
         </div>
         <div class="py-4 px-5" style="background-color: #EFF6F7;">
-            <form action="predictive-model.php" method="get">
+            <form [formGroup]="form" (ngSubmit)="onSubmit(form)">
                 <div *ngFor="let contract of arrayContract;">
-                    <h1 class="m-0 py-3">CONTRATO: {{contract}}</h1>
-                    <app-form-fields></app-form-fields>
+                  <h1 class="m-0 py-3">CONTRATO: {{contract}}</h1>
+                  <div class="row">
+                    <mat-form-field *ngFor="let field of fields_prectivie_model | keyvalue" appearance="fill" class="col-12 col-sm-6 col-md-3 p-2" [hintLabel]="this.sharedFunctionsService.camelize(field.key)+' es requerido'">
+                        <mat-label>{{this.sharedFunctionsService.camelize(field.key)}}</mat-label>
+                        <mat-select matNativeControl [attr.data-name]="contract+'_'+field.key" [formControlName]="contract+'_'+field.key">
+                            <mat-option *ngFor="let field_value of field.value" [value]="field_value">
+                                {{field_value}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                  </div>
                     <button type="button" mat-raised-button color="accent" class="py-2 rounded-0 fw-bold" (click)="arrayContract.splice(arrayContract.indexOf(contract), 1)">ELIMINAR CONTRATO {{contract}}</button>
                     <hr>
                 </div>
                 <div class="text-center">
-                    <button type="button" mat-raised-button color="accent" class="col-12 col-md-6 py-2 rounded-0 fw-bold" (click)="openProbabilityGenerator()">GENERAR PROBABILIDAD</button>
+                    <button type="submit" [disabled]="!form.valid" mat-raised-button color="accent" class="col-12 col-md-6 py-2 rounded-0 fw-bold">GENERAR PROBABILIDAD</button>
                 </div>
             </form>
         </div>
@@ -23,7 +32,7 @@
             <button mat-raised-button (click)="openDragDrop()" color="accent" class="w-100 d-block mt-3 py-2 rounded-0 fw-bold">IMPORTAR EXCEL</button>
         </div>
         <div class="col-12 col-md-6">
-            <a mat-raised-button color="accent" class="w-100 d-block mt-3 py-2 rounded-0 fw-bold" href="#" target="_blank" rel="noopener noreferrer" download="plantilla_excel_secop">DESCARGAR PLANTILLA EN EXCEL</a>
+            <a mat-raised-button color="accent" class="w-100 d-block mt-3 py-2 rounded-0 fw-bold" href="https://ds4asecop7022596406.blob.core.windows.net/util/ContratosTemplate.xlsx" target="_blank" rel="noopener noreferrer" download="plantilla_excel_secop">DESCARGAR PLANTILLA EN EXCEL</a>
         </div>
     </div>
 </div>

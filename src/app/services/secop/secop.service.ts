@@ -8,12 +8,9 @@ import { global } from 'src/app/services/global';
 })
 export class SecopService {
 
-  url_frontend: string;
-  url_backend: string;
+  private _token_forest_eastus: string = 'Bearer QsiuUHgtvw32IzBtuLb2dwS4UIkAo68i';
 
   constructor(private _http: HttpClient) {
-    this.url_backend = global.url_backend;
-    this.url_frontend = global.url_frontend;
   }
 
   // Frontend
@@ -23,46 +20,38 @@ export class SecopService {
     return this._http.get(global.url_frontend + 'assets/json/colombia.json', {headers:headers});
   }
 
-  // Backend
+  // Backend (Secop)
 
   getDepartments():Observable<any> {
     let headers = new HttpHeaders().set("Content-Type","application/json");
-    return this._http.get(global.url_backend + 'departamentos', {headers:headers});
+    return this._http.get(global.url_backend_secop + 'departamentos', {headers:headers});
   }
 
   getDataByDepartmentsAndYear(department_selected: string = '', year: string = ''):Observable<any> {
     let headers = new HttpHeaders().set("Content-Type","application/json");
-    return this._http.get(global.url_backend + `report?departamento=${department_selected}&anno=${year}`, {headers:headers});
-  }
-
-  getFieldsPredictiveModel():Observable<any> {
-    let headers = new HttpHeaders().set("Content-Type","application/json");
-    return this._http.get(global.url_backend + 'listas', {headers:headers});
+    return this._http.get(global.url_backend_secop + `report?departamento=${department_selected}&anno=${year}`, {headers:headers});
   }
 
   postFileExcel(file_excel: File):any {
     let body = new FormData();
     body.append("file", file_excel);
-    return this._http.post(global.url_backend+"upload", body ,{
+    return this._http.post(global.url_backend_secop+"upload", body ,{
       reportProgress: true,
       observe: 'events'
-    }).pipe(
-      catchError(this.errorMgmt)
-    );
+    });
   }
 
-  errorMgmt(error: HttpErrorResponse) {
-    let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
-      // Get client-side error
-      errorMessage = error.error.message;
-    } else {
-      // Get server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-      console.error(error);
-    }
-    console.error(errorMessage);
-    return throwError(errorMessage);
+  getFieldsPredictiveModel():Observable<any> {
+    let headers = new HttpHeaders().set("Content-Type","application/json");
+    return this._http.get(global.url_backend_secop + 'listas', {headers:headers});
+  }
+
+  // Backend (Forest Eastus)
+  postFormPredictiveModel(form: any):Observable<any> {
+    let params = JSON.stringify(form);
+    let headers = new HttpHeaders().set("Content-Type","application/json")
+                                    .set("Authorization",this._token_forest_eastus);
+    return this._http.post(global.url_backend_forest_eastus+'score',params,{headers:headers});
   }
 
 }

@@ -42,6 +42,10 @@ export class SharedFunctionsService {
         data = this._secopLocalService.getGraphicValuesDepartmentsByYearRAM();
         data = Object.keys(data).length ? data : this._secopLocalService.getGraphicValuesDepartmentsByYearLocal;
       }
+      else if(name_data = 'FieldsPredictiveModel') {
+        data = this._secopLocalService.getFieldsPredictiveModelRAM();
+        data = Object.keys(data).length ? data : this._secopLocalService.getFieldsPredictiveModelLocal;
+      }
     }
     else {
       if (name_data === 'dataByDepartmentsAndYear') {
@@ -52,6 +56,9 @@ export class SharedFunctionsService {
       }
       else if (name_data === 'graphicValuesDepartmentsByYear') {
         data = this._secopLocalService.getGraphicValuesDepartmentsByYearLocal;
+      }
+      else if (name_data === 'FieldsPredictiveModel') {
+        data = this._secopLocalService.getFieldsPredictiveModelLocal;
       }
     }
     return data;
@@ -68,6 +75,9 @@ export class SharedFunctionsService {
       }
       else if (name_data === 'graphicValuesDepartmentsByYear') {
         this._secopLocalService.setGraphicValuesDepartmentsByYearRAM(JSON.stringify(data));
+      }
+      else if (name_data === 'FieldsPredictiveModel') {
+        this._secopLocalService.setFieldsPredictiveModelRAM(JSON.stringify(data));
       }
     }
     else {
@@ -110,31 +120,69 @@ export class SharedFunctionsService {
           }
         }
       }
+      else if (name_data === 'FieldsPredictiveModel') {
+        try {
+          this._secopLocalService.setFieldsPredictiveModelLocal = this._secopLocalService.setFieldsPredictiveModelLocal ? this._secopLocalService.setFieldsPredictiveModelLocal+JSON.stringify(data) : JSON.stringify(data);
+        } catch (error) {
+          if (error instanceof DOMException) {
+            this._secopLocalService.setErrorLoad = 'error_exceded_cuota_limit';
+            this._secopLocalService.setFieldsPredictiveModelRAM(JSON.stringify(data));
+          }
+          else {
+            console.error(error);
+          }
+        }
+      }
     }
   }
 
-  simulateProgressBar(dialogRef: MatDialogRef<CalculateDialog>, arrayContract: Array<string>): void {
+  showMessagePredictive(array_contract: Array<string>, message_result: string, message_results: Array<string> = [], index_contract: number = 0) {
+    this.isHandset$.subscribe((isHandset) => {
+      console.log('isHandset', isHandset);
+      const dialog = this.dialog.open(ResultDialog, {
+        width: isHandset ? '100%' : '75%',
+        height: index_contract ? '90%' : 'auto',
+        data: {
+          result: message_result.replace(' contract_name', ''),
+          results: message_results,
+          number_forms: array_contract.length
+        }
+      });
+      const id_dialog = /[0-9]/g.exec(dialog.id)?.[0];
+      if (isHandset) {
+        $('#cdk-overlay-' + id_dialog).css("max-width", "initial");
+        $('#cdk-overlay-' + id_dialog).addClass('overflow-auto', 'max-width-dialog');
+      }
+      index_contract = 0;
+    });
+  }
+
+  simulateProgressBar(dialogRef: MatDialogRef<CalculateDialog>, array_contract: Array<string>, results_prediction: Array<boolean> = [true]): void {
     const duration = 100;
     const steps = (1 / duration) * 100;
-    const result: string = 'EL CONTRATO contract_name TIENE UNA PROBABILIDAD MUY boolean_probability DE QUE SE AGREGUE ADICIÓN PRESUPUESTAL';
+    const result_positive: string = 'EL CONTRATO contract_name TIENE UNA PROBABILIDAD MUY MENOR DE QUE SE LE AGREGUE ADICIÓN PRESUPUESTAL';
+    const result_negative: string = 'CUIDADO EL CONTRATO contract_name TIENE UNA ALTA PROBABILIDAD DE QUE SE LE AGREGUE ADICIÓN PRESUPUESTAL';
     let progress_timer = 0;
     let index_contract = 0;
     let results: Array<string> = [];
     let progress: number = 0;
     let progress_class: string = '';
 
-    var timer = setInterval(() => {
+    const timer = setInterval(() => {
       progress_timer++;
       progress += steps;
       progress_class = `width: ${progress}%`;
       dialogRef.componentInstance.data = {
         progress: parseFloat(progress.toPrecision(4)),
         progress_class: progress_class,
-        number_form: arrayContract[index_contract]
+        number_form: array_contract[index_contract]
       }
+      const result = results_prediction[index_contract] ?
+      result_negative.replace('contract_name', array_contract[index_contract]) :
+      result_positive.replace('contract_name', array_contract[index_contract]);
       if (progress_timer >= duration) {
-        if (index_contract != arrayContract.length - 1) {
-          results.push(result.replace('contract_name', arrayContract[index_contract]).replace('boolean_probability', 'MENOR'));
+        if (index_contract != array_contract.length - 1) {
+          results.push(result);
           index_contract++;
           progress_timer = 0;
           progress = 0;
@@ -142,32 +190,17 @@ export class SharedFunctionsService {
           dialogRef.componentInstance.data = {
             progress: parseFloat(progress.toPrecision(4)),
             progress_class: progress_class,
-            number_form: arrayContract[index_contract]
+            number_form: array_contract[index_contract]
           }
         }
         else {
           if (index_contract) {
-            results.push(result.replace('contract_name', arrayContract[index_contract]).replace('boolean_probability', 'MENOR'));
+            results.push(result);
           }
           clearInterval(timer);
           dialogRef.close();
-          const suscribeIsHandset = this.isHandset$.subscribe((isHandset) => {
-            const dialog = this.dialog.open(ResultDialog, {
-              width: isHandset ? '100%' : '75%',
-              height: index_contract ? '90%' : 'auto',
-              data: {
-                result: result.replace(' contract_name', '').replace('boolean_probability', 'MENOR'),
-                results: results,
-                number_forms: arrayContract.length
-              }
-            });
-            const id_dialog = /[0-9]/g.exec(dialog.id)?.[0];
-            if (isHandset) {
-              $('#cdk-overlay-' + id_dialog).css("max-width", "initial");
-              $('#cdk-overlay-' + id_dialog).addClass('overflow-auto', 'max-width-dialog');
-            }
-          });
-          index_contract = 0;
+          // Agregar resultDialog
+          this.showMessagePredictive(array_contract, result, results, index_contract);
         }
       }
     });

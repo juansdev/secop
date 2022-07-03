@@ -15,25 +15,21 @@ import { SeeDataComponent } from './components/see-data/see-data.component';
 import { PredictiveModelComponent, DragDropDialog, CalculateDialog, ResultDialog } from './components/predictive-model/predictive-model.component';
 import { SharedModule } from './components/shared/shared.module';
 import { FooterComponent } from './layouts/footer/footer.component';
-import { FormFieldsComponent } from './components/predictive-model/form-fields/form-fields.component';
 import { ProgressComponent } from './layouts/progress/progress.component';
 import { ExtensionPanelComponent } from './components/see-data/extension-panel/extension-panel.component';
 
 // Directive
 import { DndDirective } from './directive/dnd.directive';
 import { InfoGeneralComponent } from './components/see-data/info-general/info-general.component';
-import { ToolsDirective } from './directive/tools.directive';
 
 @NgModule({
   declarations: [
-    ToolsDirective,
     AppComponent,
     HomeComponent,
     SeeDataComponent,
     PredictiveModelComponent,
     CalculateDialog,
     FooterComponent,
-    FormFieldsComponent,
     ResultDialog,
     DragDropDialog,
     DndDirective,
