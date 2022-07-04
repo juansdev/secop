@@ -89,7 +89,7 @@ MAPA INTERACTIVO
 
 Pequeño error, al cargar datos de un departamento en un año, al cambiarse a todos (Estando seleccionando otro departamento), no se carga todos los datos de ese departamento que solo cargo un año. LISTO.
 
-Error al cambiarse a cualquier filtro por año, no se actualiza los valores de todos los departamentos. (Sin tener departamento seleccionado).
+Error al cambiarse a cualquier filtro por año, no se actualiza los valores de todos los departamentos. (Sin tener departamento seleccionado). LISTO.
 
 Teniendo departamento seleccionado al cambiarse el filtro carga en todos excepto en el filtro de "Todos". LISTO.
 

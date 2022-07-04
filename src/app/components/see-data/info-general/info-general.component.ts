@@ -79,6 +79,10 @@ export class InfoGeneralComponent {
           this._updateAllInfoDepartmentsByYear(data_by_departments, this.year_selected);
         }
         else {
+          if(!this.array_departments_selected.length && !this.department_selected){
+            this._updateArrayDepartmentsSelected();
+            this.department_selected = this.array_departments_selected[0];
+          }
           await this._loadInfoDepartmentSelectedByYear(changed_year);
         }
       }
@@ -307,9 +311,11 @@ export class InfoGeneralComponent {
       array_of_arrays = [...new Set([].concat.apply([], array_of_arrays))];
       this.array_departments_selected = array_of_arrays;
     }
-    if(!this.array_departments_selected.includes(this.department_selected)){
-      this.array_departments_selected.push(this.department_selected);
-    };
+    if(this.department_selected){
+      if(!this.array_departments_selected.includes(this.department_selected)){
+        this.array_departments_selected.push(this.department_selected);
+      };
+    }
   }
 
   private async _loadInfoDepartmentSelectedByYear(changed_year: boolean): Promise<void> {
@@ -458,12 +464,17 @@ export class InfoGeneralComponent {
       if(array_departments_with_all_data_years.length){
         for (let index = 0; index < array_departments_with_all_data_years.length; index++) {
           const department_with_all_data_year = array_departments_with_all_data_years[index];
+          const department_with_data = [];
           for (let index = 0; index < this.array_years.length; index++) {
             const year = this.array_years[index];
-            array_departments_with_data.push(data_by_departments[year][department_with_all_data_year]);
+            department_with_data.push(data_by_departments[year][department_with_all_data_year]);
           }
+          array_departments_with_data.push(department_with_data);
         }
-        this._updateInfoDepartmentSelected(array_departments_with_data);
+        for (let index = 0; index < array_departments_with_data.length; index++) {
+          const array_department_with_data = array_departments_with_data[index];
+          this._updateInfoDepartmentSelected(array_department_with_data);
+        }
       }
       if(array_departments_without_data['without_year'].length){
         const name_departments: any = [...new Set(array_departments_without_data['without_year'])];
@@ -507,7 +518,6 @@ export class InfoGeneralComponent {
     for (let index = 0; index < info_department_selected.length; index++) {
       const contract = info_department_selected[index];
       const year_contract: number = parseInt(contract['anno']);
-      // dataByDepartments[year] = dataByDepartments[year] ? dataByDepartments[year] : {[this.department_selected]:{}};
       this.graphic_values_departments_by_year[year_contract] = this.graphic_values_departments_by_year[year_contract] ? this.graphic_values_departments_by_year[year_contract] : {};
       // Loop by contract
       for (const field in contract) {
