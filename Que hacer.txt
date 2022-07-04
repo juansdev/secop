@@ -67,7 +67,7 @@ Exito desplegando el modelo usando excel tambien, aqui se procesaron 3 contratos
 
 PENDIENTE:
 
-Optimizar: _updateValueInMapByDepartmentSelected (Cuando se selecciona un año, se carga 5 veces, solo debería cargarse 1 vez).
+Optimizar: _updateValueInMapByDepartmentSelected (Cuando se selecciona un año, se carga 5 veces, solo debería cargarse 1 vez). LISTO.
 
 9. Convertir todos los CSS en SCSS.
 
@@ -93,7 +93,7 @@ Error al cambiarse a cualquier filtro por año, no se actualiza los valores de t
 
 Teniendo departamento seleccionado al cambiarse el filtro carga en todos excepto en el filtro de "Todos". LISTO.
 
-Detectar si ya esta cargado todos los años de X filtro, para deshabilitar el botón de filtro automaticamente.
+Detectar si ya esta cargado todos los años de X filtro, para deshabilitar el botón de filtro automaticamente. LISTO.
 
 Graficar con todos los datos del mapa en un TAB especifico que diga "TODOS".
 

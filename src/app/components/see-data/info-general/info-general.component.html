@@ -16,7 +16,7 @@
                   <mat-card-title>{{value_by_field.key}}</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
-                    <div #allGraphics *ngFor="let name_graphic of array_name_graphics; let last = last;" class="d-inline-block" style="width: 100%; height: 500px;" [id]="'graphic_'+name_graphic+'_'+year_i+'_'+field_i+'_'+department_i">
+                    <div #isAllGraphicsRendered #allGraphics *ngFor="let name_graphic of array_name_graphics; let last = last;" class="d-inline-block graphics_by_deparment" style="width: 100%; height: 500px;" [id]="'graphic_'+name_graphic+'_'+year_i+'_'+field_i+'_'+department_i">
                     </div>
                 </mat-card-content>
               </mat-card>

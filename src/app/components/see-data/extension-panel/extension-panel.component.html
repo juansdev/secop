@@ -4,11 +4,13 @@
             <mat-panel-title class="justify-content-center fw-bold">CLIC PARA EXPANDIR VER LOS DEPARTAMENTOS
             </mat-panel-title>
         </mat-expansion-panel-header>
-        <div class="panel-content overflow-auto panel-content-main">
+        <div class="panel-content panel-content-main" style="overflow-x: hidden;overflow-y: auto;">
             <mat-toolbar color="accent">LOCALIDADES - DEPARTAMENTOS</mat-toolbar>
-            <button *ngFor="let name_department of name_departments" mat-button color="accent" class="d-block w-100 border border-1 border-dark rounded-0 py-2" (click)="department_selected.emit(name_department);">
-                <span class="fs-5 text-dark fw-bold">{{name_department}}</span>
-            </button>
+            <mat-button-toggle-group name="departments" aria-label="Departments" class="flex-column" style="width: inherit; padding: 0 16px 0px 0px;">
+              <mat-button-toggle *ngFor="let name_department of name_departments" mat-button color="accent" class="d-block w-100 border border-1 border-dark rounded-0 py-2" (click)="department_selected.emit(name_department);" [value]="name_department">
+                  <span class="fs-5 text-dark fw-bold" style="white-space: break-spaces;">{{name_department}}</span>
+              </mat-button-toggle>
+            </mat-button-toggle-group>
         </div>
     </mat-expansion-panel>
 </mat-accordion>

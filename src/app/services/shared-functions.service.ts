@@ -34,15 +34,15 @@ export class SharedFunctionsService {
         data = this._secopLocalService.getDataByDepartmentsAndYearRAM();
         data = Object.keys(data).length ? data : this._secopLocalService.getDataByDepartmentsAndYearLocal;
       }
-      else if(name_data === 'maxValueByAddition') {
+      else if (name_data === 'maxValueByAddition') {
         data = this._secopLocalService.getMaxValueByAdditionRAM();
         data = Object.keys(data).length ? data : this._secopLocalService.getMaxValueByAdditionLocal;
       }
-      else if(name_data = 'graphicValuesDepartmentsByYear') {
+      else if (name_data = 'graphicValuesDepartmentsByYear') {
         data = this._secopLocalService.getGraphicValuesDepartmentsByYearRAM();
         data = Object.keys(data).length ? data : this._secopLocalService.getGraphicValuesDepartmentsByYearLocal;
       }
-      else if(name_data = 'FieldsPredictiveModel') {
+      else if (name_data = 'FieldsPredictiveModel') {
         data = this._secopLocalService.getFieldsPredictiveModelRAM();
         data = Object.keys(data).length ? data : this._secopLocalService.getFieldsPredictiveModelLocal;
       }
@@ -83,7 +83,7 @@ export class SharedFunctionsService {
     else {
       if (name_data === 'dataByDepartmentsAndYear') {
         try {
-          this._secopLocalService.setDataByDepartmentsAndYearLocal = this._secopLocalService.setDataByDepartmentsAndYearLocal ? this._secopLocalService.setDataByDepartmentsAndYearLocal+JSON.stringify(data) : JSON.stringify(data);
+          this._secopLocalService.setDataByDepartmentsAndYearLocal = this._secopLocalService.setDataByDepartmentsAndYearLocal ? this._secopLocalService.setDataByDepartmentsAndYearLocal + JSON.stringify(data) : JSON.stringify(data);
         } catch (error) {
           if (error instanceof DOMException) {
             this._secopLocalService.setErrorLoad = 'error_exceded_cuota_limit';
@@ -96,7 +96,7 @@ export class SharedFunctionsService {
       }
       else if (name_data === 'maxValueByAddition') {
         try {
-          this._secopLocalService.setMaxValueByAdditionLocal = this._secopLocalService.setMaxValueByAdditionLocal ? this._secopLocalService.setMaxValueByAdditionLocal+JSON.stringify(data) : JSON.stringify(data);
+          this._secopLocalService.setMaxValueByAdditionLocal = this._secopLocalService.setMaxValueByAdditionLocal ? this._secopLocalService.setMaxValueByAdditionLocal + JSON.stringify(data) : JSON.stringify(data);
         } catch (error) {
           if (error instanceof DOMException) {
             this._secopLocalService.setErrorLoad = 'error_exceded_cuota_limit';
@@ -109,7 +109,7 @@ export class SharedFunctionsService {
       }
       else if (name_data === 'graphicValuesDepartmentsByYear') {
         try {
-          this._secopLocalService.setGraphicValuesDepartmentsByYearLocal = this._secopLocalService.setGraphicValuesDepartmentsByYearLocal ? this._secopLocalService.setGraphicValuesDepartmentsByYearLocal+JSON.stringify(data) : JSON.stringify(data);
+          this._secopLocalService.setGraphicValuesDepartmentsByYearLocal = this._secopLocalService.setGraphicValuesDepartmentsByYearLocal ? this._secopLocalService.setGraphicValuesDepartmentsByYearLocal + JSON.stringify(data) : JSON.stringify(data);
         } catch (error) {
           if (error instanceof DOMException) {
             this._secopLocalService.setErrorLoad = 'error_exceded_cuota_limit';
@@ -122,7 +122,7 @@ export class SharedFunctionsService {
       }
       else if (name_data === 'FieldsPredictiveModel') {
         try {
-          this._secopLocalService.setFieldsPredictiveModelLocal = this._secopLocalService.setFieldsPredictiveModelLocal ? this._secopLocalService.setFieldsPredictiveModelLocal+JSON.stringify(data) : JSON.stringify(data);
+          this._secopLocalService.setFieldsPredictiveModelLocal = this._secopLocalService.setFieldsPredictiveModelLocal ? this._secopLocalService.setFieldsPredictiveModelLocal + JSON.stringify(data) : JSON.stringify(data);
         } catch (error) {
           if (error instanceof DOMException) {
             this._secopLocalService.setErrorLoad = 'error_exceded_cuota_limit';
@@ -172,8 +172,8 @@ export class SharedFunctionsService {
         number_form: array_contract[index_contract]
       }
       const result = results_prediction[index_contract] ?
-      result_negative.replace('contract_name', array_contract[index_contract]) :
-      result_positive.replace('contract_name', array_contract[index_contract]);
+        result_negative.replace('contract_name', array_contract[index_contract]) :
+        result_positive.replace('contract_name', array_contract[index_contract]);
       if (progress_timer >= duration) {
         if (index_contract != array_contract.length - 1) {
           results.push(result);

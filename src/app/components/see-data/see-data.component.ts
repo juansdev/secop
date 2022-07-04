@@ -42,15 +42,30 @@ export class SeeDataComponent implements OnInit {
   public loaded_date: any = {};
 
   constructor(private _secopService: SecopService, private _secopLocalService: SecopLocalService, private _sharedFunctionsService: SharedFunctionsService) {
-    for (let index = 0; index < this.array_years.length; index++) {
-      const year = this.array_years[index];
-      this.loaded_date[year] = false;
-    }
-    this.loaded_date['Todos'] = false;
   }
 
-  ngOnInit(): void {
-    this.mapFunction();
+  async ngOnInit(): Promise<void> {
+    await this.mapFunction();
+    const dataByDepartmentsAndYear = this._sharedFunctionsService.getDataLocalOrRam('dataByDepartmentsAndYear') ? JSON.parse(this._sharedFunctionsService.getDataLocalOrRam('dataByDepartmentsAndYear')) : {};
+    if(dataByDepartmentsAndYear){
+      const array_years_loaded: any = this.array_years.filter((year: string) => Object.keys(dataByDepartmentsAndYear).includes(year));
+      array_years_loaded.forEach((year_loaded: number) => {
+        if(this.name_departments.length === Object.keys(dataByDepartmentsAndYear[year_loaded]).length){
+          this.loaded_date[year_loaded] = true;
+        }
+      });
+    }
+    this.array_years.forEach((year: any)=> {
+      if(!this.loaded_date[year]) {
+        this.loaded_date[year] = false;
+      }
+    });
+    if(Object.values(this.loaded_date).every(Boolean)) {
+      this.loaded_date['Todos'] = true;
+    }
+    else {
+      this.loaded_date['Todos'] = false;
+    }
   }
 
   updateLoadDate(year: string): void {
@@ -78,7 +93,7 @@ export class SeeDataComponent implements OnInit {
     let map_options: EChartsOption;
     this.myMap.showLoading();
 
-    await lastValueFrom(this._secopService.getMapColombia().pipe(map(
+    return await lastValueFrom(this._secopService.getMapColombia().pipe(map(
       async (colombiaJson: any) => {
         this.myMap.hideLoading();
         registerMap('Colombia', colombiaJson);
@@ -113,7 +128,7 @@ export class SeeDataComponent implements OnInit {
                 '#a50026'
               ]
             },
-            text: ['High', 'Low'],
+            text: ['Alto', 'Bajo'],
             calculable: true
           },
           toolbox: {

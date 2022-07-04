@@ -1,4 +1,4 @@
-import { Component, Input, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Input, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { SecopService } from 'src/app/services/secop/secop.service';
 import { SharedFunctionsService } from 'src/app/services/shared-functions.service';
 import { use, init } from 'echarts/core';
@@ -8,6 +8,8 @@ import { LabelLayout, UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
 import { SecopLocalService } from 'src/app/services/secop/secop-local.service';
 import { lastValueFrom, map } from 'rxjs';
+
+declare var $: any;
 
 use([GridComponent, TooltipComponent, LegendComponent, PieChart, BarChart, LineChart, CanvasRenderer, UniversalTransition, LabelLayout]);
 
@@ -30,7 +32,8 @@ interface ValuesByYear {
 })
 export class InfoGeneralComponent {
 
-  @ViewChildren('allGraphics') things: any;
+  @ViewChild('allGraphics') allGraphics: any;
+  @ViewChildren('isAllGraphicsRendered') isAllGraphicsRendered: any;
 
   @Input() myMap: any;
   @Input() department_selected: string = '';
@@ -96,47 +99,50 @@ export class InfoGeneralComponent {
   }
 
   async ngAfterViewInit() {
-    await lastValueFrom(this.things.changes.pipe(map((_: any) => {
-      this.ngForRendred();
+    // Arreglar problema de generacion de graficos, el problema esta en que no se espera lo suficiente a que todas los elementos se carguen y se eliminen los anteriores.
+    // El problema se agraba por alguna razon, cuando se selecciona el departamento en desplegable izquierdo.
+    await lastValueFrom(this.isAllGraphicsRendered.changes.pipe(map(()=>{
+      let indexs_field: any = [];
+      this.isAllGraphicsRendered.forEach((element: ElementRef) => {
+        indexs_field.push(element.nativeElement.id);
+      });
+      indexs_field.forEach((val: any, i: any)=>{
+        indexs_field[i] = val.match(/(_\d)+[\d]?/g)[0].replace('_','');
+      });
+      indexs_field = [...new Set(indexs_field)];
+      this.ngForRendred(indexs_field);
     })));
   }
 
-  ngForRendred() {
-    let year_i = 0;
+  ngForRendred(indexs_field: Array<string>) {
     const graphic_values_departments_by_year = this.graphic_values_departments_by_year;
     const year_selected: any = this.year_selected;
     const department_selected: any = this.department_selected;
     this.params_for_generate_graphics = [];
     for (const year in graphic_values_departments_by_year) {
       if (Object.prototype.hasOwnProperty.call(graphic_values_departments_by_year, year)) {
-        const graphic_value_department: any = graphic_values_departments_by_year[year];
         if(year === year_selected || !year_selected){
-          let index_department = 0;
+          const graphic_value_department: any = graphic_values_departments_by_year[year];
           for (const department in graphic_value_department) {
             if (Object.prototype.hasOwnProperty.call(graphic_value_department, department)) {
               const value_by_departments = graphic_value_department[department];
               if(department === department_selected){
-                let field_i = 0;
                 for (const field in value_by_departments) {
                   if (Object.prototype.hasOwnProperty.call(value_by_departments, field)) {
-                    this.params_for_generate_graphics.push([year, field, year_i+'_'+field_i+'_'+index_department]);
+                    this.params_for_generate_graphics.push([year, field]);
                   }
-                  field_i++;
                 }
                 break;
               }
             }
-            index_department++;
           }
           if(year === year_selected) {
-            year_i++;
             break;
           }
         }
       }
-      year_i++;
     }
-    this._loadGraphicsWithValues();
+    this._loadGraphicsWithValues(indexs_field);
   }
 
   ngAfterViewChecked() {
@@ -149,9 +155,17 @@ export class InfoGeneralComponent {
     }
   }
 
-  changeYearSelectedTab(index_year_selected: any){
+  changeYearSelectedTab(index_year_selected: number){
     setTimeout(() => {
-      this._loadGraphicsWithValues(index_year_selected);
+      let indexs_field: any = [];
+      $('.graphics_by_deparment').each((_: number, element: any) => {
+        indexs_field.push($(element).attr('id'));
+      });
+      indexs_field.forEach((val: any, i: any)=>{
+        indexs_field[i] = val.match(/(_\d)+[\d]?/g)[0].replace('_','');
+      });
+      indexs_field = [...new Set(indexs_field)];
+      this._loadGraphicsWithValues(indexs_field, index_year_selected);
     }, 1000);
   }
 
@@ -161,14 +175,21 @@ export class InfoGeneralComponent {
     this._updateAllInfoDepartmentsByYear(data_by_departments, this.year_selected, true);
   }
 
-  public _loadGraphicsWithValues(tab_index_year_selected: number = 0){
+  public _loadGraphicsWithValues(indexs_field:Array<string>, tab_index_year_selected: number = 0){
     let year_selected = this.year_selected;
     if(!year_selected) {
       year_selected = this.array_years[tab_index_year_selected];
     }
     if(this.params_for_generate_graphics.length){
-      for (let index = 0; index < this.params_for_generate_graphics.length; index++) {
-        const params_for_generate_graphic = this.params_for_generate_graphics[index];
+      let params_for_generate_graphics = this.params_for_generate_graphics.filter((element: any) => element[0] === year_selected);
+      params_for_generate_graphics.forEach((element: any, index: number)=>{
+        if(element.length === 3){
+          element.pop();
+        }
+        element.push(indexs_field[index]);
+      });
+      for (let index = 0; index < params_for_generate_graphics.length; index++) {
+        const params_for_generate_graphic = params_for_generate_graphics[index];
         let year,field,index_field;
         year = params_for_generate_graphic[0];
         field = params_for_generate_graphic[1];
@@ -420,18 +441,20 @@ export class InfoGeneralComponent {
     let list_name_departments_selected = this.array_departments_selected;
     list_name_departments_selected = load_all_departments ? this.array_departments_by_map.filter((val) => this.array_departments_selected.indexOf(val) === -1) : list_name_departments_selected;
     if(year_selected) {
-      for (let index = 0; index < list_name_departments_selected.length; index++) {
-        const name_department = list_name_departments_selected[index];
-        let info_department_selected = Object.keys(data_by_departments).length ? data_by_departments[year_selected] : {[year_selected]: {}};
-        info_department_selected = info_department_selected[name_department];
-        if(!info_department_selected) {
-          const department_selected_original = this.department_selected;
-          this.department_selected = name_department;
-          await this._loadInfoDepartmentSelectedByYear(false);
-          this.department_selected = department_selected_original;
-        }
-        else {
-          this._updateInfoDepartmentSelected(info_department_selected);
+      if(list_name_departments_selected.length){
+        for (let index = 0; index < list_name_departments_selected.length; index++) {
+          const name_department = list_name_departments_selected[index];
+          let info_department_selected = Object.keys(data_by_departments).length ? data_by_departments[year_selected] : {[year_selected]: {}};
+          info_department_selected = info_department_selected[name_department];
+          if(!info_department_selected) {
+            const department_selected_original = this.department_selected;
+            this.department_selected = name_department;
+            await this._loadInfoDepartmentSelectedByYear(false);
+            this.department_selected = department_selected_original;
+          }
+          else {
+            this._updateInfoDepartmentSelected(info_department_selected);
+          }
         }
       }
     }
@@ -447,7 +470,12 @@ export class InfoGeneralComponent {
         for (let index = 0; index < list_name_departments_selected.length; index++) {
           const name_department = list_name_departments_selected[index];
           let exist_data_department = data_by_departments[year];
-          exist_data_department = exist_data_department ? (exist_data_department[name_department] ? 2 : 1) : 0;
+          if(load_all_departments){
+            exist_data_department = exist_data_department ? (exist_data_department[name_department] ? 2 : 0) : 0;
+          }
+          else {
+            exist_data_department = exist_data_department ? (exist_data_department[name_department] ? 2 : 1) : 0;
+          }
           if(exist_data_department!=2) {
             if(exist_data_department === 0){
               array_departments_without_data['without_year'].push(name_department);
@@ -455,6 +483,17 @@ export class InfoGeneralComponent {
             else {
               array_departments_without_data['without_department_in_year'].push(name_department);
             }
+          }
+        }
+      }
+      let departments_repeat_without_data_in_year: any = {};
+      array_departments_without_data['without_department_in_year'].forEach(function (x: any) { departments_repeat_without_data_in_year[x] = (departments_repeat_without_data_in_year[x] || 0) + 1; });
+      for (const department in departments_repeat_without_data_in_year) {
+        if (Object.prototype.hasOwnProperty.call(departments_repeat_without_data_in_year, department)) {
+          const count_repeat = departments_repeat_without_data_in_year[department];
+          if(count_repeat >= Math.ceil(this.array_years.length/2)){
+            array_departments_without_data['without_department_in_year'] = array_departments_without_data['without_department_in_year'].filter((val: string) => val !== department);
+            array_departments_without_data['without_year'].push(department);
           }
         }
       }
@@ -487,9 +526,7 @@ export class InfoGeneralComponent {
         }
       }
       if(array_departments_without_data['without_department_in_year'].length){
-        // Arreglar problema de async, await.
         const name_departments: any = [...new Set(array_departments_without_data['without_department_in_year'])];
-        // Debe permitir iterar el arreglo en un subscription, esperar que se reciba respuesta de la peticion y continuar con el siguiente...
         for (let index = 0; index < name_departments.length; index++) {
           const name_department = name_departments[index];
           for (let index = 0; index < this.array_years.length; index++) {
