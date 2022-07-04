@@ -46,12 +46,11 @@ export class SecopService {
     return this._http.get(global.url_backend_secop + 'listas', {headers:headers});
   }
 
-  // Backend (Forest Eastus)
   postFormPredictiveModel(form: any):Observable<any> {
     let params = JSON.stringify(form);
     let headers = new HttpHeaders().set("Content-Type","application/json")
                                     .set("Authorization",this._token_forest_eastus);
-    return this._http.post(global.url_backend_forest_eastus+'score',params,{headers:headers});
+    return this._http.post(global.url_backend_secop+'predict',params,{headers:headers});
   }
 
 }

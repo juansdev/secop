@@ -1,11 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
-import { delay, filter } from 'rxjs/operators';
+import { delay, filter, map } from 'rxjs/operators';
 import { NavigationEnd, Router } from '@angular/router';
 import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import { SharedFunctionsService } from './services/shared-functions.service';
-import { Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 
 @UntilDestroy()
 @Component({
@@ -21,26 +21,22 @@ export class AppComponent {
 
   isHandset$: Observable<boolean> = this.SharedFunctionsService.isHandset$;
 
-  ngAfterViewInit() {
-    this.observer.observe(Breakpoints.Handset).pipe(delay(1), untilDestroyed(this)).subscribe((res: any) => {
-      if (!res.matches) {
-        this.sidenav.mode = 'side';
-        this.sidenav.close();
-      } else {
-        this.sidenav.mode = 'over';
-      }
-    });
-
-    this.router.events
-      .pipe(
-        untilDestroyed(this),
-        filter((e) => e instanceof NavigationEnd)
-      )
-      .subscribe(() => {
-        if (this.sidenav.mode === 'over') {
+  async ngAfterViewInit() {
+    await lastValueFrom(this.observer.observe(Breakpoints.Handset).pipe(delay(1), untilDestroyed(this), map((res: any) => {
+        if (!res.matches) {
+          this.sidenav.mode = 'side';
           this.sidenav.close();
+        } else {
+          this.sidenav.mode = 'over';
         }
-      });
+      }
+    )));
+
+    await lastValueFrom(this.router.events.pipe(untilDestroyed(this), filter((e) => e instanceof NavigationEnd), map(() => {
+      if (this.sidenav.mode === 'over') {
+        this.sidenav.close();
+      }
+    })));
   }
 
 }

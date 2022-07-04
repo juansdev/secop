@@ -43,8 +43,11 @@ export class PredictiveModelComponent implements OnInit {
 
   constructor(private dialog: MatDialog, private _secopService: SecopService, private _secopLocalService: SecopLocalService, public sharedFunctionsService: SharedFunctionsService, private fb: FormBuilder) {
     this.fields_prectivie_model = this.sharedFunctionsService.getDataLocalOrRam('FieldsPredictiveModel') ? JSON.parse(this.sharedFunctionsService.getDataLocalOrRam('FieldsPredictiveModel')) : {};
+  }
+
+  async ngOnInit(): Promise<void> {
     if(!Object.keys(this.fields_prectivie_model).length){
-      this._secopService.getFieldsPredictiveModel().subscribe((data_fields_predictive_model: any) => {
+      await lastValueFrom(this._secopService.getFieldsPredictiveModel().pipe(map(async (data_fields_predictive_model: any) => {
         const fields_predictive_model = Object.values(data_fields_predictive_model);
         for (let index = 0; index < fields_predictive_model.length; index++) {
           const value_fields: any = fields_predictive_model[index];
@@ -62,7 +65,7 @@ export class PredictiveModelComponent implements OnInit {
         this.fields_prectivie_model['Departamento Ejecución'] = [];
         let name_departments: any = this._secopLocalService.getDepartments ? this._secopLocalService.getDepartments.split(';').sort() : [];
         if(!name_departments.length){
-          this._secopService.getDepartments().subscribe((data_name_departments: any)=>{
+          await lastValueFrom(this._secopService.getDepartments().pipe(map((data_name_departments: any)=>{
             for (const key in data_name_departments) {
               if (Object.prototype.hasOwnProperty.call(data_name_departments, key)) {
                 const department = data_name_departments[key];
@@ -77,7 +80,7 @@ export class PredictiveModelComponent implements OnInit {
               this.fields_prectivie_model['Departamento Ejecución'].push(department);
             }
             this.sharedFunctionsService.setDataLocalOrRam('FieldsPredictiveModel', this.fields_prectivie_model);
-          });
+          })));
         }
         else {
           for (let index = 0; index < name_departments.length; index++) {
@@ -87,11 +90,9 @@ export class PredictiveModelComponent implements OnInit {
           }
           this.sharedFunctionsService.setDataLocalOrRam('FieldsPredictiveModel', this.fields_prectivie_model);
         }
-      });
+      })));
     }
   }
-
-  ngOnInit(): void {}
 
   ngDoCheck()	{
     const amount_controlers = (Object.keys(this.form.controls).length/Object.keys(this.fields_prectivie_model).length);
@@ -130,23 +131,15 @@ export class PredictiveModelComponent implements OnInit {
     for (let index = 0; index < form_values_by_numeric.length; index++) {
       const form_values_by_numeric_contract = form_values_by_numeric[index];
       let new_form_values = form_values_by_numeric_contract;
-      console.log('Procesando formulario');
-      console.log(new_form_values);
-      await lastValueFrom(this._secopService.postFormPredictiveModel(new_form_values)).then(
-        map((result: any)=> {
-          console.log('Formulario procesado');
-          console.log(result);
-          results_prediction.push(!!parseInt(result['data']));
-        })
+      await lastValueFrom(this._secopService.postFormPredictiveModel(new_form_values)).then((result: any)=> {
+        results_prediction.push(!!parseInt(result['data']));
+      }
       ).catch((error: any)=>{
         console.error(error);
       });
     }
     if(results_prediction.length) {
       this.openProbabilityGenerator(results_prediction);
-    }
-    else {
-      this.openProbabilityGenerator();
     }
   }
 
@@ -174,7 +167,7 @@ export class PredictiveModelComponent implements OnInit {
 
   openDragDrop(): void {
     this.dialog.open(DragDropDialog, {
-      width: '75%'
+      width: this.sharedFunctionsService.isHandset$ ? '100%' : '75%'
     });
   }
 
@@ -278,8 +271,7 @@ export class DragDropDialog implements OnInit {
   }
 
   async onSubmit() {
-    await lastValueFrom(this._secopService.postFileExcel(this.file)).then(
-      (result: any)=> {
+    await lastValueFrom(this._secopService.postFileExcel(this.file)).then((result: any)=> {
         const contracts = result['body']['contracts'];
         this.openProbabilityGenerator(contracts);
       }
@@ -305,10 +297,6 @@ export class DragDropDialog implements OnInit {
         number_form: contracts_excel
       }
     });
-    console.log('contracts_excel');
-    console.log(contracts_excel);
-    console.log('results_prediction');
-    console.log(results_prediction);
     this.sharedFunctionsService.simulateProgressBar(dialogRef, contracts_excel, results_prediction);
   }
 

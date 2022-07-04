@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { first, map, shareReplay } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { CalculateDialog, ResultDialog } from '../components/predictive-model/predictive-model.component';
 import { SecopLocalService } from './secop/secop-local.service';
 
@@ -66,7 +66,7 @@ export class SharedFunctionsService {
 
   setDataLocalOrRam(name_data: string, data: any): void {
     if (this._secopLocalService.getErrorLoad) {
-      console.log('error_exceded_cuota_limit');
+      console.warn('Almacenamiento en memoria local alcanzada. Utilizando memoria RAM en su lugar.');
       if (name_data === 'dataByDepartmentsAndYear') {
         this._secopLocalService.setDataByDepartmentsAndYearRAM(JSON.stringify(data));
       }
@@ -136,9 +136,8 @@ export class SharedFunctionsService {
     }
   }
 
-  showMessagePredictive(array_contract: Array<string>, message_result: string, message_results: Array<string> = [], index_contract: number = 0) {
-    this.isHandset$.subscribe((isHandset) => {
-      console.log('isHandset', isHandset);
+  async showMessagePredictive(array_contract: Array<string>, message_result: string, message_results: Array<string> = [], index_contract: number = 0) {
+    await lastValueFrom(this.isHandset$.pipe(map((isHandset) => {
       const dialog = this.dialog.open(ResultDialog, {
         width: isHandset ? '100%' : '75%',
         height: index_contract ? '90%' : 'auto',
@@ -148,16 +147,11 @@ export class SharedFunctionsService {
           number_forms: array_contract.length
         }
       });
-      const id_dialog = /[0-9]/g.exec(dialog.id)?.[0];
-      if (isHandset) {
-        $('#cdk-overlay-' + id_dialog).css("max-width", "initial");
-        $('#cdk-overlay-' + id_dialog).addClass('overflow-auto', 'max-width-dialog');
-      }
       index_contract = 0;
-    });
+    })));
   }
 
-  simulateProgressBar(dialogRef: MatDialogRef<CalculateDialog>, array_contract: Array<string>, results_prediction: Array<boolean> = [true]): void {
+  async simulateProgressBar(dialogRef: MatDialogRef<CalculateDialog>, array_contract: Array<string>, results_prediction: Array<boolean> = [true]): Promise<void> {
     const duration = 100;
     const steps = (1 / duration) * 100;
     const result_positive: string = 'EL CONTRATO contract_name TIENE UNA PROBABILIDAD MUY MENOR DE QUE SE LE AGREGUE ADICIÓN PRESUPUESTAL';
@@ -205,9 +199,9 @@ export class SharedFunctionsService {
       }
     });
 
-    dialogRef.afterClosed().subscribe(() => {
+    await lastValueFrom(dialogRef.afterClosed().pipe(map(() => {
       clearInterval(timer);
-    });
+    })));
   }
 
 }

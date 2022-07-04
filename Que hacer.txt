@@ -43,27 +43,13 @@ Por Nivel Entidad. LISTO.
 Por Modalidad de Contratación. LISTO.
 Por Tipo del contrato. LISTO.
 
-PENDIENTE:
+Versión móvil en sección "Modelo Predictivo": LISTO.
+Ajustar tamaño en móvil del Dialog calcular, resultado y dragndrop. LISTO.
+Arreglar logo y actualizarlos. LISTO.
 
-Optimizar: _updateValueInMapByDepartmentSelected (Cuando se selecciona un año, se carga 5 veces, solo debería cargarse 1 vez).
+GENERAR PROBABILIDAD: LISTO.
 
-7. Versión móvil en sección "Modelo Predictivo":
-
-7.1. Ajustar tamaño en móvil del Dialog calcular, resultado y dragndrop.
-
-9. Convertir todos los CSS en SCSS.
-
-9.1. Ajustar colores que correspondan al Mockup.
-
-10. Arreglar problemas de accesibilidad.
-
-11. Arreglar logo y actualizarlos.
-
-12. Realizar documentación en código fuente y subirlo al GitHub con README.me documentado.
-
-GENERAR PROBABILIDAD:
-
-* Generar probabilidad es mediante el endpoint del modelo. Sin necesidad de conexión a backend. Todavía no esta el modelo listo para procesar predicción.
+* Generar probabilidad es mediante el endpoint del modelo. Sin necesidad de conexión a backend. LISTO.
 
 * Cambiar mensaje de probabilidad generado. LISTO.
 - Cuidado el contrato tiene una alta probabilidad de que se le agregue adición presupuestal. LISTO.
@@ -71,46 +57,46 @@ GENERAR PROBABILIDAD:
 
 * Cambiar IMPORTAR CSV por EXCEL. LISTO.
 - Permitir importar archivos Excel. LISTO.
-- Es necesario conexión al endpoint del backend.
+- Es necesario conexión al endpoint del backend. LISTO.
+
+
+Modelo Predictivo:
+Agregar los campos que faltan en modelo predictivo. LISTO.
+
+Exito desplegando el modelo usando excel tambien, aqui se procesaron 3 contratos. @Juan Serrano  para que por favor ya ajustes el front para visualizar el "tiene adicion" y "no tiene adicion" dependiendo de ese json de respuesta. LISTO.
+
+PENDIENTE:
+
+Optimizar: _updateValueInMapByDepartmentSelected (Cuando se selecciona un año, se carga 5 veces, solo debería cargarse 1 vez).
+
+9. Convertir todos los CSS en SCSS.
+
+9.1. Ajustar colores que correspondan al Mockup.
+
+10. Arreglar problemas de accesibilidad.
+
+Realizar documentación en código fuente y subirlo al GitHub con README.me documentado.
 
 PRIORIDAD:
 
 Mostrar Datos:
 Los valores en graficos además tambien mostrarlo en porcentaje.
 
-Modelo Predictivo:
-1. LISTO.
-Agregar los campos que faltan en modelo predictivo.
-
-2. LISTO. JHOSEP TENDRA QUE ARREGLAR PROBLEMA DE CORS.
-Metodo http POST:
-url para consumirlo: https://forest.eastus.inference.ml.azure.com/score
-header de autenticación: Authorization Bearer QsiuUHgtvw32IzBtuLb2dwS4UIkAo68i
-json de ejemplo: {
-  "Orden Entidad": "DISTRITO CAPITAL",
-  "Modalidad de Contratacion": "Licitación Pública",
-  "Objeto a Contratar": "Componentes y Suministros para Estructuras, Edificación, Construcción y Obras Civiles",
-  "Departamento Entidad": "Cundinamarca",
-  "Departamento Ejecución": "Córdoba",
-  "Rango val contratos": "> 1000 MCOP hasta 5000 MCOP",
-  "Rango tiempo contratos": "> 2 años"
-}
-
-3. LISTO.
-Exito desplegando el modelo usando excel tambien, aqui se procesaron 3 contratos. @Juan Serrano  para que por favor ya ajustes el front para visualizar el "tiene adicion" y "no tiene adicion" dependiendo de ese json de respuesta.
-
-El 1, 2 3 es el numero de la fila del excel, y el valor seria 1 con adicion y 0 sin adicion.
-
 4.
-Arreglar problema de subscribe, cambiarlos a .then cuando es POST, map usar cuando es GET. Ponerles a todos async await.
+Arreglar problema de subscribe, cambiarlos a .then cuando es POST, map usar cuando es GET. Ponerles a todos async await. LISTO.
 
-Pequeño error, al cargar datos de un departamento en un año, al cambiarse a todos (Estando seleccionando otro departamento), no se carga todos los datos de ese departamento que solo cargo un año.
+MAPA INTERACTIVO
+
+Pequeño error, al cargar datos de un departamento en un año, al cambiarse a todos (Estando seleccionando otro departamento), no se carga todos los datos de ese departamento que solo cargo un año. LISTO.
 
 Error al cambiarse a cualquier filtro por año, no se actualiza los valores de todos los departamentos. (Sin tener departamento seleccionado).
-Teniendo departamento seleccionado al cambiarse el filtro carga en todos excepto en el filtro de "Todos".
+
+Teniendo departamento seleccionado al cambiarse el filtro carga en todos excepto en el filtro de "Todos". LISTO.
 
 Detectar si ya esta cargado todos los años de X filtro, para deshabilitar el botón de filtro automaticamente.
 
 Graficar con todos los datos del mapa en un TAB especifico que diga "TODOS".
 
-Por alguna razón al cargarse todos los datos, no se cargan los graficos el año 2017.
+Por alguna razón al cargarse todos los datos, no se cargan los graficos el año 2017. LISTO.
+
+Al seleccionarse un departamento no se actualiza valores en graficas. LISTO.

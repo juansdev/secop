@@ -33,3 +33,10 @@ body {
   overflow: auto;
   resize: horizontal;
 }
+
+@media (max-width: 575px) {
+  .cdk-overlay-pane {
+    max-width: initial !important;
+    overflow: auto !important;
+  }
+}

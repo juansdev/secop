@@ -13,6 +13,7 @@ import {
 import { MapSeriesOption } from 'echarts/charts';
 import { SharedFunctionsService } from 'src/app/services/shared-functions.service';
 import { InfoGeneralComponent } from './info-general/info-general.component';
+import { lastValueFrom, map } from 'rxjs';
 
 type EChartsOption = echarts.ComposeOption<
   | TitleComponentOption
@@ -71,14 +72,14 @@ export class SeeDataComponent implements OnInit {
     this.department_selected = department_selected;
   }
 
-  private mapFunction(): void {
+  private async mapFunction(): Promise<void> {
     const chartDom = document.getElementById('main_map');
     this.myMap = init(chartDom!);
     let map_options: EChartsOption;
     this.myMap.showLoading();
 
-    this._secopService.getMapColombia().subscribe(
-      (colombiaJson: any) => {
+    await lastValueFrom(this._secopService.getMapColombia().pipe(map(
+      async (colombiaJson: any) => {
         this.myMap.hideLoading();
         registerMap('Colombia', colombiaJson);
         map_options = {
@@ -148,18 +149,18 @@ export class SeeDataComponent implements OnInit {
         const data = new_option_map['series'][0]['data'];
         const name_departments = this._secopLocalService.getDepartments;
         if(!name_departments){
-          this._secopService.getDepartments().subscribe((data_name_departments: any)=>{
-            for (const key in data_name_departments) {
-              if (Object.prototype.hasOwnProperty.call(data_name_departments, key)) {
-                const department = data_name_departments[key];
-                this.name_departments.push(department.departamentoEjecucion);
-                data.push({name: department.departamentoEjecucion, value: 0});
+            await lastValueFrom(this._secopService.getDepartments().pipe(map((data_name_departments: any)=>{
+              for (const key in data_name_departments) {
+                if (Object.prototype.hasOwnProperty.call(data_name_departments, key)) {
+                  const department = data_name_departments[key];
+                  this.name_departments.push(department.departamentoEjecucion);
+                  data.push({name: department.departamentoEjecucion, value: 0});
+                }
               }
-            }
-            this.name_departments.sort();
-            this._secopLocalService.setDepartments = this.name_departments;
-            this.myMap.setOption(new_option_map);
-          });
+              this.name_departments.sort();
+              this._secopLocalService.setDepartments = this.name_departments;
+              this.myMap.setOption(new_option_map);
+            })));
         }
         else {
           this.name_departments = name_departments.split(';').sort();
@@ -196,7 +197,7 @@ export class SeeDataComponent implements OnInit {
           this.myMap.setOption(new_option_map);
         }
         this.myMap.resize();
-      });
+      })));
   }
 
 }

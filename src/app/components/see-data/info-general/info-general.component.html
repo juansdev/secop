@@ -5,23 +5,23 @@
 <div *ngIf="department_selected">
   <mat-toolbar color="accent" class="text-uppercase justify-content-center">{{department_selected}} - DEPARTAMENTO
   </mat-toolbar>
-  <mat-tab-group>
-    <div *ngIf="is_load" class="d-flex justify-content-center align-items-center" style="height: 90vh;">
-      <mat-spinner mode="indeterminate"></mat-spinner>
-    </div>
+  <mat-tab-group (selectedIndexChange)="changeYearSelectedTab($event)">
     <div *ngFor="let graphic_value_department of graphic_values_departments_by_year | keyvalue; let year_i = index;">
       <div *ngIf="graphic_value_department.key === year_selected || !year_selected">
         <mat-tab [label]="graphic_value_department.key">
-          <mat-card *ngFor="let value_by_field of graphic_value_department.value | keyvalue; let field_i = index;" style="resize: horizontal;" class="col-md-6 overflow-auto d-inline-block card_with_graphics">
-            <mat-card-header>
-              <mat-card-title>{{value_by_field.key}}</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                <div *ngFor="let name_graphic of array_name_graphics; let last = last;" class="d-inline-block" style="width: 100%; height: 500px;" [id]="'graphic_'+name_graphic+'_'+year_i+'_'+field_i">
-                  {{last ? createGraphicWithValues(graphic_value_department.key, value_by_field.key, year_i+'_'+field_i) : false}}
-                </div>
-            </mat-card-content>
-          </mat-card>
+          <div *ngFor="let value_by_departments of graphic_value_department.value | keyvalue; let department_i = index;">
+            <div *ngIf="value_by_departments.key === department_selected">
+              <mat-card *ngFor="let value_by_field of value_by_departments.value | keyvalue; let field_i = index;" style="resize: horizontal;" class="col-md-6 overflow-auto d-inline-block card_with_graphics">
+                <mat-card-header>
+                  <mat-card-title>{{value_by_field.key}}</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div #allGraphics *ngFor="let name_graphic of array_name_graphics; let last = last;" class="d-inline-block" style="width: 100%; height: 500px;" [id]="'graphic_'+name_graphic+'_'+year_i+'_'+field_i+'_'+department_i">
+                    </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
         </mat-tab>
       </div>
     </div>
