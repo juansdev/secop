@@ -1,0 +1,42 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "~bootstrap/dist/css/bootstrap-reboot.css";
+@import "~bootstrap/dist/css/bootstrap-grid.css";
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.holder {
+    transform: skew(-38deg);
+}
+
+.rotate {
+    position: relative;
+    white-space: pre-wrap;
+    transform: skew(38deg);
+    display: inline-block;
+    font-size: 1.6vw;
+}
+
+.row {
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+
+.cdk-overlay-pane{
+  overflow: auto;
+  resize: horizontal;
+}
+
+@media (max-width: 575px) {
+  .cdk-overlay-pane {
+    max-width: initial !important;
+    overflow: auto !important;
+  }
+}

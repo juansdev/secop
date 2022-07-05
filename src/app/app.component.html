@@ -1,0 +1,47 @@
+<mat-toolbar color="primary" class="mat-elevation-z8">
+    <!-- Button Open Menu - Mobile -->
+    <button [class]="(isHandset$ | async) ? '' : 'd-none'" mat-icon-button *ngIf="sidenav.mode === 'over'"
+        (click)="sidenav.toggle()">
+        <mat-icon *ngIf="!sidenav.opened"> menu </mat-icon>
+        <mat-icon *ngIf="sidenav.opened"> close </mat-icon>
+    </button>
+    <!-- Menu - PC -->
+    <img src="assets/img/logo2.webp" width="50px" alt="Logo Team 102" [class]="(isHandset$ | async) ? 'd-none' : 'me-3'">
+    <!-- All -->
+    <span class="fw-bold">CIENCIAS DE DATOS SECOP</span>
+    <!-- Menu - PC -->
+    <span class="spacer"></span>
+    <div [class]="(isHandset$ | async) ? 'd-none' : ''">
+        <button mat-button routerLink="/">INICIO</button>
+        <button mat-button routerLink="/ver_datos">VER DATOS</button>
+        <button mat-button routerLink="/modelo_predictivo">MODELO PREDICTIVO</button>
+    </div>
+</mat-toolbar>
+
+<!-- Menu - Mobile -->
+<mat-sidenav-container>
+    <mat-sidenav #sidenav="matSidenav" class="mat-elevation-z8">
+        <img class="avatar mat-elevation-z8" width="100px" height="100px" src="assets/img/logo2.webp" />
+
+        <mat-divider></mat-divider>
+
+        <button mat-button class="menu-button" routerLink="/">
+            <mat-icon>home</mat-icon>
+            <span>INICIO</span>
+        </button>
+        <button mat-button class="menu-button" routerLink="/ver_datos">
+            <mat-icon>person</mat-icon>
+            <span>VER DATOS</span>
+        </button>
+        <button mat-button class="menu-button text-start" routerLink="/modelo_predictivo" style="line-height: 20px !important;">
+            <mat-icon>info</mat-icon>
+            <span style="white-space: break-spaces;">MODELO PREDICTIVO</span>
+        </button>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div class="mat-elevation-z8">
+            <router-outlet></router-outlet>
+            <app-footer></app-footer>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

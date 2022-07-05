@@ -1,0 +1,123 @@
+{
+  "configVersion": 1,
+  "timestamp": 1656962092800,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/assets/icons/icon-128x128.png",
+        "/index.html",
+        "/main.c2e6b13a0e14ada2.js",
+        "/manifest.webmanifest",
+        "/polyfills.688ee873a6a59255.js",
+        "/runtime.27de29bdfa1a23e1.js",
+        "/scripts.0dc7c56edc122337.js",
+        "/styles.e2c8ee9fa030d719.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/assets/icons/icon-114x114.png",
+        "/assets/icons/icon-120x120.png",
+        "/assets/icons/icon-144x144.png",
+        "/assets/icons/icon-152x152.png",
+        "/assets/icons/icon-192x192.png",
+        "/assets/icons/icon-228x228.png",
+        "/assets/icons/icon-384x384.png",
+        "/assets/icons/icon-512x512.png",
+        "/assets/icons/icon-72x72.png",
+        "/assets/icons/icon-76x76.png",
+        "/assets/icons/icon-96x96.png",
+        "/assets/img/background_home.svg",
+        "/assets/img/dnd/ic-delete-file.svg",
+        "/assets/img/dnd/ic-file.svg",
+        "/assets/img/dnd/ic-upload-file.svg",
+        "/assets/img/logo.webp",
+        "/assets/img/logo2.webp",
+        "/assets/img/profile/Ivan-Daniel-Pacheco-Durango.webp",
+        "/assets/img/profile/Jhosep-Granda-Parra.webp",
+        "/assets/img/profile/Juan-Fernando-Varela-Joven.webp",
+        "/assets/img/profile/Juan-Guillermo-Serrano-Ramirez.webp",
+        "/assets/img/profile/Juan-Pablo-Ramirez-Escobar.webp",
+        "/assets/img/profile/Kelly-Johana-Vergara-Torres.webp",
+        "/assets/img/see-data/Colombia.svg",
+        "/assets/js/text_diagonal.js",
+        "/assets/json/colombia.json",
+        "/assets/json/prueba.json",
+        "/background_home.fc6097abc942974b.svg"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/assets/icons/icon-114x114.png": "b5b7865e49f325dc786cd3a78e3e486d2844092e",
+    "/assets/icons/icon-120x120.png": "53bccb1b559c09e96511c3181ac525962615f9a0",
+    "/assets/icons/icon-128x128.png": "cd5dbf8f07b23fadac4e7df80dd6f8061a60797b",
+    "/assets/icons/icon-144x144.png": "f55ebd4e916130f02587aa1e72eb74bc3a2670ad",
+    "/assets/icons/icon-152x152.png": "bc45c1b2aa2a300de0cda9602e9bc3f891cdcc20",
+    "/assets/icons/icon-192x192.png": "f5aa33b8cafaed7530961eca79d8c08ad544f882",
+    "/assets/icons/icon-228x228.png": "a5273afbc19d3ee60ee98fe77a4d9d29ea28d653",
+    "/assets/icons/icon-384x384.png": "e622aebef35dff559874c6fd9967b3d3c6b5b77c",
+    "/assets/icons/icon-512x512.png": "8544329159f8e5acc20fa4eef2a5ad42e36349fe",
+    "/assets/icons/icon-72x72.png": "78704843e172c782682220e25cb6ba3864b8bac3",
+    "/assets/icons/icon-76x76.png": "99859c03c6a296e3845aa6356ad53cb221a15b43",
+    "/assets/icons/icon-96x96.png": "54f2c13d68e8269c42eb46c40745d220f02f546b",
+    "/assets/img/background_home.svg": "40752349ac04dd7431f543f8e0771a63b36ee832",
+    "/assets/img/dnd/ic-delete-file.svg": "5938e530b2c48f087615f732d94dc4f693d486ea",
+    "/assets/img/dnd/ic-file.svg": "2cc06d6563b5e2bdab4d700448fe7f015dfcfaf0",
+    "/assets/img/dnd/ic-upload-file.svg": "2af052110d70bcdd6b28c45e5f2440b8902b4ec5",
+    "/assets/img/logo.webp": "cb927b6deec095cbf01f4412fdc9e82204ebfd2c",
+    "/assets/img/logo2.webp": "5779bd0138369e257c8fdebaf15bcad03c5e1f57",
+    "/assets/img/profile/Ivan-Daniel-Pacheco-Durango.webp": "259e0724b7fd2768d35b40a5975f16d6dc952de2",
+    "/assets/img/profile/Jhosep-Granda-Parra.webp": "135bc56cec311b1e049aa4fa3eaf3e6bc1e1b4c2",
+    "/assets/img/profile/Juan-Fernando-Varela-Joven.webp": "5dec8ff29e8e39449ce86c5c35f278b90a7bd27b",
+    "/assets/img/profile/Juan-Guillermo-Serrano-Ramirez.webp": "ade05591f544f701ca53313e562ab737ad4e800a",
+    "/assets/img/profile/Juan-Pablo-Ramirez-Escobar.webp": "ce9a29d8ce70fb684952e31202099897d9ba548e",
+    "/assets/img/profile/Kelly-Johana-Vergara-Torres.webp": "778cfcd372433a7e20ad6d06921c933c3f223194",
+    "/assets/img/see-data/Colombia.svg": "2135e0b088873e3bc825eb343b57de60afd18a20",
+    "/assets/js/text_diagonal.js": "291575e536af3f8342647c38571b78c20f7a058a",
+    "/assets/json/colombia.json": "00f5014e94bfe584be23fafb543f1fc50e5fafa4",
+    "/assets/json/prueba.json": "5d0ac82c05c867cf01bdec78e5b1823165b841e7",
+    "/background_home.fc6097abc942974b.svg": "40752349ac04dd7431f543f8e0771a63b36ee832",
+    "/index.html": "f4b681b77ea477e0a647d41b5d033a865168b9c7",
+    "/main.c2e6b13a0e14ada2.js": "f465689736adc07dd548af0c848e6958377cd482",
+    "/manifest.webmanifest": "32341d5281224ae6a80a0ac541b760497e0a866d",
+    "/polyfills.688ee873a6a59255.js": "3027fdce7d72fddf59daff44c7d3d45f4d53239c",
+    "/runtime.27de29bdfa1a23e1.js": "81202719d04f8a30a58018af378ee2d57d958b1f",
+    "/scripts.0dc7c56edc122337.js": "722f445cd59607c4cd95145fe003e7e3ce5ecf00",
+    "/styles.e2c8ee9fa030d719.css": "956e3899b65f339868f5cc5e628ed54c20364e8e"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
