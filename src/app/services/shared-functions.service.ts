@@ -157,7 +157,7 @@ export class SharedFunctionsService {
     const steps = (1 / duration) * 100;
     let result_positive: string = 'ACCORDING TO THE CHARACTERISTICS SELECTED FOR THE CONTRACT contract_name IS UNLIKELY THAT IT HAS BUDGET ADDITION';
     let result_negative: string = 'ACCORDING TO THE CHARACTERISTICS SELECTED FOR THE CONTRACT contract_name IS VERY LIKELY THAT IT HAS BUDGET ADDITION';
-    const get_current_lang = await this.translate.currentLang;
+    const get_current_lang = this.translate.currentLang;
     if(get_current_lang === 'es') {
       result_positive = 'SEGUN LAS CARACTERISTICAS SELECCIONADAS PARA EL CONTRATO contract_name ES MUY POCO PROBABLE QUE TENGA ADICIÓN PRESUPUESTAL';
       result_negative = 'SEGUN LAS CARACTERISTICAS SELECCIONADAS PARA EL CONTRATO contract_name ES MUY PROBABLE QUE TENGA ADICIÓN PRESUPUESTAL';

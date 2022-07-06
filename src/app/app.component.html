@@ -12,9 +12,9 @@
     <!-- Menu - PC -->
     <span class="spacer"></span>
     <div [class]="(isHandset$ | async) ? 'd-none' : ''">
-        <button mat-button routerLink="/">{{'navbar.menu.home' | translate}}</button>
-        <button mat-button routerLink="/ver_datos">{{'navbar.menu.dashboard' | translate}}</button>
-        <button mat-button routerLink="/modelo_predictivo">{{'navbar.menu.prediction_model' | translate}}</button>
+        <button mat-raised-button class="main-button fw-bold me-3" color="accent" routerLink="/"><img style="height: 30px;" src="assets/img/icons/home.webp" alt="Icon Home"> {{'navbar.menu.home' | translate}}</button>
+        <button mat-raised-button class="main-button fw-bold me-3" color="accent" routerLink="/ver_datos"><img style="height: 30px;" src="assets/img/icons/dashboard.webp" alt="Icon Dashboard"> {{'navbar.menu.dashboard' | translate}}</button>
+        <button mat-raised-button class="main-button fw-bold" color="accent" routerLink="/modelo_predictivo"><img style="height: 30px;" src="assets/img/icons/model.webp" alt="Icon Model"> {{'navbar.menu.prediction_model' | translate}}</button>
         <button mat-button (click)="translateLanguageTo('en')">
           <img class="flag" src="assets/img/flags/flag_usa.svg" alt="Bandera de Estados Unidos">
         </button>
@@ -28,9 +28,7 @@
 <mat-sidenav-container>
     <mat-sidenav #sidenav="matSidenav" class="mat-elevation-z8">
         <img class="avatar mat-elevation-z8" width="100px" height="100px" src="assets/img/logo2.webp" />
-
         <mat-divider></mat-divider>
-
         <button mat-button class="menu-button" routerLink="/">
             <mat-icon>home</mat-icon>
             <span>{{'navbar.menu.home' | translate}}</span>
@@ -43,6 +41,14 @@
             <mat-icon>info</mat-icon>
             <span style="white-space: break-spaces;">{{'navbar.menu.prediction_model' | translate}}</span>
         </button>
+        <div class="mt-3">
+          <button mat-button (click)="translateLanguageTo('en')">
+            <img class="flag" src="assets/img/flags/flag_usa.svg" alt="Bandera de Estados Unidos">
+          </button>
+          <button mat-button (click)="translateLanguageTo('es')">
+            <img class="flag" src="assets/img/flags/flag_colombia.svg" alt="Bandera de Colombia">
+          </button>
+        </div>
     </mat-sidenav>
     <mat-sidenav-content>
         <div class="mat-elevation-z8">

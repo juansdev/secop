@@ -4,7 +4,7 @@
     "menu":{
         "home":"INICIO",
         "dashboard":"TABLERO",
-        "prediction_model":"MODELO DE PREDICCIÓN"
+        "prediction_model":"PREDICCIÓN"
     }
   },
   "home": {

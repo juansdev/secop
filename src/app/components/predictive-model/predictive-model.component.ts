@@ -1,7 +1,7 @@
-import { HttpEventType } from '@angular/common/http';
-import { Component, Inject, OnInit, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
 import { lastValueFrom, map } from 'rxjs';
 import { SecopLocalService } from 'src/app/services/secop/secop-local.service';
 import { SecopService } from 'src/app/services/secop/secop.service';
@@ -36,17 +36,127 @@ export interface dialogResultData {
 })
 export class PredictiveModelComponent implements OnInit {
 
-  public fields_prectivie_model: ValueByFields = {};
+  public translate_fields_predictive_model: any = {
+    "Departamento Ejecución": "Execution Department",
+    "Departamento Entidad": "Department Entity",
+    "Modalidad De Contratacion": {
+      "title": "Modality of contracting",
+      "fields": {
+        "Concurso de diseño Arquitectónico": "Architectural Design Contest",
+        "Selección Abreviada de Menor Cuantía (Ley 1150 de 2007)": "Abbreviated Selection of Minor Amount (Law 1150 of 2007)",
+        "Selección Abreviada del literal h del numeral 2 del artículo 2 de la Ley 1150 de 2007": "Abbreviated selection of literal h of numeral 2 of article 2 of Law 1150 of 2007",
+        "Contratación Directa (Ley 1150 de 2007)": "Direct Contracting (Law 1150 of 2007)",
+        "Selección Abreviada servicios de Salud": "Abbreviated Selection Health Services",
+        "Otras Formas de Contratación Directa": "Other Forms of Direct Hiring",
+        "Asociación Público Privada": "Public Private Partnership",
+        "Licitación obra pública": "Public works tender",
+        "Licitación Pública": "Public tender",
+        "Contratos y convenios con más de dos partes": "Contracts and agreements with more than two parties",
+        "Contratación Mínima Cuantía": "Minimum Amount Hiring",
+        "Concurso de Méritos con Lista Corta": "Merit Contest with Short List",
+        "Régimen Especial": "Special regime",
+        "Concurso de Méritos Abierto": "Open Merit Contest",
+        "Subasta": "Auction"
+      }
+    },
+    "Objeto A Contratar": {
+      "title":"Object to Hire",
+      "fields": {
+        "Equipo Médico, Accesorios y Suministros": "Medical Equipment, Accessories and Supplies",
+        "Productos para Relojería, Joyería y Piedras Preciosas": "Products for Watches, Jewelry and Precious Stones",
+        "Artículos Domésticos, Suministros y Productos Electrónicos de Consumo": "Household Items, Supplies and Consumer Electronics",
+        "Servicios de Minería, Petróleo y Gas": "Mining, Oil and Gas Services",
+        "Material Vivo Vegetal y Animal, Accesorios y Suministros": "Plant and Animal Live Material, Accessories and Supplies",
+        "Componentes y Suministros de Manufactura": "Components and Manufacturing Supplies",
+        "Servicios Políticos y de Asuntos Cívicos": "Political and Civic Affairs Services",
+        "Servicios Públicos y Servicios Relacionados con el Sector Público": "Public Services and Services Related to the Public Sector",
+        "Servicios Editoriales, de Diseño, de Artes Graficas y Bellas Artes": "Editorial, Design, Graphic Arts and Fine Arts Services",
+        "Servicios Basados en Ingeniería, Investigación y Tecnología": "Services Based on Engineering, Research and Technology",
+        "Servicios Personales y Domésticos": "Personal and Domestic Services",
+        "Servicios de Edificación, Construcción de Instalaciones y Mantenimiento": "Building Services, Facilities Construction and Maintenance",
+        "Medicamentos y Productos Farmacéuticos": "Medicines and Pharmaceutical Products",
+        "Equipos, Suministros y Accesorios para Deportes y Recreación": "Equipment, Supplies and Accessories for Sports and Recreation",
+        "Maquinaria y Accesorios para Generación y Distribución de Energía": "Machinery and Accessories for Power Generation and Distribution",
+        "Maquinaria, Accesorios y Suministros para Manejo, Acondicionamiento y Almacenamiento de Materiales": "Machinery, Accessories and Supplies for Handling, Conditioning and Storage of Materials",
+        "Materiales Combustibles, Aditivos para Combustibles, Lubricantes y Anticorrosivos": "Fuel Materials, Fuel Additives, Lubricants and Anticorrosives",
+        "Maquinaria y Accesorios para Agricultura, Pesca, Silvicultura y Fauna": "Machinery and Accessories for Agriculture, Fishing, Forestry and Fauna",
+        "Servicios de Viajes, Alimentación, Alojamiento y Entretenimiento": "Travel, Food, Accommodation and Entertainment Services",
+        "Ropa, Maletas y Productos de Aseo Personal": "Clothes, Suitcases and Personal Care Products",
+        "Servicios de Limpieza, Descontaminación y Tratamiento de Residuos": "Cleaning, Decontamination and Waste Treatment Services",
+        "Servicios de Producción Industrial y Manufactura": "Industrial Production and Manufacturing Services",
+        "Equipos y Suministros de Defensa, Orden Publico, Proteccion, Vigilancia y Seguridad": "Equipment and Supplies for Defense, Public Order, Protection, Surveillance and Security",
+        "Difusión de Tecnologías de Información y Telecomunicaciones": "Diffusion of Information Technologies and Telecommunications",
+        "Servicios Financieros y de Seguros": "Financial and Insurance Services",
+        "Servicios de Defensa Nacional, Orden Publico, Seguridad y Vigilancia": "National Defense Services, Public Order, Security and Surveillance",
+        "Publicaciones Impresas, Publicaciones Electronicas y Accesorios": "Printed Publications, Electronic Publications and Accessories",
+        "Herramientas y Maquinaria General": "Tools and General Machinery",
+        "Servicios Educativos y de Formación": "Educational and Training Services",
+        "Alimentos, Bebidas y Tabaco": "Food, Drinks and Tobacco",
+        "Equipos y Suministros para Limpieza": "Equipment and Supplies for Cleaning",
+        "Materiales de Resina, Colofonia, Caucho, Espuma, Película y Elastómericos": "Resin, Rosin, Rubber, Foam, Film and Elastomeric Materials",
+        "Instrumentos Musicales, Juegos, Artes, Artesanías y Equipo educativo, Materiales, Accesorios y Suministros": "Musical Instruments, Games, Arts, Crafts and Educational Equipment, Materials, Accessories and Supplies",
+        "Componentes y Equipos para Distribución y Sistemas de Acondicionamiento": "Components and Equipment for Distribution and Conditioning Systems",
+        "Componentes y Suministros Electrónicos": "Electronic Components and Supplies",
+        "Servicios de Transporte, Almacenaje y Correo": "Transport, Storage and Mail Services",
+        "Maquinaria y Accesorios para Construcción y Edificación": "Machinery and Accessories for Construction and Building",
+        "Equipos de Oficina, Accesorios y Suministros": "Office Equipment, Accessories and Supplies",
+        "Terrenos, Edificios, Estructuras y Vías": "Land, Buildings, Structures and Roads",
+        "Servicios de Salud": "Health services",
+        "Componentes, Accesorios y Suministros de Sistemas Eléctricos e Iluminación": "Components, Accessories and Supplies for Electrical Systems and Lighting",
+        "Vehículos Comerciales, Militares y Particulares, Accesorios y Componentes": "Commercial, Military and Private Vehicles, Accessories and Components",
+        "Maquinaria, Equipo y Suministros para la Industria de Servicios": "Machinery, Equipment and Supplies for the Service Industry",
+        "Servicios de Gestion, Servicios Profesionales de Empresa y Servicios Administrativos": "Management Services, Professional Business Services and Administrative Services",
+        "Componentes y Suministros para Estructuras, Edificación, Construcción y Obras Civiles": "Components and Supplies for Structures, Building, Construction and Civil Works",
+        "Equipos y Suministros de Laboratorio, de Medición, de Observación y de Pruebas": "Laboratory, Measurement, Observation and Testing Equipment and Supplies",
+        "Organizaciones y Clubes": "Organizations and Clubs",
+        "Material Químico incluyendo Bioquímicos y Materiales de Gas": "Chemical Material including Biochemical and Gas Materials",
+        "Servicios de Contratacion Agrícola, Pesquera, Forestal y de Fauna": "Agricultural, Fishing, Forestry and Fauna Contracting Services",
+        "Servicios Medioambientales": "Environmental Services",
+        "Maquinaria y Accesorios para Manufactura y Procesamiento Industrial": "Machinery and Accessories for Manufacturing and Industrial Processing",
+        "Equipos y Suministros para Impresión, Fotografia y Audiovisuales": "Equipment and Supplies for Printing, Photography and Audiovisuals",
+        "Materiales y Productos de Papel": "Materials and Paper Products",
+        "Material Mineral, Textil y  Vegetal y Animal No Comestible": "Non-edible Mineral, Textile, Vegetable and Animal Material",
+        "Maquinaria y Accesorios de Minería y Perforación de Pozos": "Machinery and Accessories for Mining and Well Drilling",
+        "Muebles, Mobiliario y Decoración": "Furniture, Furnishings and Decoration"
+      }
+    },
+    "Orden Entidad": {
+      "title": "Order Entity",
+      "fields": {
+        "NACIONAL CENTRALIZADO": "NATIONAL CENTRALIZED",
+        "TERRITORIAL DEPARTAMENTAL DESCENTRALIZADO": "DECENTRALIZED DEPARTMENTAL TERRITORIAL",
+        "AREA METROPOLITANA": "METROPOLITAN AREA",
+        "TERRITORIAL DISTRITAL MUNICIPAL NIVEL": "TERRITORIAL DISTRICT MUNICIPAL LEVEL",
+        "TERRITORIAL DEPARTAMENTAL CENTRALIZADO": "CENTRALIZED DEPARTMENTAL TERRITORIAL",
+        "DISTRITO CAPITAL": "CAPITAL DISTRICT",
+        "NACIONAL DESCENTRALIZADO": "DECENTRALIZED NATIONAL"
+      }
+    },
+    "Rango Tiempo Contratos": {
+      "title": "Time Range Contracts",
+      "fields": {
+        "hasta": "until"
+      }
+    },
+    "Rango Val Contratos": {
+      "title": "Range Values Contracts",
+      "fields": {
+        "hasta": "until"
+      }
+    }
+  };
+
+  public fields_predictive_model: ValueByFields = {};
   public countContract: string = '001';
   public arrayContract: Array<string> = [this.countContract];
   public form: FormGroup = new FormGroup({});
 
-  constructor(private dialog: MatDialog, private _secopService: SecopService, private _secopLocalService: SecopLocalService, public sharedFunctionsService: SharedFunctionsService, private fb: FormBuilder) {
-    this.fields_prectivie_model = this.sharedFunctionsService.getDataLocalOrRam('FieldsPredictiveModel') ? JSON.parse(this.sharedFunctionsService.getDataLocalOrRam('FieldsPredictiveModel')) : {};
+  constructor(public translate: TranslateService, private dialog: MatDialog, private _secopService: SecopService, private _secopLocalService: SecopLocalService, public sharedFunctionsService: SharedFunctionsService, private fb: FormBuilder) {
+    this.fields_predictive_model = this.sharedFunctionsService.getDataLocalOrRam('FieldsPredictiveModel') ? JSON.parse(this.sharedFunctionsService.getDataLocalOrRam('FieldsPredictiveModel')) : {};
   }
 
   async ngOnInit(): Promise<void> {
-    if(!Object.keys(this.fields_prectivie_model).length){
+    if(!Object.keys(this.fields_predictive_model).length){
       await lastValueFrom(this._secopService.getFieldsPredictiveModel().pipe(map(async (data_fields_predictive_model: any) => {
         const fields_predictive_model = Object.values(data_fields_predictive_model);
         for (let index = 0; index < fields_predictive_model.length; index++) {
@@ -56,13 +166,13 @@ export class PredictiveModelComponent implements OnInit {
             const value_field = value_fields[index];
             if(!index) {
               name_field = Object.keys(value_field).filter(key => key !== 'id')[0];
-              this.fields_prectivie_model[this.sharedFunctionsService.camelize(name_field)] = [];
+              this.fields_predictive_model[this.sharedFunctionsService.camelize(name_field)] = [];
             }
-            this.fields_prectivie_model[this.sharedFunctionsService.camelize(name_field)].push(value_field[name_field]);
+            this.fields_predictive_model[this.sharedFunctionsService.camelize(name_field)].push(value_field[name_field]);
           }
         }
-        this.fields_prectivie_model['Departamento Entidad'] = [];
-        this.fields_prectivie_model['Departamento Ejecución'] = [];
+        this.fields_predictive_model['Departamento Entidad'] = [];
+        this.fields_predictive_model['Departamento Ejecución'] = [];
         let name_departments: any = this._secopLocalService.getDepartments ? this._secopLocalService.getDepartments.split(';').sort() : [];
         if(!name_departments.length){
           await lastValueFrom(this._secopService.getDepartments().pipe(map((data_name_departments: any)=>{
@@ -76,37 +186,66 @@ export class PredictiveModelComponent implements OnInit {
             this._secopLocalService.setDepartments = name_departments;
             for (let index = 0; index < name_departments.length; index++) {
               const department = name_departments[index];
-              this.fields_prectivie_model['Departamento Entidad'].push(department);
-              this.fields_prectivie_model['Departamento Ejecución'].push(department);
+              this.fields_predictive_model['Departamento Entidad'].push(department);
+              this.fields_predictive_model['Departamento Ejecución'].push(department);
             }
-            this.sharedFunctionsService.setDataLocalOrRam('FieldsPredictiveModel', this.fields_prectivie_model);
+            this.sharedFunctionsService.setDataLocalOrRam('FieldsPredictiveModel', this.fields_predictive_model);
           })));
         }
         else {
           for (let index = 0; index < name_departments.length; index++) {
             const department = name_departments[index];
-            this.fields_prectivie_model['Departamento Entidad'].push(department);
-            this.fields_prectivie_model['Departamento Ejecución'].push(department);
+            this.fields_predictive_model['Departamento Entidad'].push(department);
+            this.fields_predictive_model['Departamento Ejecución'].push(department);
           }
-          this.sharedFunctionsService.setDataLocalOrRam('FieldsPredictiveModel', this.fields_prectivie_model);
+          this.sharedFunctionsService.setDataLocalOrRam('FieldsPredictiveModel', this.fields_predictive_model);
         }
       })));
     }
   }
 
   ngDoCheck()	{
-    const amount_controlers = (Object.keys(this.form.controls).length/Object.keys(this.fields_prectivie_model).length);
+    const amount_controlers = (Object.keys(this.form.controls).length/Object.keys(this.fields_predictive_model).length);
     if(amount_controlers !== this.arrayContract.length || !Object.keys(this.form.controls).length){
       const fields_form: any = this.form.controls;
       for (let index = 0; index < this.arrayContract.length; index++) {
         const contract = this.arrayContract[index];
-        for (let index = 0; index < Object.keys(this.fields_prectivie_model).length; index++) {
-          const name_field = Object.keys(this.fields_prectivie_model)[index];
+        for (let index = 0; index < Object.keys(this.fields_predictive_model).length; index++) {
+          const name_field = Object.keys(this.fields_predictive_model)[index];
           fields_form[contract+'_'+name_field] = [fields_form[contract+'_'+name_field] ? fields_form[contract+'_'+name_field].value : null, [Validators.required]]
         }
       }
       this.form = this.fb.group(fields_form);
     }
+  }
+
+  translationValue(data: any, field_value: string = '', is_title: boolean = true): string {
+    if(typeof data === 'object') {
+      if(is_title){
+        return data['title'];
+      }
+      else{
+        const number = field_value.match(/NIVEL \d+$/g)?.[0];
+        const range = field_value.match(/ hasta /g)?.[0];
+        if(number){
+          let temp_field_value = field_value.replace(number, '');
+          return data['fields'][temp_field_value+'NIVEL']+' '+(number.replace('NIVEL',''));
+        }
+        else if(range) {
+          return field_value.replace(range, ` ${data['fields'][range.replace(/\s/g, '')]} `);
+        }
+        else {
+          if(data['fields'][field_value]){
+            return data['fields'][field_value];
+          }
+          return field_value;
+        }
+      }
+    }
+    if(!is_title){
+      return field_value;
+    }
+    return data;
   }
 
   async onSubmit(form: any): Promise<void> {
