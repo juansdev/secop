@@ -8,6 +8,7 @@ import { LabelLayout, UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
 import { SecopLocalService } from 'src/app/services/secop/secop-local.service';
 import { lastValueFrom, map } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 declare var $: any;
 
@@ -41,25 +42,75 @@ export class InfoGeneralComponent {
   @Input() array_years: Array<string> = [];
 
   public graphic_values_departments_by_year: ValuesByYear;
-
   public params_for_generate_graphics: any = [];
-  private options_map_changed: boolean = false;
-
   public array_departments_selected: Array<string> = [];
   public array_fields: Array<string> = [];
   public array_name_graphics: Array<string> = ['barChart','pieChart'];
+
+  private options_map_changed: boolean = false;
+  private graphics_echart: Array<any> = [];
 
   private fields_for_graphics: any = {
     'Marcacion Adiciones': 'adiciones',
     'Tipo De Contrato': 'contratos',
     'Modalidad de Contratacion': 'modalidad',
-    'Orden Entidad': 'orden'
+    'Orden Entidad': 'orden',
+    'Rango val Contratos': 'val',
+    'Rango Tiempo Contratos': 'tiempo'
+  };
+
+  private list_word_for_remove: any = {
+    'Modalidad de Contratacion': 'modalidad',
+    'Orden Entidad': 'orden',
+    'Tipo De Contrato': 'contratos'
+  };
+
+  private translate_general_label: any = {
+    "Marcacion Adiciones": "Marking Additions",
+    "Tipo De Contrato": "Type Of Contract",
+    "Modalidad de Contratacion": "Modality Of Contracting",
+    "Orden Entidad": "Order Entity",
+    "Rango val Contratos": "Value Range Contracts",
+    "Rango Tiempo Contratos": "Time Range Contracts"
+  }
+
+  private translate_label: any = {
+      'conAdiciones': 'withAdditions',
+      'sinAdiciones': 'withoutAdditions',
+      'Celebrados': 'Celebrated',
+      'Convocado': 'Summoned',
+      'Liquidados': 'Liquidated',
+      'Adjudicados': 'Awarded',
+      'ConcursoDeDiseñoArquitectónico': 'ArchitecturalDesignContest',
+      'MenorCuantia': 'MinorAmount',
+      'Seleccion': 'Selection',
+      'ContratacionDirecta': 'DirectHire',
+      'ServiciosSalud': 'HealthServices',
+      'OtrasFormas': 'OtherForms',
+      'PublicoPrivada': 'PublicPrivate',
+      'LicitacionObraPublica': 'PublicWorksTender',
+      'LicitaciónPublica': 'PublicTender',
+      'ContratosDosPartes': 'TwoPartyContract',
+      'MinimaCuantia': 'MinimumAmount',
+      'MeritosListaCorta': 'MeritsShortList',
+      'RegimenEspecial': 'SpecialRegime',
+      'MeritosAbierto': 'MeritsOpen',
+      'Subasta': 'Auction',
+      'NacionalCentralizado': 'NationalCentralized',
+      'TerritorialDepartamentalDescentralizado': 'DecentralizedDepartmentalTerritory',
+      'AreaMetropolitana': 'MetropolitanArea',
+      'TerritorialDepartamentalCentralizado': 'TerritorialDepartmentalCentralized',
+      'DistritoCapital': 'CapitalDistrict',
+      'NacionalDescentralizado': 'NationalDecentralized',
+      'TerritorialDistritalMunicipalNivel': 'TerritorialDistrictMunicipalLevel',
+      'valContrato': 'valContract',
+      'tiempoContrato': 'timeContract'
   };
 
   private array_departments_by_map: Array<string> = [];
 
 
-  constructor(public _sharedFunctionsService: SharedFunctionsService, private _secopService: SecopService, private _secopLocalService: SecopLocalService) {
+  constructor(public translate: TranslateService, public _sharedFunctionsService: SharedFunctionsService, private _secopService: SecopService, private _secopLocalService: SecopLocalService) {
     const graphic_values_departments_by_year = JSON.parse(this._sharedFunctionsService.getDataLocalOrRam('graphicValuesDepartmentsByYear'));
     this.graphic_values_departments_by_year = graphic_values_departments_by_year ? graphic_values_departments_by_year : {};
   }
@@ -100,7 +151,6 @@ export class InfoGeneralComponent {
 
   async ngAfterViewInit() {
     // Arreglar problema de generacion de graficos, el problema esta en que no se espera lo suficiente a que todas los elementos se carguen y se eliminen los anteriores.
-    // El problema se agraba por alguna razon, cuando se selecciona el departamento en desplegable izquierdo.
     await lastValueFrom(this.isAllGraphicsRendered.changes.pipe(map(()=>{
       let indexs_field: any = [];
       this.isAllGraphicsRendered.forEach((element: ElementRef) => {
@@ -188,6 +238,7 @@ export class InfoGeneralComponent {
         }
         element.push(indexs_field[index]);
       });
+      this.graphics_echart = [];
       for (let index = 0; index < params_for_generate_graphics.length; index++) {
         const params_for_generate_graphic = params_for_generate_graphics[index];
         let year,field,index_field;
@@ -201,20 +252,42 @@ export class InfoGeneralComponent {
     }
   }
 
-  public createGraphicWithValues(year: string, field: string, index_field: string): void {
+  public createGraphicWithValues(year: string, general_field: string, index_field: string): void {
     const graphic_values_departments_by_year: any = this.graphic_values_departments_by_year;
-    const value_field = graphic_values_departments_by_year[parseInt(year)][this.department_selected][field];
+    const value_field = graphic_values_departments_by_year[parseInt(year)][this.department_selected][general_field];
     let label_x: Array<string> = [];
     let data: Array<number> = [];
     let data_pie: any = [];
-    for (const key in value_field) {
-      if (Object.prototype.hasOwnProperty.call(value_field, key)) {
-        const value = value_field[key];
-        let key_camelize = this._sharedFunctionsService.camelize(key);
+    // Save Data for graphics
+    for (let field in value_field) {
+      if (Object.prototype.hasOwnProperty.call(value_field, field)) {
+        const value = value_field[field];
+        if(this.list_word_for_remove[general_field]) {
+          field = field.replace(this.list_word_for_remove[general_field],'');
+        }
+        //Translate fields
+        if(this.translate.currentLang === 'en' || !this.translate.currentLang){
+          const number_field = field.match(/\d+$/g)?.[0];
+          let temporal_field = field;
+          if(number_field){
+            temporal_field = field.replace(number_field,'');
+          }
+          if(this.translate_label[temporal_field]){
+            field = this.translate_label[temporal_field]+(number_field?number_field:'');
+          }
+        }
+        //Camelize and add data to graphic
+        let key_camelize = this._sharedFunctionsService.camelize(field);
         label_x.push(key_camelize);
         data.push(value);
         data_pie.push({value: value, name: key_camelize});
       }
+    }
+    if(this.translate.currentLang === 'en' || !this.translate.currentLang){
+      document.getElementById(`graphic_title_${index_field}`)!.innerHTML = this.translate_general_label[general_field];
+    }
+    else {
+      document.getElementById(`graphic_title_${index_field}`)!.innerHTML = general_field;
     }
     for (let index = 0; index < this.array_name_graphics.length; index++) {
       const type_graphic = this.array_name_graphics[index];
@@ -222,6 +295,7 @@ export class InfoGeneralComponent {
       const chartDom: any = document.getElementById(id_element_for_render)!;
       if(chartDom) {
         const myChart = init(chartDom);
+        this.graphics_echart.push(myChart);
         let option: EChartsOption;
         if(type_graphic === 'lineChart') {
           option = {
@@ -241,8 +315,19 @@ export class InfoGeneralComponent {
           };
           option && myChart.setOption(option);
         }
-        else if(type_graphic === 'barChart') {
+        else if(type_graphic === 'barChart' && data.length > 2) {
+          document.getElementById(`graphic_pieChart_${index_field}`)?.remove();
           option = {
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                type: 'shadow'
+              },
+              formatter: function (params: any) {
+                const tar = params[0];
+                return tar.name + ' : ' + tar.value;
+              }
+            },
             xAxis: {
               type: 'category',
               splitLine: { show: false },
@@ -259,42 +344,26 @@ export class InfoGeneralComponent {
                   show: true,
                   position: 'inside'
                 },
-                data: data.length === 2 ?
-                [
-                  data[0],
-                  {
-                    value: data[1],
-                    itemStyle: {
-                      color: '#a90000'
-                    }
-                  }
-                ] : data
+                data: data
               }
             ]
           };
-          if(data.length !== 2){
-            option['tooltip'] = {
-              trigger: 'axis',
-              axisPointer: {
-                type: 'shadow'
-              },
-              formatter: function (params: any) {
-                const tar = params[0];
-                return tar.name + ' : ' + tar.value;
-              }
-            }
-          }
           option && myChart.setOption(option);
         }
-        else if(type_graphic === 'pieChart') {
+        else if(type_graphic === 'pieChart' && data.length === 2) {
+          document.getElementById(`graphic_barChart_${index_field}`)?.remove();
           option = {
+            tooltip: {
+              trigger: 'item',
+              formatter: '{b}: {c} ({d}%)'
+            },
             legend: {
               orient: 'vertical',
               left: 'left'
             },
             series: [
               {
-                name: this._sharedFunctionsService.camelize(field),
+                name: this._sharedFunctionsService.camelize(general_field),
                 type: 'pie',
                 radius: '50%',
                 data: data_pie,
@@ -303,6 +372,27 @@ export class InfoGeneralComponent {
                     shadowBlur: 10,
                     shadowOffsetX: 0,
                     shadowColor: 'rgba(0, 0, 0, 0.5)'
+                  }
+                },
+                label: {
+                  formatter: '{b|{b}：}{c}  {per|{d}%}  ',
+                  backgroundColor: '#F6F8FC',
+                  borderColor: '#8C8D8E',
+                  borderWidth: 1,
+                  borderRadius: 4,
+                  rich: {
+                    b: {
+                      color: '#4C5058',
+                      fontSize: 14,
+                      fontWeight: 'bold',
+                      lineHeight: 33
+                    },
+                    per: {
+                      color: '#fff',
+                      backgroundColor: '#4C5058',
+                      padding: [3, 4],
+                      borderRadius: 4
+                    }
                   }
                 }
               }
@@ -547,11 +637,28 @@ export class InfoGeneralComponent {
     }
   }
 
+  private _sort_object(obj: any) {
+    const items = Object.keys(obj).map(function(key) {
+        return [key, obj[key]];
+    });
+    items.sort(function(first, second) {
+        return second[1] - first[1];
+    });
+    const sorted_obj: any = {};
+    $.each(items, function(k: any, v: any) {
+        const use_key = v[0]
+        const use_value = v[1]
+        sorted_obj[use_key] = use_value
+    })
+    return(sorted_obj)
+  }
+
   private _updateInfoDepartmentSelected(info_department_selected: any): void {
     let department_selected: string = '';
     if(!Array.isArray(info_department_selected)) {
       info_department_selected = [info_department_selected];
     }
+    // Save data or simple load in this.graphic_values_departments_by_year
     for (let index = 0; index < info_department_selected.length; index++) {
       const contract = info_department_selected[index];
       const year_contract: number = parseInt(contract['anno']);
@@ -576,6 +683,23 @@ export class InfoGeneralComponent {
             const values_for_graphics = graphic_values_departments[field_used];
             values_for_graphics[field] = contract[field];
             this.graphic_values_departments_by_year[year_contract][department_selected] = graphic_values_departments;
+          }
+        }
+      }
+    }
+    // Order low to high in this.graphic_values_departments_by_year
+    for (const year in this.graphic_values_departments_by_year) {
+      if (Object.prototype.hasOwnProperty.call(this.graphic_values_departments_by_year, year)) {
+        const value_by_department = this.graphic_values_departments_by_year[year];
+        for (const department in value_by_department) {
+          if (Object.prototype.hasOwnProperty.call(value_by_department, department)) {
+            const value_by_fields = value_by_department[department];
+            for (const field in value_by_fields) {
+              if (Object.prototype.hasOwnProperty.call(value_by_fields, field)) {
+                const value_by_field = value_by_fields[field];
+                this.graphic_values_departments_by_year[year][department][field] = this._sort_object(value_by_field);
+              }
+            }
           }
         }
       }

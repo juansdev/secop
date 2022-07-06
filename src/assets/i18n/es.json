@@ -1,0 +1,59 @@
+{
+  "navbar": {
+    "title": "SISTEMA DE PREDICCIÓN DE ADICIONES CONTRACTUALES CAPS",
+    "menu":{
+        "home":"INICIO",
+        "dashboard":"TABLERO",
+        "prediction_model":"MODELO DE PREDICCIÓN"
+    }
+  },
+  "home": {
+    "title": "PROBLEMATICA A RESOLVER",
+    "desc": "Es útil para las entidades públicas en Colombia, contar con una herramienta que les permita predecir la probabilidad de adiciones de presupuesto y tiempo en los contratos e identificar cuáles son las características más comunes de los contratos que lo provocan, porque esto les ayuda a tomar controles de planificación y ejecución para cumplir con las restricciones de alcance, presupuesto y cronograma, además les permite prevenir hallazgos de auditoría."
+  },
+  "dashboard": {
+    "filter": "Filtrar Datos por Año",
+    "filter_all": "Todos",
+    "load_all": "CARGAR TODA LA CANTIDAD DE CONTRATOS CON ADICIÓN PRESUPUESTAL",
+    "load_all_by_year": "CARGAR LA CANTIDAD DE CONTRATOS CON ADICIÓN PRESUPUESTAL DEL AÑO",
+    "info": {
+      "title_info": "POR FAVOR SELECCIONAR UN DEPARTAMENTO PARA VISUALIZAR LOS DATOS",
+      "department": "DEPARTAMENTO"
+    },
+    "extension_panel": {
+      "title":"CLIC PARA EXPANDIR VER LOS DEPARTAMENTOS",
+      "title_2":"DEPARTAMENTOS"
+    }
+  },
+  "predictive_model": {
+    "title": "RELLENA EL FORMULARIO PARA GENERAR LA PROBABILIDAD DE ADICIÓN PRESUPUESTAL A SU CONTRATO",
+    "contract": "CONTRATO",
+    "delete_contract": "ELIMINAR CONTRATO",
+    "generate_contract": "GENERAR PROBABILIDAD",
+    "create_form": "CREAR NUEVO FORMULARIO",
+    "import_excel": "IMPORTAR EXCEL",
+    "download_excel": "DESCARGAR PLANTILLA EN EXCEL"
+  },
+  "dialog": {
+    "calculate": {
+      "title": "CALCULANDO PROBABILIDAD",
+      "desc": "CALCULANDO LA PROBABILIDAD DE ADICIÓN PRESUPUESTAL AL CONTRATO",
+      "cancel": "CANCELAR"
+    },
+    "dragndrop": {
+      "function_desc": {
+        "desc_1": "Arrastre el archivo aquí",
+        "desc_2": "o",
+        "desc_3": "Abre el explorador"
+      },
+      "generate": "GENERAR PROBABILIDAD DEL CONTRATO",
+      "leave":"SALIR",
+      "cancel": "CANCELAR"
+    },
+    "result": {
+      "title": "ADICIÓN PRESUPUESTAL A SU CONTRATO",
+      "leave":"SALIR",
+      "success": "PROBABILIDADES GENERADAS CON EXITO"
+    }
+  }
+}

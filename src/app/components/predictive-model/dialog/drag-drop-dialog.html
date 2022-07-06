@@ -2,9 +2,9 @@
     <input #fileDropRef id="fileDropRef" type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"  />
     <div [class]="file ? 'd-none' : ''">
         <img src="assets/img/dnd/ic-upload-file.svg" alt="">
-        <h3>Arrastre el archivo aquí</h3>
-        <h3>o</h3>
-        <button mat-raised-button color="accent" class="rounded-0">Abre el explorador</button>
+        <h3>{{"dialog.dragndrop.function_desc.desc_1" | translate}}</h3>
+        <h3>{{"dialog.dragndrop.function_desc.desc_2" | translate}}</h3>
+        <button mat-raised-button color="accent" class="rounded-0">{{"dialog.dragndrop.function_desc.desc_3" | translate}}</button>
     </div>
     <div class="files-list">
         <div class="single-file" *ngIf="file">
@@ -25,9 +25,9 @@
 
 <div class="d-flex flex-wrap">
     <div *ngIf="file" class="pe-md-3 col-12 col-md-6">
-        <button [disabled]="!file_loaded" (click)="onSubmit()" mat-raised-button color="accent" class="w-100 d-block mt-3 py-2 rounded-0 fw-bold">GENERAR PROBABILIDAD DEL CONTRATO</button>
+        <button [disabled]="!file_loaded" (click)="onSubmit()" mat-raised-button color="accent" class="w-100 d-block mt-3 py-2 rounded-0 fw-bold">{{"dialog.dragndrop.generate" | translate}}</button>
     </div>
     <div [class]="file ? 'col-md-6 col-12' : 'col-12'">
-        <button mat-raised-button color="accent" class="w-100 d-block mt-3 py-2 rounded-0 fw-bold" (click)="onNoClick()">{{file_loaded ? 'SALIR' : (!file ? 'SALIR': 'CANCELAR')}}</button>
+        <button mat-raised-button color="accent" class="w-100 d-block mt-3 py-2 rounded-0 fw-bold" (click)="onNoClick()">{{file_loaded ? ('dialog.dragndrop.leave' | translate) : (!file ? ('dialog.dragndrop.leave' | translate):('dialog.dragndrop.cancel' | translate))}}</button>
     </div>
 </div>

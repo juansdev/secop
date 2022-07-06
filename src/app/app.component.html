@@ -8,13 +8,19 @@
     <!-- Menu - PC -->
     <img src="assets/img/logo2.webp" width="50px" alt="Logo Team 102" [class]="(isHandset$ | async) ? 'd-none' : 'me-3'">
     <!-- All -->
-    <span class="fw-bold">CIENCIAS DE DATOS SECOP</span>
+    <span class="fw-bold">{{'navbar.title' | translate}}</span>
     <!-- Menu - PC -->
     <span class="spacer"></span>
     <div [class]="(isHandset$ | async) ? 'd-none' : ''">
-        <button mat-button routerLink="/">INICIO</button>
-        <button mat-button routerLink="/ver_datos">VER DATOS</button>
-        <button mat-button routerLink="/modelo_predictivo">MODELO PREDICTIVO</button>
+        <button mat-button routerLink="/">{{'navbar.menu.home' | translate}}</button>
+        <button mat-button routerLink="/ver_datos">{{'navbar.menu.dashboard' | translate}}</button>
+        <button mat-button routerLink="/modelo_predictivo">{{'navbar.menu.prediction_model' | translate}}</button>
+        <button mat-button (click)="translateLanguageTo('en')">
+          <img class="flag" src="assets/img/flags/flag_usa.svg" alt="Bandera de Estados Unidos">
+        </button>
+        <button mat-button (click)="translateLanguageTo('es')">
+          <img class="flag" src="assets/img/flags/flag_colombia.svg" alt="Bandera de Colombia">
+        </button>
     </div>
 </mat-toolbar>
 
@@ -27,15 +33,15 @@
 
         <button mat-button class="menu-button" routerLink="/">
             <mat-icon>home</mat-icon>
-            <span>INICIO</span>
+            <span>{{'navbar.menu.home' | translate}}</span>
         </button>
         <button mat-button class="menu-button" routerLink="/ver_datos">
             <mat-icon>person</mat-icon>
-            <span>VER DATOS</span>
+            <span>{{'navbar.menu.dashboard' | translate}}</span>
         </button>
         <button mat-button class="menu-button text-start" routerLink="/modelo_predictivo" style="line-height: 20px !important;">
             <mat-icon>info</mat-icon>
-            <span style="white-space: break-spaces;">MODELO PREDICTIVO</span>
+            <span style="white-space: break-spaces;">{{'navbar.menu.prediction_model' | translate}}</span>
         </button>
     </mat-sidenav>
     <mat-sidenav-content>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
 import { registerMap, init } from "echarts";
 import { SecopService } from "src/app/services/secop/secop.service";
 import { SecopLocalService } from 'src/app/services/secop/secop-local.service';
@@ -12,8 +12,8 @@ import {
 } from 'echarts/components';
 import { MapSeriesOption } from 'echarts/charts';
 import { SharedFunctionsService } from 'src/app/services/shared-functions.service';
-import { InfoGeneralComponent } from './info-general/info-general.component';
 import { lastValueFrom, map } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 type EChartsOption = echarts.ComposeOption<
   | TitleComponentOption
@@ -41,7 +41,17 @@ export class SeeDataComponent implements OnInit {
   public year_selected: string = '';
   public loaded_date: any = {};
 
-  constructor(private _secopService: SecopService, private _secopLocalService: SecopLocalService, private _sharedFunctionsService: SharedFunctionsService) {
+  constructor(public translate: TranslateService, private _secopService: SecopService, private _secopLocalService: SecopLocalService, private _sharedFunctionsService: SharedFunctionsService) {
+    lastValueFrom(translate.onLangChange.pipe(map((lang:any)=>{
+      const current_lang = lang.lang;
+      const current_options_map = this.myMap.getOption();
+      current_options_map['title'][0]['text'] = current_lang==='en' || !current_lang ? 'Map of Colombia (2022)' : 'Mapa de Colombia (2022)';
+      current_options_map['title'][0]['subtext'] = current_lang==='en' || !current_lang ? 'Through the interactive map,\n you can view the information related to the\n number of contracts with addition, filter them by\n year and departments.' : 'Mediante el mapa interactivo,\n puede visualizar la información relacionada a la cantidad\n de contratos con adición, filtrarlos\n por año y departamentos.';
+      current_options_map['series'][0]['name'] = current_lang==='en' || !current_lang ? 'Contracts with Addendum' : 'Contratos con Adición';
+      current_options_map['visualMap'][0]['text'][0] = current_lang==='en' || !current_lang ? 'High' : 'Alto';
+      current_options_map['visualMap'][0]['text'][1] = current_lang==='en' || !current_lang ? 'Low' : 'Bajo';
+      this.myMap.setOption(current_options_map);
+    })));
   }
 
   async ngOnInit(): Promise<void> {
@@ -99,8 +109,8 @@ export class SeeDataComponent implements OnInit {
         registerMap('Colombia', colombiaJson);
         map_options = {
           title: {
-            text: 'Mapa de Colombia (2022)',
-            subtext: 'Datos extraidos de gist.github.com/john-guerra',
+            text: this.translate.currentLang==='en' || !this.translate.currentLang ? 'Map of Colombia (2022)' : 'Mapa de Colombia (2022)',
+            subtext: this.translate.currentLang==='en' || !this.translate.currentLang ? 'Through the interactive map,\n you can view the information related to the\n number of contracts with addition, filter them by\n year and departments.' : 'Mediante el mapa interactivo,\n puede visualizar la información relacionada a la cantidad\n de contratos con adición, filtrarlos\n por año y departamentos.',
             sublink: 'https://gist.github.com/john-guerra/43c7656821069d00dcbc',
             left: 'right'
           },
@@ -115,20 +125,20 @@ export class SeeDataComponent implements OnInit {
             max: 0,
             inRange: {
               color: [
-                '#313695',
-                '#4575b4',
-                '#74add1',
-                '#abd9e9',
-                '#e0f3f8',
-                '#ffffbf',
-                '#fee090',
-                '#fdae61',
-                '#f46d43',
-                '#d73027',
-                '#a50026'
+                '#C4C7FF',
+                '#BABEFF',
+                '#A5AAFF',
+                '#9297FF',
+                '#8188FF',
+                '#6D74FF',
+                '#5E66FF',
+                '#4B54FF',
+                '#3640FF',
+                '#2731FF',
+                '#000CFF'
               ]
             },
-            text: ['Alto', 'Bajo'],
+            text: ['High', 'Low'],
             calculable: true
           },
           toolbox: {
@@ -143,7 +153,7 @@ export class SeeDataComponent implements OnInit {
           },
           series: [
             {
-              name: 'Contratos con Adición',
+              name: 'Contracts with Addendum',
               type: 'map',
               roam: true,
               map: 'Colombia',

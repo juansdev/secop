@@ -65,7 +65,6 @@ Agregar los campos que faltan en modelo predictivo. LISTO.
 
 Exito desplegando el modelo usando excel tambien, aqui se procesaron 3 contratos. @Juan Serrano  para que por favor ya ajustes el front para visualizar el "tiene adicion" y "no tiene adicion" dependiendo de ese json de respuesta. LISTO.
 
-<<<<<<< HEAD
 4.
 Arreglar problema de subscribe, cambiarlos a .then cuando es POST, map usar cuando es GET. Ponerles a todos async await. LISTO.
 
@@ -87,12 +86,6 @@ Optimizar: _updateValueInMapByDepartmentSelected (Cuando se selecciona un año, 
 
 PENDIENTE:
 
-=======
-PENDIENTE:
-
-Optimizar: _updateValueInMapByDepartmentSelected (Cuando se selecciona un año, se carga 5 veces, solo debería cargarse 1 vez). LISTO.
-
->>>>>>> 42c1c93db10fc7601cdd7a7af0be97298c46e8b3
 9. Convertir todos los CSS en SCSS.
 
 9.1. Ajustar colores que correspondan al Mockup.
@@ -104,27 +97,6 @@ Realizar documentación en código fuente y subirlo al GitHub con README.me docu
 PRIORIDAD:
 
 Mostrar Datos:
-Los valores en graficos además tambien mostrarlo en porcentaje.
-
-<<<<<<< HEAD
-Graficar con todos los datos del mapa en un TAB especifico que diga "TODOS".
-=======
-4.
-Arreglar problema de subscribe, cambiarlos a .then cuando es POST, map usar cuando es GET. Ponerles a todos async await. LISTO.
-
-MAPA INTERACTIVO
-
-Pequeño error, al cargar datos de un departamento en un año, al cambiarse a todos (Estando seleccionando otro departamento), no se carga todos los datos de ese departamento que solo cargo un año. LISTO.
-
-Error al cambiarse a cualquier filtro por año, no se actualiza los valores de todos los departamentos. (Sin tener departamento seleccionado). LISTO.
-
-Teniendo departamento seleccionado al cambiarse el filtro carga en todos excepto en el filtro de "Todos". LISTO.
-
-Detectar si ya esta cargado todos los años de X filtro, para deshabilitar el botón de filtro automaticamente. LISTO.
+Los valores en graficos además tambien mostrarlo en porcentaje. LISTO.
 
 Graficar con todos los datos del mapa en un TAB especifico que diga "TODOS".
-
-Por alguna razón al cargarse todos los datos, no se cargan los graficos el año 2017. LISTO.
-
-Al seleccionarse un departamento no se actualiza valores en graficas. LISTO.
->>>>>>> 42c1c93db10fc7601cdd7a7af0be97298c46e8b3

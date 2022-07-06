@@ -6,6 +6,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import { SharedFunctionsService } from './services/shared-functions.service';
 import { lastValueFrom, Observable } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @UntilDestroy()
 @Component({
@@ -16,11 +17,19 @@ import { lastValueFrom, Observable } from 'rxjs';
 export class AppComponent {
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav;
-
-  constructor(private observer: BreakpointObserver, private router: Router, private SharedFunctionsService: SharedFunctionsService) {}
-
   isHandset$: Observable<boolean> = this.SharedFunctionsService.isHandset$;
 
+  constructor(public translate: TranslateService, private observer: BreakpointObserver, private router: Router, private SharedFunctionsService: SharedFunctionsService) {
+    // Register translation languages
+    translate.addLangs(['en', 'es']);
+    // Set default language
+    translate.setDefaultLang('en');
+  }
+
+  //Switch language
+  translateLanguageTo(lang: string) {
+    this.translate.use(lang);
+  }
   async ngAfterViewInit() {
     await lastValueFrom(this.observer.observe(Breakpoints.Handset).pipe(delay(1), untilDestroyed(this), map((res: any) => {
         if (!res.matches) {

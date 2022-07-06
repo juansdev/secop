@@ -1,0 +1,59 @@
+{
+  "navbar": {
+    "title": "CONTRACTUAL ADDITIONS PREDICTION SYSTEM CAPS",
+    "menu":{
+        "home":"HOME",
+        "dashboard":"DASHBOARD",
+        "prediction_model":"PREDICT"
+    }
+  },
+  "home": {
+    "title": "PROBLEM TO SOLVE",
+    "desc": "It is useful for public entities in Colombia to have a tool that allows them to predict the probability of budget and time additions in contracts and identify which are the most common characteristics of contracts that cause it, because this helps them to take control of planning and execution to meet scope, budget, and schedule constraints, plus it enables them to prevent audit findings."
+  },
+  "dashboard": {
+    "filter": "Filter Data by Year",
+    "filter_all": "All",
+    "load_all": "LOAD ALL THE AMOUNT OF CONTRACTS WITH BUDGET ADDITION",
+    "load_all_by_year": "LOAD ALL THE AMOUNT OF CONTRACTS WITH BUDGET ADDITION BY YEAR",
+    "info": {
+      "title_info": "PLEASE SELECT A DEPARTMENT TO VIEW THE DATA",
+      "department": "DEPARTMENT"
+    },
+    "extension_panel": {
+      "title":"CLICK TO EXPAND SEE THE APARTMENTS",
+      "title_2":"DEPARTMENT"
+    }
+  },
+  "predictive_model": {
+    "title": "FILL IN THE FORM TO GENERATE THE PROBABILITY OF BUDGET ADDITION TO YOUR CONTRACT",
+    "contract": "CONTRACT",
+    "delete_contract": "DELETE CONTRACT",
+    "generate_contract": "GENERATE PROBABILITY",
+    "create_form": "CREATE NEW FORM",
+    "import_excel": "IMPORT EXCEL",
+    "download_excel": "DOWNLOAD TEMPLATE IN EXCEL"
+  },
+  "dialog": {
+    "calculate": {
+      "title": "CALCULATING PROBABILITY",
+      "desc": "CALCULATING THE PROBABILITY OF BUDGET ADDITION TO THE CONTRACT",
+      "cancel": "CANCEL"
+    },
+    "dragndrop": {
+      "function_desc": {
+        "desc_1": "Drag file here",
+        "desc_2": "or",
+        "desc_3": "Open the browser"
+      },
+      "generate": "GENERATE CONTRACT PROBABILITY",
+      "leave":"LEAVE",
+      "cancel": "CANCEL"
+    },
+    "result": {
+      "title": "BUDGET ADDITION TO YOUR CONTRACT",
+      "leave":"LEAVE",
+      "success": "SUCCESSFULLY GENERATED ODDS"
+    }
+  }
+}

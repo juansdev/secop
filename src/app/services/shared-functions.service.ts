@@ -5,6 +5,7 @@ import { first, map, shareReplay } from 'rxjs/operators';
 import { lastValueFrom, Observable } from 'rxjs';
 import { CalculateDialog, ResultDialog } from '../components/predictive-model/predictive-model.component';
 import { SecopLocalService } from './secop/secop-local.service';
+import { TranslateService } from '@ngx-translate/core';
 
 declare var $: any;
 
@@ -13,7 +14,7 @@ declare var $: any;
 })
 export class SharedFunctionsService {
 
-  constructor(public dialog: MatDialog, private observer: BreakpointObserver, private _secopLocalService: SecopLocalService) { }
+  constructor(public translate: TranslateService , public dialog: MatDialog, private observer: BreakpointObserver, private _secopLocalService: SecopLocalService) { }
 
   isHandset$: Observable<boolean> = this.observer.observe(Breakpoints.Handset)
     .pipe(first(),
@@ -154,8 +155,13 @@ export class SharedFunctionsService {
   async simulateProgressBar(dialogRef: MatDialogRef<CalculateDialog>, array_contract: Array<string>, results_prediction: Array<boolean> = [true]): Promise<void> {
     const duration = 100;
     const steps = (1 / duration) * 100;
-    const result_positive: string = 'EL CONTRATO contract_name TIENE UNA PROBABILIDAD MUY MENOR DE QUE SE LE AGREGUE ADICIÓN PRESUPUESTAL';
-    const result_negative: string = 'CUIDADO EL CONTRATO contract_name TIENE UNA ALTA PROBABILIDAD DE QUE SE LE AGREGUE ADICIÓN PRESUPUESTAL';
+    let result_positive: string = 'ACCORDING TO THE CHARACTERISTICS SELECTED FOR THE CONTRACT contract_name IS UNLIKELY THAT IT HAS BUDGET ADDITION';
+    let result_negative: string = 'ACCORDING TO THE CHARACTERISTICS SELECTED FOR THE CONTRACT contract_name IS VERY LIKELY THAT IT HAS BUDGET ADDITION';
+    const get_current_lang = await this.translate.currentLang;
+    if(get_current_lang === 'es') {
+      result_positive = 'SEGUN LAS CARACTERISTICAS SELECCIONADAS PARA EL CONTRATO contract_name ES MUY POCO PROBABLE QUE TENGA ADICIÓN PRESUPUESTAL';
+      result_negative = 'SEGUN LAS CARACTERISTICAS SELECCIONADAS PARA EL CONTRATO contract_name ES MUY PROBABLE QUE TENGA ADICIÓN PRESUPUESTAL';
+    }
     let progress_timer = 0;
     let index_contract = 0;
     let results: Array<string> = [];
