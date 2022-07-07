@@ -9,7 +9,7 @@
   },
   "home": {
     "title": "PROBLEM TO SOLVE",
-    "desc": "It is useful for public entities in Colombia to have a tool that allows them to predict the probability of budget and time additions in contracts and identify which are the most common characteristics of contracts that cause it, because this helps them to take control of planning and execution to meet scope, budget, and schedule constraints, plus it enables them to prevent audit findings."
+    "desc": "It is useful for public entities in Colombia to have a tool that allows them to predict the probability of budget additions in contracts and identify which are the most common characteristics of contracts that cause it, because this helps them to take control of planning and execution to meet scope, budget, and schedule constraints, plus it enables them to prevent audit findings."
   },
   "dashboard": {
     "filter": "Filter Data by Year",

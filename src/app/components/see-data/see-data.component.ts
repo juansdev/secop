@@ -47,7 +47,7 @@ export class SeeDataComponent implements OnInit {
       const current_options_map = this.myMap.getOption();
       current_options_map['title'][0]['text'] = current_lang==='en' || !current_lang ? 'Map of Colombia (2022)' : 'Mapa de Colombia (2022)';
       current_options_map['title'][0]['subtext'] = current_lang==='en' || !current_lang ? 'Through the interactive map,\n you can view the information related to the\n number of contracts with addition, filter them by\n year and departments.' : 'Mediante el mapa interactivo,\n puede visualizar la información relacionada a la cantidad\n de contratos con adición, filtrarlos\n por año y departamentos.';
-      current_options_map['series'][0]['name'] = current_lang==='en' || !current_lang ? 'Contracts with Addendum' : 'Contratos con Adición';
+      current_options_map['series'][0]['name'] = current_lang==='en' || !current_lang ? 'Contracts with Addition' : 'Contratos con Adición';
       current_options_map['visualMap'][0]['text'][0] = current_lang==='en' || !current_lang ? 'High' : 'Alto';
       current_options_map['visualMap'][0]['text'][1] = current_lang==='en' || !current_lang ? 'Low' : 'Bajo';
       this.myMap.setOption(current_options_map);
@@ -153,7 +153,7 @@ export class SeeDataComponent implements OnInit {
           },
           series: [
             {
-              name: 'Contracts with Addendum',
+              name: 'Contracts with Addition',
               type: 'map',
               roam: true,
               map: 'Colombia',

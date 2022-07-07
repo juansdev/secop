@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { SecopService } from 'src/app/services/secop/secop.service';
-import { SharedFunctionsService } from 'src/app/services/shared-functions.service';
+import { SharedFunctionsService, ValueByFields } from 'src/app/services/shared-functions.service';
 import { use, init } from 'echarts/core';
 import { GridComponent, GridComponentOption, LegendComponent, LegendComponentOption, TooltipComponent, TooltipComponentOption } from 'echarts/components';
 import { BarChart, BarSeriesOption, LineChart, LineSeriesOption, PieChart, PieSeriesOption } from 'echarts/charts';
@@ -67,7 +67,7 @@ export class InfoGeneralComponent {
 
   private translate_general_label: any = {
     "Marcacion Adiciones": "Marking Additions",
-    "Tipo De Contrato": "Type Of Contract",
+    "Tipo De Contrato": "Process Status",
     "Modalidad de Contratacion": "Modality Of Contracting",
     "Orden Entidad": "Order Entity",
     "Rango val Contratos": "Value Range Contracts",
@@ -103,9 +103,26 @@ export class InfoGeneralComponent {
       'DistritoCapital': 'CapitalDistrict',
       'NacionalDescentralizado': 'NationalDecentralized',
       'TerritorialDistritalMunicipalNivel': 'TerritorialDistrictMunicipalLevel',
-      'valContrato': 'valContract',
-      'tiempoContrato': 'timeContract'
+      "tiempoContrato": {
+        "title": "Time Range Contracts",
+        "fields": {
+          "hasta": "until",
+          "años": "years",
+          "meses": "months",
+          "días": "days",
+          "mes": "month",
+          "año": "year"
+        }
+      },
+      "valContrato": {
+        "title": "Range Values Contracts",
+        "fields": {
+          "hasta": "until"
+        }
+      }
   };
+
+  public fields_predictive_model: ValueByFields = {};
 
   private array_departments_by_map: Array<string> = [];
 
@@ -113,6 +130,13 @@ export class InfoGeneralComponent {
   constructor(public translate: TranslateService, public _sharedFunctionsService: SharedFunctionsService, private _secopService: SecopService, private _secopLocalService: SecopLocalService) {
     const graphic_values_departments_by_year = JSON.parse(this._sharedFunctionsService.getDataLocalOrRam('graphicValuesDepartmentsByYear'));
     this.graphic_values_departments_by_year = graphic_values_departments_by_year ? graphic_values_departments_by_year : {};
+    this.fields_predictive_model = this._sharedFunctionsService.getDataLocalOrRam('FieldsPredictiveModel') ? JSON.parse(this._sharedFunctionsService.getDataLocalOrRam('FieldsPredictiveModel')) : {};
+  }
+
+  async ngOnInit(){
+    await this._sharedFunctionsService.loadFielsPredictiveModel(this.fields_predictive_model).then((fields_predictive_model: ValueByFields)=>{
+      this.fields_predictive_model = fields_predictive_model;
+    });
   }
 
   async ngOnChanges(changes: SimpleChanges) {
@@ -267,13 +291,23 @@ export class InfoGeneralComponent {
         }
         //Translate fields
         if(this.translate.currentLang === 'en' || !this.translate.currentLang){
-          const number_field = field.match(/\d+$/g)?.[0];
           let temporal_field = field;
+          const number_field: any = field.match(/\d+$/g)?.[0];
           if(number_field){
             temporal_field = field.replace(number_field,'');
           }
           if(this.translate_label[temporal_field]){
-            field = this.translate_label[temporal_field]+(number_field?number_field:'');
+            if(temporal_field.match(/valContrato/g)){
+              field = this.fields_predictive_model['Rango Val Contratos'][number_field-1];
+              field = this._sharedFunctionsService.predictiveModelTranslationValue(this.translate_label['valContrato'], field, false);
+            }
+            else if(temporal_field.match(/tiempoContrato/g)){
+              field = this.fields_predictive_model['Rango Tiempo Contratos'][number_field-1];
+              field = this._sharedFunctionsService.predictiveModelTranslationValue(this.translate_label['tiempoContrato'], field, false);
+            }
+            else {
+              field = this.translate_label[temporal_field]+(number_field?+` ${number_field}`:'');
+            }
           }
         }
         //Camelize and add data to graphic
@@ -331,7 +365,13 @@ export class InfoGeneralComponent {
             xAxis: {
               type: 'category',
               splitLine: { show: false },
-              data: label_x
+              data: label_x,
+              nameLocation: 'middle',
+              axisLabel: {
+                show: true,
+                interval: 0,
+                rotate: 45,
+              }
             },
             yAxis: {
               type: 'value'
@@ -696,8 +736,10 @@ export class InfoGeneralComponent {
             const value_by_fields = value_by_department[department];
             for (const field in value_by_fields) {
               if (Object.prototype.hasOwnProperty.call(value_by_fields, field)) {
-                const value_by_field = value_by_fields[field];
-                this.graphic_values_departments_by_year[year][department][field] = this._sort_object(value_by_field);
+                if(!(['Rango Tiempo Contratos', 'Rango val Contratos'].includes(field))){
+                  const value_by_field = value_by_fields[field];
+                  this.graphic_values_departments_by_year[year][department][field] = this._sort_object(value_by_field);
+                }
               }
             }
           }

@@ -2,14 +2,9 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { lastValueFrom, map } from 'rxjs';
-import { SecopLocalService } from 'src/app/services/secop/secop-local.service';
+import { lastValueFrom } from 'rxjs';
 import { SecopService } from 'src/app/services/secop/secop.service';
-import { SharedFunctionsService } from '../../services/shared-functions.service';
-
-interface ValueByFields {
-  [key: string]: Array<string>;
-}
+import { SharedFunctionsService, ValueByFields } from '../../services/shared-functions.service';
 
 export interface calculateData {
   progress: number;
@@ -151,62 +146,20 @@ export class PredictiveModelComponent implements OnInit {
     }
   };
 
+  public predictiveModelTranslationValue = this.sharedFunctionsService.predictiveModelTranslationValue;
   public fields_predictive_model: ValueByFields = {};
   public countContract: string = '001';
   public arrayContract: Array<string> = [this.countContract];
   public form: FormGroup = new FormGroup({});
 
-  constructor(public translate: TranslateService, private dialog: MatDialog, private _secopService: SecopService, private _secopLocalService: SecopLocalService, public sharedFunctionsService: SharedFunctionsService, private fb: FormBuilder) {
+  constructor(public translate: TranslateService, private dialog: MatDialog, private _secopService: SecopService, public sharedFunctionsService: SharedFunctionsService, private fb: FormBuilder) {
     this.fields_predictive_model = this.sharedFunctionsService.getDataLocalOrRam('FieldsPredictiveModel') ? JSON.parse(this.sharedFunctionsService.getDataLocalOrRam('FieldsPredictiveModel')) : {};
   }
 
-  async ngOnInit(): Promise<void> {
-    if(!Object.keys(this.fields_predictive_model).length){
-      await lastValueFrom(this._secopService.getFieldsPredictiveModel().pipe(map(async (data_fields_predictive_model: any) => {
-        const fields_predictive_model = Object.values(data_fields_predictive_model);
-        for (let index = 0; index < fields_predictive_model.length; index++) {
-          const value_fields: any = fields_predictive_model[index];
-          let name_field = '';
-          for (let index = 0; index < value_fields.length; index++) {
-            const value_field = value_fields[index];
-            if(!index) {
-              name_field = Object.keys(value_field).filter(key => key !== 'id')[0];
-              this.fields_predictive_model[this.sharedFunctionsService.camelize(name_field)] = [];
-            }
-            this.fields_predictive_model[this.sharedFunctionsService.camelize(name_field)].push(value_field[name_field]);
-          }
-        }
-        this.fields_predictive_model['Departamento Entidad'] = [];
-        this.fields_predictive_model['Departamento Ejecución'] = [];
-        let name_departments: any = this._secopLocalService.getDepartments ? this._secopLocalService.getDepartments.split(';').sort() : [];
-        if(!name_departments.length){
-          await lastValueFrom(this._secopService.getDepartments().pipe(map((data_name_departments: any)=>{
-            for (const key in data_name_departments) {
-              if (Object.prototype.hasOwnProperty.call(data_name_departments, key)) {
-                const department = data_name_departments[key];
-                name_departments.push(department.departamentoEjecucion);
-              }
-            }
-            name_departments.sort();
-            this._secopLocalService.setDepartments = name_departments;
-            for (let index = 0; index < name_departments.length; index++) {
-              const department = name_departments[index];
-              this.fields_predictive_model['Departamento Entidad'].push(department);
-              this.fields_predictive_model['Departamento Ejecución'].push(department);
-            }
-            this.sharedFunctionsService.setDataLocalOrRam('FieldsPredictiveModel', this.fields_predictive_model);
-          })));
-        }
-        else {
-          for (let index = 0; index < name_departments.length; index++) {
-            const department = name_departments[index];
-            this.fields_predictive_model['Departamento Entidad'].push(department);
-            this.fields_predictive_model['Departamento Ejecución'].push(department);
-          }
-          this.sharedFunctionsService.setDataLocalOrRam('FieldsPredictiveModel', this.fields_predictive_model);
-        }
-      })));
-    }
+  async ngOnInit() {
+    await this.sharedFunctionsService.loadFielsPredictiveModel(this.fields_predictive_model).then((fields_predictive_model: ValueByFields)=>{
+      this.fields_predictive_model = fields_predictive_model;
+    });
   }
 
   ngDoCheck()	{
@@ -222,44 +175,6 @@ export class PredictiveModelComponent implements OnInit {
       }
       this.form = this.fb.group(fields_form);
     }
-  }
-
-  translationValue(data: any, field_value: string = '', is_title: boolean = true): string {
-    if(typeof data === 'object') {
-      if(is_title){
-        return data['title'];
-      }
-      else{
-        const number = field_value.match(/NIVEL \d+$/g)?.[0];
-        let range: any = field_value.match(/(años|año|meses|mes|dias)/g);
-        if(!range){
-          range = [];
-        }
-        field_value.match(/ hasta /g) ? range?.push(field_value.match(/ hasta /g)?.[0]) : false;
-        if(number){
-          let temp_field_value = field_value.replace(number, '');
-          return data['fields'][temp_field_value+'NIVEL']+' '+(number.replace('NIVEL',''));
-        }
-        else if(range.length) {
-          let field_value_translated = field_value;
-          for (let index = 0; index < range.length; index++) {
-            let range_selected = range[index];
-            field_value_translated = field_value_translated.replace(range_selected.replace(/\s/g, ''), `${data['fields'][range_selected.replace(/\s/g, '')]}`);
-          }
-          return field_value_translated;
-        }
-        else {
-          if(data['fields'][field_value]){
-            return data['fields'][field_value];
-          }
-          return field_value;
-        }
-      }
-    }
-    if(!is_title){
-      return field_value;
-    }
-    return data;
   }
 
   async onSubmit(form: any): Promise<void> {

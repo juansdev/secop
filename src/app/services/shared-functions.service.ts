@@ -6,15 +6,18 @@ import { lastValueFrom, Observable } from 'rxjs';
 import { CalculateDialog, ResultDialog } from '../components/predictive-model/predictive-model.component';
 import { SecopLocalService } from './secop/secop-local.service';
 import { TranslateService } from '@ngx-translate/core';
+import { SecopService } from './secop/secop.service';
 
-declare var $: any;
+export interface ValueByFields {
+  [key: string]: Array<string>;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class SharedFunctionsService {
 
-  constructor(public translate: TranslateService , public dialog: MatDialog, private observer: BreakpointObserver, private _secopLocalService: SecopLocalService) { }
+  constructor(public translate: TranslateService , public dialog: MatDialog, private observer: BreakpointObserver, private _secopLocalService: SecopLocalService, private _secopService: SecopService) { }
 
   isHandset$: Observable<boolean> = this.observer.observe(Breakpoints.Handset)
     .pipe(first(),
@@ -208,6 +211,108 @@ export class SharedFunctionsService {
     await lastValueFrom(dialogRef.afterClosed().pipe(map(() => {
       clearInterval(timer);
     })));
+  }
+
+  async loadFielsPredictiveModel(fields_predictive_model: ValueByFields): Promise<ValueByFields> {
+    if(!Object.keys(fields_predictive_model).length){
+      fields_predictive_model = await lastValueFrom(this._secopService.getFieldsPredictiveModel().pipe(map(async (data_fields_predictive_model: any) => {
+        const values_fields_predictive_model: Array<any> = Object.values(data_fields_predictive_model);
+        for (let index = 0; index < values_fields_predictive_model.length; index++) {
+          let value_fields: any = values_fields_predictive_model[index];
+          if(['rangoTiempos', 'rangoContratos'].includes(Object.keys(data_fields_predictive_model)[index])){
+            let arr_value_fields = Array.from({length: value_fields.length}, () => {});
+            value_fields.forEach((value: any) => {
+              arr_value_fields[value['id']-1] = value;
+            });
+            value_fields = arr_value_fields;
+          }
+          else {
+          }
+          let name_field = '';
+          for (let index = 0; index < value_fields.length; index++) {
+            const value_field = value_fields[index];
+            if(!index) {
+              name_field = Object.keys(value_field).filter(key => key !== 'id')[0];
+              fields_predictive_model[this.camelize(name_field)] = [];
+            }
+            fields_predictive_model[this.camelize(name_field)].push(value_field[name_field]);
+          }
+        }
+        fields_predictive_model['Departamento Entidad'] = [];
+        fields_predictive_model['Departamento Ejecución'] = [];
+        let name_departments: any = this._secopLocalService.getDepartments ? this._secopLocalService.getDepartments.split(';').sort() : [];
+        if(!name_departments.length){
+          await lastValueFrom(this._secopService.getDepartments().pipe(map((data_name_departments: any)=>{
+            for (const key in data_name_departments) {
+              if (Object.prototype.hasOwnProperty.call(data_name_departments, key)) {
+                const department = data_name_departments[key];
+                name_departments.push(department.departamentoEjecucion);
+              }
+            }
+            name_departments.sort();
+            this._secopLocalService.setDepartments = name_departments;
+            for (let index = 0; index < name_departments.length; index++) {
+              const department = name_departments[index];
+              fields_predictive_model['Departamento Entidad'].push(department);
+              fields_predictive_model['Departamento Ejecución'].push(department);
+            }
+            this.setDataLocalOrRam('FieldsPredictiveModel', fields_predictive_model);
+          })));
+        }
+        else {
+          for (let index = 0; index < name_departments.length; index++) {
+            const department = name_departments[index];
+            fields_predictive_model['Departamento Entidad'].push(department);
+            fields_predictive_model['Departamento Ejecución'].push(department);
+          }
+          this.setDataLocalOrRam('FieldsPredictiveModel', fields_predictive_model);
+        }
+        return fields_predictive_model;
+      })));
+    }
+    return fields_predictive_model;
+  }
+
+  predictiveModelTranslationValue(data: any, field_value: string = '', is_title: boolean = true): string {
+    if(typeof data === 'object') {
+      if(is_title){
+        return data['title'];
+      }
+      else{
+        const number = field_value.match(/NIVEL \d+$/g)?.[0];
+        let range: any = field_value.match(/(años|año|meses|mes|dias)/g);
+        if(!range){
+          range = [];
+        }
+        field_value.match(/ hasta /g) ? range?.push(field_value.match(/ hasta /g)?.[0]) : false;
+        if(number){
+          let temp_field_value = field_value.replace(number, '');
+          return data['fields'][temp_field_value+'NIVEL']+' '+(number.replace('NIVEL',''));
+        }
+        else if(range.length) {
+          let field_value_translated = field_value;
+          for (let index = 0; index < range.length; index++) {
+            let range_selected = range[index];
+            console.log(field_value_translated);
+            console.log(range_selected.replace(/\s/g, ''));
+            console.log(data['fields']);
+            console.log(data['fields'][range_selected.replace(/\s/g, '')]);
+            field_value_translated = field_value_translated.replace(range_selected.replace(/\s/g, ''), data['fields'][range_selected.replace(/\s/g, '')]);
+          }
+          return field_value_translated;
+        }
+        else {
+          if(data['fields'][field_value]){
+            return data['fields'][field_value];
+          }
+          return field_value;
+        }
+      }
+    }
+    if(!is_title){
+      return field_value;
+    }
+    return data;
   }
 
 }

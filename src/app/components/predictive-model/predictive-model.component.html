@@ -8,12 +8,12 @@
                 <div *ngFor="let contract of arrayContract;">
                   <h1 class="m-0 py-3">{{"predictive_model.contract" | translate}}: {{contract}}</h1>
                   <div class="row">
-                    <mat-form-field *ngFor="let field of fields_predictive_model | keyvalue" appearance="fill" class="col-12 col-sm-6 col-md-3 p-2" [hintLabel]="(translate.currentLang === 'es' ? (field.key+' es requerido') : (translationValue(translate_fields_predictive_model[field.key])+' is required'))">
-                        <mat-label>{{translate.currentLang === 'es' ? field.key : translationValue(translate_fields_predictive_model[field.key])}}</mat-label>
+                    <mat-form-field *ngFor="let field of fields_predictive_model | keyvalue" appearance="fill" class="col-12 col-sm-6 col-md-3 p-2" [hintLabel]="(translate.currentLang === 'es' ? (field.key+' es requerido') : (predictiveModelTranslationValue(translate_fields_predictive_model[field.key])+' is required'))">
+                        <mat-label>{{translate.currentLang === 'es' ? field.key : predictiveModelTranslationValue(translate_fields_predictive_model[field.key])}}</mat-label>
                         <mat-select matNativeControl [attr.data-name]="contract+'_'+field.key" [formControlName]="contract+'_'+field.key">
                           <div *ngIf="translate.currentLang !== 'es'">
                             <mat-option *ngFor="let field_value of field.value; let field_index = index;" [value]="field_value">
-                              {{translationValue(translate_fields_predictive_model[field.key],field_value, false)}}
+                              {{predictiveModelTranslationValue(translate_fields_predictive_model[field.key],field_value, false)}}
                             </mat-option>
                           </div>
                           <div *ngIf="translate.currentLang === 'es'">
