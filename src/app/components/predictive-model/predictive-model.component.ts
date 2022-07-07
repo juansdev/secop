@@ -135,7 +135,12 @@ export class PredictiveModelComponent implements OnInit {
     "Rango Tiempo Contratos": {
       "title": "Time Range Contracts",
       "fields": {
-        "hasta": "until"
+        "hasta": "until",
+        "años": "years",
+        "meses": "months",
+        "días": "days",
+        "mes": "month",
+        "año": "year"
       }
     },
     "Rango Val Contratos": {
@@ -226,13 +231,22 @@ export class PredictiveModelComponent implements OnInit {
       }
       else{
         const number = field_value.match(/NIVEL \d+$/g)?.[0];
-        const range = field_value.match(/ hasta /g)?.[0];
+        let range: any = field_value.match(/(años|año|meses|mes|dias)/g);
+        if(!range){
+          range = [];
+        }
+        field_value.match(/ hasta /g) ? range?.push(field_value.match(/ hasta /g)?.[0]) : false;
         if(number){
           let temp_field_value = field_value.replace(number, '');
           return data['fields'][temp_field_value+'NIVEL']+' '+(number.replace('NIVEL',''));
         }
-        else if(range) {
-          return field_value.replace(range, ` ${data['fields'][range.replace(/\s/g, '')]} `);
+        else if(range.length) {
+          let field_value_translated = field_value;
+          for (let index = 0; index < range.length; index++) {
+            let range_selected = range[index];
+            field_value_translated = field_value_translated.replace(range_selected.replace(/\s/g, ''), `${data['fields'][range_selected.replace(/\s/g, '')]}`);
+          }
+          return field_value_translated;
         }
         else {
           if(data['fields'][field_value]){

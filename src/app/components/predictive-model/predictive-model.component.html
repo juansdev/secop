@@ -24,7 +24,7 @@
                         </mat-select>
                     </mat-form-field>
                   </div>
-                    <button type="button" mat-raised-button color="accent" class="py-2 rounded-0 fw-bold" (click)="arrayContract.splice(arrayContract.indexOf(contract), 1)">{{'predictive_model.delete_contract' | translate}} {{contract}}</button>
+                    <button type="button" mat-raised-button color="accent" class="py-2 rounded-0 fw-bold" [disabled]="arrayContract.length===1" (click)="arrayContract.splice(arrayContract.indexOf(contract), 1)">{{'predictive_model.delete_contract' | translate}} {{contract}}</button>
                     <hr>
                 </div>
                 <div class="text-center">
