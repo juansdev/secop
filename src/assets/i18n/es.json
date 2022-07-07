@@ -32,7 +32,9 @@
     "generate_contract": "GENERAR PROBABILIDAD",
     "create_form": "CREAR NUEVO FORMULARIO",
     "import_excel": "IMPORTAR EXCEL",
-    "download_excel": "DESCARGAR PLANTILLA EN EXCEL"
+    "download_excel": "DESCARGAR PLANTILLA EN EXCEL",
+    "entity":"ENTIDAD",
+    "process":"PROCESO"
   },
   "dialog": {
     "calculate": {

@@ -293,10 +293,6 @@ export class SharedFunctionsService {
           let field_value_translated = field_value;
           for (let index = 0; index < range.length; index++) {
             let range_selected = range[index];
-            console.log(field_value_translated);
-            console.log(range_selected.replace(/\s/g, ''));
-            console.log(data['fields']);
-            console.log(data['fields'][range_selected.replace(/\s/g, '')]);
             field_value_translated = field_value_translated.replace(range_selected.replace(/\s/g, ''), data['fields'][range_selected.replace(/\s/g, '')]);
           }
           return field_value_translated;
