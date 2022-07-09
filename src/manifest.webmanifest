@@ -1,13 +1,13 @@
 {
-  "name": "Proyecto SECOP",
-  "short_name": "SECOP",
+  "name": "Proyect C.A.P.S.",
+  "short_name": "C.A.P.S.",
   "theme_color": "#00747C",
   "background_color": "#99C7CB",
   "display": "standalone",
   "start_url": "./",
   "scope": "./",
-  "lang": "es-CO",
-  "description": "Ciencia de Datos para SECOP.",
+  "lang": "en-US",
+  "description": "It is useful for public entities in Colombia to have a tool that allows them to predict the probability of budget and time additions in contracts and identify which are the most common characteristics of contracts that cause it, because this helps them to take control of planning and execution to meet scope, budget, and schedule constraints, plus it enables them to prevent audit findings.",
   "icons": [
     {
       "src": "assets/icons/icon-72x72.png",

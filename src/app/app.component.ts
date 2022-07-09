@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
-import { delay, filter, map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { NavigationEnd, Router } from '@angular/router';
 import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import { SharedFunctionsService } from './services/shared-functions.service';
@@ -17,9 +16,9 @@ import { TranslateService } from '@ngx-translate/core';
 export class AppComponent {
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav;
-  isHandset$: Observable<boolean> = this.SharedFunctionsService.isHandset$;
+  isHandset$: Observable<Boolean> = this.SharedFunctionsService.isHandset$;
 
-  constructor(public translate: TranslateService, private observer: BreakpointObserver, private router: Router, private SharedFunctionsService: SharedFunctionsService) {
+  constructor(public translate: TranslateService, private router: Router, private SharedFunctionsService: SharedFunctionsService) {
     // Register translation languages
     translate.addLangs(['en', 'es']);
     // Set default language
@@ -31,20 +30,15 @@ export class AppComponent {
     this.translate.use(lang);
   }
   async ngAfterViewInit() {
-    await lastValueFrom(this.observer.observe(Breakpoints.Handset).pipe(delay(1), untilDestroyed(this), map((res: any) => {
-        if (!res.matches) {
+
+    await lastValueFrom(this.router.events.pipe(untilDestroyed(this), filter((e) => e instanceof NavigationEnd), map(() => {
+        if (!this.isHandset$) {
           this.sidenav.mode = 'side';
           this.sidenav.close();
         } else {
           this.sidenav.mode = 'over';
+          this.sidenav.close();
         }
-      }
-    )));
-
-    await lastValueFrom(this.router.events.pipe(untilDestroyed(this), filter((e) => e instanceof NavigationEnd), map(() => {
-      if (this.sidenav.mode === 'over') {
-        this.sidenav.close();
-      }
     })));
   }
 

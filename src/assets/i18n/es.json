@@ -18,7 +18,8 @@
     "load_all_by_year": "CARGAR LA CANTIDAD DE CONTRATOS CON ADICIÓN PRESUPUESTAL DEL AÑO",
     "info": {
       "title_info": "POR FAVOR SELECCIONAR UN DEPARTAMENTO PARA VISUALIZAR LOS DATOS",
-      "department": "DEPARTAMENTO"
+      "department": "DEPARTAMENTO",
+      "show_all": "TODOS"
     },
     "extension_panel": {
       "title":"CLIC PARA EXPANDIR VER LOS DEPARTAMENTOS",

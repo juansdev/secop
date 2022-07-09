@@ -19,7 +19,7 @@ export class SharedFunctionsService {
 
   constructor(public translate: TranslateService , public dialog: MatDialog, private observer: BreakpointObserver, private _secopLocalService: SecopLocalService, private _secopService: SecopService) { }
 
-  isHandset$: Observable<boolean> = this.observer.observe(Breakpoints.Handset)
+  isHandset$: Observable<boolean> = this.observer.observe([Breakpoints.Handset, Breakpoints.Tablet])
     .pipe(first(),
       map(result => result.matches),
       shareReplay()
@@ -217,6 +217,8 @@ export class SharedFunctionsService {
     if(!Object.keys(fields_predictive_model).length){
       fields_predictive_model = await lastValueFrom(this._secopService.getFieldsPredictiveModel().pipe(map(async (data_fields_predictive_model: any) => {
         const values_fields_predictive_model: Array<any> = Object.values(data_fields_predictive_model);
+        const list_real_keys = ["Orden Entidad", "Modalidad de contratacion", "Objeto a contratar", "Departamento Entidad", "Departamento Ejecución", "Rango val contratos", "Rango tiempo contratos"];
+        const list_real_keys_2 = ["orden entidad", "modalidad de contratacion", "objeto a contratar", "Departamento Entidad", "Departamento Ejecución", "rango val contratos", "rango tiempo contratos"];
         for (let index = 0; index < values_fields_predictive_model.length; index++) {
           let value_fields: any = values_fields_predictive_model[index];
           if(['rangoTiempos', 'rangoContratos'].includes(Object.keys(data_fields_predictive_model)[index])){
@@ -231,11 +233,13 @@ export class SharedFunctionsService {
           let name_field = '';
           for (let index = 0; index < value_fields.length; index++) {
             const value_field = value_fields[index];
+            let real_key = list_real_keys[list_real_keys_2.indexOf(this.camelize(name_field).toLowerCase())];
             if(!index) {
               name_field = Object.keys(value_field).filter(key => key !== 'id')[0];
-              fields_predictive_model[this.camelize(name_field)] = [];
+              real_key = list_real_keys[list_real_keys_2.indexOf(this.camelize(name_field).toLowerCase())];
+              fields_predictive_model[real_key] = [];
             }
-            fields_predictive_model[this.camelize(name_field)].push(value_field[name_field]);
+            fields_predictive_model[real_key].push(value_field[name_field]);
           }
         }
         fields_predictive_model['Departamento Entidad'] = [];

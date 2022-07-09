@@ -23,14 +23,14 @@
   height:50px;
 }
 
-@media (min-width: 768px) {
-    .presentation-home {
-        background-image: url('../../../assets/img/background_home.svg');
-        background-repeat: no-repeat;
-        background-position-y: -10px;
-        background-size: cover;
-    }
-    .container-main {
-      height: 31vw;
-    }
+@media (min-width: 1200px) {
+  .presentation-home {
+      background-image: url('../../../assets/img/background_home.svg');
+      background-repeat: no-repeat;
+      background-position-y: -10px;
+      background-size: cover;
+  }
+  .container-main {
+    height: 31vw;
+  }
 }

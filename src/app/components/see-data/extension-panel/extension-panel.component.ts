@@ -10,10 +10,14 @@ export class ExtensionPanelComponent implements OnInit {
   @Output() department_selected = new EventEmitter<string>();
 
   @Input() name_departments: Array<string> = [];
-  extension_panel_vertical_opened: boolean = false;
+  extension_panel_vertical: boolean = true;
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  change_state_extension_panel_vertical() {
+    this.extension_panel_vertical = !this.extension_panel_vertical;
   }
 }

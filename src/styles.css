@@ -34,6 +34,20 @@ body {
   resize: horizontal;
 }
 
+mat-sidenav-content>.mat-elevation-z8{
+  height: -webkit-fill-available;
+  display: flex;
+  flex-direction: column;
+}
+
+app-home{
+  flex-basis: 80%;
+}
+
+app-footer{
+  flex-basis: 20%;
+}
+
 @media (max-width: 575px) {
   .cdk-overlay-pane {
     max-width: initial !important;

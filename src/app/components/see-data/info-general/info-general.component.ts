@@ -26,6 +26,12 @@ interface ValuesByYear {
   };
 }
 
+interface ValuesAll {
+  [string: string] : {
+    [string: string] : any,
+  }
+}
+
 @Component({
   selector: 'app-info-general',
   templateUrl: './info-general.component.html',
@@ -33,7 +39,6 @@ interface ValuesByYear {
 })
 export class InfoGeneralComponent {
 
-  @ViewChild('allGraphics') allGraphics: any;
   @ViewChildren('isAllGraphicsRendered') isAllGraphicsRendered: any;
 
   @Input() myMap: any;
@@ -42,10 +47,12 @@ export class InfoGeneralComponent {
   @Input() array_years: Array<string> = [];
 
   public graphic_values_departments_by_year: ValuesByYear;
+  public all_graphic_value_department: ValuesAll = {};
   public params_for_generate_graphics: any = [];
   public array_departments_selected: Array<string> = [];
   public array_fields: Array<string> = [];
   public array_name_graphics: Array<string> = ['barChart','pieChart'];
+  public Object = Object;
 
   private options_map_changed: boolean = false;
   private graphics_echart: Array<any> = [];
@@ -53,14 +60,14 @@ export class InfoGeneralComponent {
   private fields_for_graphics: any = {
     'Marcacion Adiciones': 'adiciones',
     'Tipo De Contrato': 'contratos',
-    'Modalidad de Contratacion': 'modalidad',
+    'Modalidad de contratacion': 'modalidad',
     'Orden Entidad': 'orden',
-    'Rango val Contratos': 'val',
-    'Rango Tiempo Contratos': 'tiempo'
+    'Rango val contratos': 'val',
+    'Rango tiempo contratos': 'tiempo'
   };
 
   private list_word_for_remove: any = {
-    'Modalidad de Contratacion': 'modalidad',
+    'Modalidad de contratacion': 'modalidad',
     'Orden Entidad': 'orden',
     'Tipo De Contrato': 'contratos'
   };
@@ -68,10 +75,10 @@ export class InfoGeneralComponent {
   private translate_general_label: any = {
     "Marcacion Adiciones": "Marking Additions",
     "Tipo De Contrato": "Process Status",
-    "Modalidad de Contratacion": "Modality Of Contracting",
+    "Modalidad de contratacion": "Modality Of Contracting",
     "Orden Entidad": "Order Entity",
-    "Rango val Contratos": "Value Range Contracts",
-    "Rango Tiempo Contratos": "Time Range Contracts"
+    "Rango val contratos": "Value Range Contracts",
+    "Rango tiempo contratos": "Time Range Contracts"
   }
 
   private translate_label: any = {
@@ -128,9 +135,33 @@ export class InfoGeneralComponent {
 
 
   constructor(public translate: TranslateService, public _sharedFunctionsService: SharedFunctionsService, private _secopService: SecopService, private _secopLocalService: SecopLocalService) {
-    const graphic_values_departments_by_year = JSON.parse(this._sharedFunctionsService.getDataLocalOrRam('graphicValuesDepartmentsByYear'));
-    this.graphic_values_departments_by_year = graphic_values_departments_by_year ? graphic_values_departments_by_year : {};
+    const graphic_values_departments_by_year = this._sharedFunctionsService.getDataLocalOrRam('graphicValuesDepartmentsByYear');
+    this.graphic_values_departments_by_year = graphic_values_departments_by_year ? JSON.parse(graphic_values_departments_by_year) : {};
     this.fields_predictive_model = this._sharedFunctionsService.getDataLocalOrRam('FieldsPredictiveModel') ? JSON.parse(this._sharedFunctionsService.getDataLocalOrRam('FieldsPredictiveModel')) : {};
+  }
+
+  private updateAllGraphicValueDepartment() {
+    this.all_graphic_value_department = {};
+    if(!this.year_selected){
+      this.all_graphic_value_department[this.department_selected] = {};
+      for (const year in this.graphic_values_departments_by_year) {
+        if (Object.prototype.hasOwnProperty.call(this.graphic_values_departments_by_year, year)) {
+          const values_by_department = this.graphic_values_departments_by_year[year][this.department_selected];
+          for (const general_field in values_by_department) {
+            if (Object.prototype.hasOwnProperty.call(values_by_department, general_field)) {
+              this.all_graphic_value_department[this.department_selected][general_field] = this.all_graphic_value_department[this.department_selected][general_field] ? this.all_graphic_value_department[this.department_selected][general_field] : {};
+              const values_by_field_general = values_by_department[general_field];
+              for (const field in values_by_field_general) {
+                if (Object.prototype.hasOwnProperty.call(values_by_field_general, field)) {
+                  const value_by_field = values_by_field_general[field];
+                  this.all_graphic_value_department[this.department_selected][general_field][field] = this.all_graphic_value_department[this.department_selected][general_field][field] ? this.all_graphic_value_department[this.department_selected][general_field][field] + value_by_field : value_by_field;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   async ngOnInit(){
@@ -175,17 +206,20 @@ export class InfoGeneralComponent {
 
   async ngAfterViewInit() {
     // Arreglar problema de generacion de graficos, el problema esta en que no se espera lo suficiente a que todas los elementos se carguen y se eliminen los anteriores.
-    await lastValueFrom(this.isAllGraphicsRendered.changes.pipe(map(()=>{
-      let indexs_field: any = [];
-      this.isAllGraphicsRendered.forEach((element: ElementRef) => {
-        indexs_field.push(element.nativeElement.id);
-      });
-      indexs_field.forEach((val: any, i: any)=>{
-        indexs_field[i] = val.match(/(_\d)+[\d]?/g)[0].replace('_','');
-      });
-      indexs_field = [...new Set(indexs_field)];
-      this.ngForRendred(indexs_field);
-    })));
+    await lastValueFrom(this.isAllGraphicsRendered.changes.pipe(
+      map(()=>{
+        let indexs_field: any = [];
+        this.isAllGraphicsRendered.forEach((element: ElementRef) => {
+          indexs_field.push(element.nativeElement.id);
+        });
+        indexs_field.forEach((val: any, i: any)=>{
+          indexs_field[i] = val.match(/(_\d)+[\d]?/g)[0].replace('_','');
+        });
+        indexs_field = [...new Set(indexs_field)];
+        this.ngForRendred(indexs_field);
+        this.updateAllGraphicValueDepartment();
+      })
+    ));
   }
 
   ngForRendred(indexs_field: Array<string>) {
@@ -239,7 +273,19 @@ export class InfoGeneralComponent {
         indexs_field[i] = val.match(/(_\d)+[\d]?/g)[0].replace('_','');
       });
       indexs_field = [...new Set(indexs_field)];
-      this._loadGraphicsWithValues(indexs_field, index_year_selected);
+      if(index_year_selected > this.array_years.length-1){
+        if(this.params_for_generate_graphics[this.params_for_generate_graphics.length -1][0] !== 'all'){
+          for (const field in this.all_graphic_value_department[this.department_selected]) {
+            if (Object.prototype.hasOwnProperty.call(this.all_graphic_value_department[this.department_selected], field)) {
+              this.params_for_generate_graphics.push(['all', field]);
+            }
+          }
+        }
+        this._loadGraphicsWithValues(indexs_field, -1);
+      }
+      else {
+        this._loadGraphicsWithValues(indexs_field, index_year_selected);
+      }
     }, 1000);
   }
 
@@ -250,10 +296,16 @@ export class InfoGeneralComponent {
   }
 
   public _loadGraphicsWithValues(indexs_field:Array<string>, tab_index_year_selected: number = 0){
-    let year_selected = this.year_selected;
+    let year_selected: any = this.year_selected;
     if(!year_selected) {
-      year_selected = this.array_years[tab_index_year_selected];
+      if(tab_index_year_selected === -1) {
+        year_selected = 'all';
+      }
+      else {
+        year_selected = this.array_years[tab_index_year_selected];
+      }
     }
+    console.log(this.params_for_generate_graphics);
     if(this.params_for_generate_graphics.length){
       let params_for_generate_graphics = this.params_for_generate_graphics.filter((element: any) => element[0] === year_selected);
       params_for_generate_graphics.forEach((element: any, index: number)=>{
@@ -263,6 +315,8 @@ export class InfoGeneralComponent {
         element.push(indexs_field[index]);
       });
       this.graphics_echart = [];
+      console.log(params_for_generate_graphics);
+      console.log(year_selected);
       for (let index = 0; index < params_for_generate_graphics.length; index++) {
         const params_for_generate_graphic = params_for_generate_graphics[index];
         let year,field,index_field;
@@ -277,8 +331,15 @@ export class InfoGeneralComponent {
   }
 
   public createGraphicWithValues(year: string, general_field: string, index_field: string): void {
+    const all_graphic_value_department: any = this.all_graphic_value_department;
     const graphic_values_departments_by_year: any = this.graphic_values_departments_by_year;
-    const value_field = graphic_values_departments_by_year[parseInt(year)][this.department_selected][general_field];
+    let value_field: any = {};
+    if(year === 'all'){
+      value_field = all_graphic_value_department[this.department_selected][general_field];
+    }
+    else {
+      value_field = graphic_values_departments_by_year[year][this.department_selected][general_field];
+    }
     let label_x: Array<string> = [];
     let data: Array<number> = [];
     let data_pie: any = [];
@@ -298,11 +359,11 @@ export class InfoGeneralComponent {
           }
           if(this.translate_label[temporal_field]){
             if(temporal_field.match(/valContrato/g)){
-              field = this.fields_predictive_model['Rango Val Contratos'][number_field-1];
+              field = this.fields_predictive_model['Rango val contratos'][number_field-1];
               field = this._sharedFunctionsService.predictiveModelTranslationValue(this.translate_label['valContrato'], field, false);
             }
             else if(temporal_field.match(/tiempoContrato/g)){
-              field = this.fields_predictive_model['Rango Tiempo Contratos'][number_field-1];
+              field = this.fields_predictive_model['Rango tiempo contratos'][number_field-1];
               field = this._sharedFunctionsService.predictiveModelTranslationValue(this.translate_label['tiempoContrato'], field, false);
             }
             else {
@@ -317,15 +378,17 @@ export class InfoGeneralComponent {
         data_pie.push({value: value, name: key_camelize});
       }
     }
+    const title_id = year === 'all' ? `graphic_title_all_${index_field}` : `graphic_title_${index_field}`;
+    console.log(title_id);
     if(this.translate.currentLang === 'en' || !this.translate.currentLang){
-      document.getElementById(`graphic_title_${index_field}`)!.innerHTML = this.translate_general_label[general_field];
+      document.getElementById(title_id)!.innerHTML = this.translate_general_label[general_field];
     }
     else {
-      document.getElementById(`graphic_title_${index_field}`)!.innerHTML = general_field;
+      document.getElementById(title_id)!.innerHTML = general_field;
     }
     for (let index = 0; index < this.array_name_graphics.length; index++) {
       const type_graphic = this.array_name_graphics[index];
-      const id_element_for_render = `graphic_${type_graphic}_${index_field}`;
+      const id_element_for_render = year === 'all' ? `graphic_${type_graphic}_all_${index_field}` : `graphic_${type_graphic}_${index_field}`;
       const chartDom: any = document.getElementById(id_element_for_render)!;
       if(chartDom) {
         const myChart = init(chartDom);
@@ -350,7 +413,8 @@ export class InfoGeneralComponent {
           option && myChart.setOption(option);
         }
         else if(type_graphic === 'barChart' && data.length > 2) {
-          document.getElementById(`graphic_pieChart_${index_field}`)?.remove();
+          const remove_id = year === 'all' ? `graphic_pieChart_all_${index_field}` : `graphic_pieChart_${index_field}`;
+          document.getElementById(remove_id)?.remove();
           option = {
             tooltip: {
               trigger: 'axis',
@@ -391,7 +455,8 @@ export class InfoGeneralComponent {
           option && myChart.setOption(option);
         }
         else if(type_graphic === 'pieChart' && data.length === 2) {
-          document.getElementById(`graphic_barChart_${index_field}`)?.remove();
+          const remove_id = year === 'all' ? `graphic_barChart_all_${index_field}` : `graphic_barChart_${index_field}`;
+          document.getElementById(remove_id)?.remove();
           option = {
             tooltip: {
               trigger: 'item',
@@ -736,7 +801,7 @@ export class InfoGeneralComponent {
             const value_by_fields = value_by_department[department];
             for (const field in value_by_fields) {
               if (Object.prototype.hasOwnProperty.call(value_by_fields, field)) {
-                if(!(['Rango Tiempo Contratos', 'Rango val Contratos'].includes(field))){
+                if(!(['Rango tiempo contratos', 'Rango val contratos'].includes(field))){
                   const value_by_field = value_by_fields[field];
                   this.graphic_values_departments_by_year[year][department][field] = this._sort_object(value_by_field);
                 }

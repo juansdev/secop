@@ -18,7 +18,8 @@
     "load_all_by_year": "LOAD ALL THE AMOUNT OF CONTRACTS WITH BUDGET ADDITION BY YEAR",
     "info": {
       "title_info": "PLEASE SELECT A DEPARTMENT TO VIEW THE DATA",
-      "department": "DEPARTMENT"
+      "department": "DEPARTMENT",
+      "show_all": "ALL"
     },
     "extension_panel": {
       "title":"CLICK TO EXPAND SEE THE APARTMENTS",

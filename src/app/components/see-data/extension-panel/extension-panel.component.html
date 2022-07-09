@@ -1,5 +1,5 @@
 <mat-accordion multi="true">
-    <mat-expansion-panel [expanded]="true" [class]="(extension_panel_vertical_opened ? 'extension-panel-vertical' : '') +' rounded-0'" (opened)="extension_panel_vertical_opened = true" (closed)="extension_panel_vertical_opened = false">
+    <mat-expansion-panel [expanded]="true" [class]="(extension_panel_vertical ? 'extension-panel-vertical' : '') +' rounded-0'" (click)="change_state_extension_panel_vertical()">
         <mat-expansion-panel-header class="p-0 panel-vertical">
             <mat-panel-title class="justify-content-center fw-bold">{{"dashboard.extension_panel.title" | translate}}</mat-panel-title>
         </mat-expansion-panel-header>

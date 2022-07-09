@@ -1,6 +1,6 @@
 <div class="presentation-home">
-  <div class="row container-main pt-md-4 pt-sm-2">
-    <div class="d-none d-md-block">
+  <div class="row container-main pt-xl-4 pt-sm-2">
+    <div class="d-none d-xl-block">
         <img src="assets/img/logo.webp" alt="Logo Team 102" class="position-absolute main-logo" width="20%">
         <div class="text-light text-end" style="right: 60px;">
             <div class="container-main-text position-relative">
@@ -14,27 +14,36 @@
             </div>
         </div>
     </div>
-    <div class="d-flex flex-wrap flex-xl-nowrap d-md-none justify-content-center">
+    <div class="d-xl-none col-lg-8 text-center mx-auto">
         <img class="mt-5 w-50" src="assets/img/logo2.webp" alt="Logo Team 102">
         <div class="mt-5 px-3 text-light">
             <h1 class="fst-italic text-center">{{"home.title" | translate}}</h1>
             <p style="font-size: 25px; line-height: 35px;" class="text-justify">{{"home.desc" | translate}}</p>
-            <div class="d-flex justify-content-center align-items-end flex-wrap mb-3" style="gap:30px;">
+            <div class="d-lg-none mb-3">
+              <button mat-raised-button class="w-100 d-block fw-bold" style="height: 50px;" color="warn" routerLink="/ver_datos"><img style="height: 30px;" src="assets/img/icons/dashboard.webp" alt="Icon Dashboard"> {{'navbar.menu.dashboard' | translate}}</button>
+              <button mat-raised-button class="w-100 d-block my-3 fw-bold" style="height: 50px;" color="warn" routerLink="/modelo_predictivo"><img style="height: 30px;" src="assets/img/icons/model.webp" alt="Icon Model"> {{'navbar.menu.prediction_model' | translate}}</button>
               <div class="d-flex justify-content-center align-items-center flex-wrap" style="gap:30px;">
-                <button mat-raised-button style="width: 150px;" class="h-auto fw-bold" color="warn" routerLink="/ver_datos"><img style="height: 30px;" src="assets/img/icons/dashboard.webp" alt="Icon Dashboard"> {{'navbar.menu.dashboard' | translate}}</button>
-                <button mat-raised-button style="width: 150px;" class="h-auto fw-bold" color="warn" routerLink="/modelo_predictivo"><img style="height: 30px;" src="assets/img/icons/model.webp" alt="Icon Model"> {{'navbar.menu.prediction_model' | translate}}</button>
-              </div>
-              <div class="d-flex justify-content-center align-items-center flex-wrap" style="gap:30px;">
-                <img src="assets/img/brands/brand_ds4a.webp" style="height:30px;" alt="Brand DS4A">
-                <img src="assets/img/brands/brand_mintic.webp" style="height:30px;" alt="Brand MinTIC">
-                <img src="assets/img/brands/brand_n_b.webp" style="height:30px;" alt="Brand Colombia Compra Eficiente">
+                <img src="assets/img/brands/brand_ds4a.webp" style="height:50px;" alt="Brand DS4A">
+                <img src="assets/img/brands/brand_mintic.webp" style="height:50px;" alt="Brand MinTIC">
+                <img src="assets/img/brands/brand_n_b.webp" style="height:50px;" alt="Brand Colombia Compra Eficiente">
               </div>
             </div>
         </div>
     </div>
+    <div class="d-none d-lg-flex justify-content-center justify-content-xl-end align-items-end flex-wrap mb-3" style="gap:30px;">
+      <div class="d-flex justify-content-center align-items-center flex-wrap" style="gap:30px;">
+        <button mat-raised-button style="width: 300px; height: 50px;" class="fw-bold" color="warn" routerLink="/ver_datos"><img style="height: 30px;" src="assets/img/icons/dashboard.webp" alt="Icon Dashboard"> {{'navbar.menu.dashboard' | translate}}</button>
+        <button mat-raised-button style="width: 300px; height: 50px;" class="fw-bold" color="warn" routerLink="/modelo_predictivo"><img style="height: 30px;" src="assets/img/icons/model.webp" alt="Icon Model"> {{'navbar.menu.prediction_model' | translate}}</button>
+      </div>
+      <div class="d-flex d-xl-none justify-content-center align-items-center flex-wrap" style="gap:150px;">
+        <img src="assets/img/brands/brand_ds4a.webp" style="height:50px;" alt="Brand DS4A">
+        <img src="assets/img/brands/brand_mintic.webp" style="height:50px;" alt="Brand MinTIC">
+        <img src="assets/img/brands/brand_n_b.webp" style="height:50px;" alt="Brand Colombia Compra Eficiente">
+      </div>
+    </div>
   </div>
-  <div class="d-none d-md-flex pb-md-4 pb-sm-2 justify-content-end align-items-end flex-wrap" style="gap:30px;">
-    <div class="d-md-flex justify-content-end align-items-center flex-wrap h-100" style="gap:30px;">
+  <div class="d-none d-xl-flex pb-xl-4 pb-sm-2 justify-content-end align-items-end flex-wrap" style="gap:30px;">
+    <div class="d-xl-flex justify-content-end align-items-center flex-wrap h-100" style="gap:30px;">
       <img src="assets/img/brands/brand_ds4a.webp" style="height:50px;" alt="Brand DS4A">
       <img src="assets/img/brands/brand_mintic.webp" style="height:50px;" alt="Brand MinTIC">
       <img src="assets/img/brands/brand_n_b.webp" style="height:50px;" alt="Brand Colombia Compra Eficiente">

@@ -8,17 +8,17 @@
                 <div *ngFor="let contract of arrayContract;">
                   <h1 class="m-0 py-3">{{"predictive_model.contract" | translate}}: {{contract}}</h1>
                   <div class="container-main">
-                    <div *ngFor="let field of fields_predictive_model | keyvalue" [class]="!['Rango Tiempo Contratos', 'Rango Val Contratos'].includes(field.key) ? 'w-auto mobile-full':'w-100'">
+                    <div *ngFor="let field of fields_predictive_model | keyvalue" [class]="!['Rango tiempo contratos', 'Rango val contratos'].includes(field.key) ? 'w-auto mobile-full':'w-100'">
                       <h2 class="text-center m-0" *ngIf="field.key==='Departamento Ejecución'">
                         <span class="fw-bold">{{"predictive_model.contract" | translate}}</span>
                       </h2>
                       <h2 class="text-center m-0" *ngIf="field.key==='Departamento Entidad'">
                         <span class="fw-bold">{{"predictive_model.entity" | translate}}</span>
                       </h2>
-                      <h2 class="text-center m-0" *ngIf="field.key==='Modalidad De Contratacion'">
+                      <h2 class="text-center m-0" *ngIf="field.key==='Modalidad de contratacion'">
                         <span class="fw-bold">{{"predictive_model.process" | translate}}</span>
                       </h2>
-                      <mat-form-field *ngIf="!['Rango Tiempo Contratos', 'Rango Val Contratos'].includes(field.key)" appearance="fill" class="w-100 p-2" [hintLabel]="(translate.currentLang === 'es' ? (field.key+' es requerido') : (predictiveModelTranslationValue(translate_fields_predictive_model[field.key])+' is required'))">
+                      <mat-form-field *ngIf="!['Rango tiempo contratos', 'Rango val contratos'].includes(field.key)" appearance="fill" class="w-100 p-2" [hintLabel]="(translate.currentLang === 'es' ? (field.key+' es requerido') : (predictiveModelTranslationValue(translate_fields_predictive_model[field.key])+' is required'))">
                           <mat-label>{{translate.currentLang === 'es' ? field.key : predictiveModelTranslationValue(translate_fields_predictive_model[field.key])}}</mat-label>
                           <mat-select matNativeControl [attr.data-name]="contract+'_'+field.key" [formControlName]="contract+'_'+field.key">
                             <div *ngIf="translate.currentLang !== 'es'">
@@ -33,11 +33,11 @@
                             </div>
                           </mat-select>
                       </mat-form-field>
-                      <mat-form-field *ngIf="['Rango Tiempo Contratos', 'Rango Val Contratos'].includes(field.key)" appearance="fill" class="w-100 p-2" [hintLabel]="(translate.currentLang === 'es' ? (field.key+' es requerido') : (predictiveModelTranslationValue(translate_fields_predictive_model[field.key])+' is required'))">
+                      <mat-form-field *ngIf="['Rango tiempo contratos', 'Rango val contratos'].includes(field.key)" appearance="fill" class="w-100 p-2" [hintLabel]="(translate.currentLang === 'es' ? (field.key+' es requerido') : (predictiveModelTranslationValue(translate_fields_predictive_model[field.key])+' is required'))">
                         <mat-label>{{translate.currentLang === 'es' ? field.key : predictiveModelTranslationValue(translate_fields_predictive_model[field.key])}}</mat-label>
                         <mat-select matNativeControl [attr.data-name]="contract+'_'+field.key" [formControlName]="contract+'_'+field.key">
                           <div *ngIf="translate.currentLang !== 'es'">
-                            <mat-option *ngFor="let field_value of field.value.sort(); let field_index = index;" [value]="field_value">
+                            <mat-option *ngFor="let field_value of field.value; let field_index = index;" [value]="field_value">
                               {{predictiveModelTranslationValue(translate_fields_predictive_model[field.key],field_value, false)}}
                             </mat-option>
                           </div>

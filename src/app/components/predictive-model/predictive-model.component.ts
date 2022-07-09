@@ -34,7 +34,7 @@ export class PredictiveModelComponent implements OnInit {
   public translate_fields_predictive_model: any = {
     "Departamento Ejecución": "Execution Department",
     "Departamento Entidad": "Department Entity",
-    "Modalidad De Contratacion": {
+    "Modalidad de contratacion": {
       "title": "Modality of contracting",
       "fields": {
         "Concurso de diseño Arquitectónico": "Architectural Design Contest",
@@ -54,7 +54,7 @@ export class PredictiveModelComponent implements OnInit {
         "Subasta": "Auction"
       }
     },
-    "Objeto A Contratar": {
+    "Objeto a contratar": {
       "title":"Object to Hire",
       "fields": {
         "Equipo Médico, Accesorios y Suministros": "Medical Equipment, Accessories and Supplies",
@@ -127,7 +127,7 @@ export class PredictiveModelComponent implements OnInit {
         "NACIONAL DESCENTRALIZADO": "DECENTRALIZED NATIONAL"
       }
     },
-    "Rango Tiempo Contratos": {
+    "Rango tiempo contratos": {
       "title": "Time Range Contracts",
       "fields": {
         "hasta": "until",
@@ -138,7 +138,7 @@ export class PredictiveModelComponent implements OnInit {
         "año": "year"
       }
     },
-    "Rango Val Contratos": {
+    "Rango val contratos": {
       "title": "Range Values Contracts",
       "fields": {
         "hasta": "until"
@@ -257,7 +257,8 @@ export class DragDropDialog implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialog: MatDialog,
     private sharedFunctionsService: SharedFunctionsService,
-    private _secopService: SecopService
+    private _secopService: SecopService,
+    public translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -352,7 +353,7 @@ export class DragDropDialog implements OnInit {
   openProbabilityGenerator(excel_results_prediction = {}): void {
     // Crear nombre a las filas de excel que corresponda a un contrato
     let contracts_excel: Array<string> = [];
-    Object.keys(excel_results_prediction).forEach((n_fila, _) => contracts_excel.push('DE LA FILA N. '+n_fila));
+    Object.keys(excel_results_prediction).forEach((n_fila, _) => contracts_excel.push(`${this.translate.currentLang==='es'?'DE LA FILA N.':'OF ROW N.'} ${n_fila}`));
     let results_prediction: Array<boolean> = [];
     Object.values(excel_results_prediction).forEach((result: any)=> {
       results_prediction.push(!!parseInt(result));
