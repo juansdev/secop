@@ -7,7 +7,7 @@ import { BarChart, BarSeriesOption, LineChart, LineSeriesOption, PieChart, PieSe
 import { LabelLayout, UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
 import { SecopLocalService } from 'src/app/services/secop/secop-local.service';
-import { lastValueFrom, map } from 'rxjs';
+import { concat, lastValueFrom, map } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 
 declare var $: any;
@@ -39,6 +39,7 @@ interface ValuesAll {
 })
 export class InfoGeneralComponent {
 
+  @ViewChildren('isYearGraphicsRendered') isYearGraphicsRendered: any;
   @ViewChildren('isAllGraphicsRendered') isAllGraphicsRendered: any;
 
   @Input() myMap: any;
@@ -132,6 +133,9 @@ export class InfoGeneralComponent {
   public fields_predictive_model: ValueByFields = {};
 
   private array_departments_by_map: Array<string> = [];
+  private index_year_selected: number = 0;
+  private list_chart: Array<any> = [];
+  private indexs_field: Array<any> = [];
 
 
   constructor(public translate: TranslateService, public _sharedFunctionsService: SharedFunctionsService, private _secopService: SecopService, private _secopLocalService: SecopLocalService) {
@@ -141,7 +145,6 @@ export class InfoGeneralComponent {
   }
 
   private updateAllGraphicValueDepartment() {
-    this.all_graphic_value_department = {};
     if(!this.year_selected){
       this.all_graphic_value_department[this.department_selected] = {};
       for (const year in this.graphic_values_departments_by_year) {
@@ -161,6 +164,12 @@ export class InfoGeneralComponent {
           }
         }
       }
+      const all_graphic_value_department_sort: any = {};
+      for (let index = 0; index < Object.keys(this.all_graphic_value_department).sort().length; index++) {
+        const key = Object.keys(this.all_graphic_value_department).sort()[index];
+        all_graphic_value_department_sort[key] = this.all_graphic_value_department[key];
+      }
+      this.all_graphic_value_department = all_graphic_value_department_sort;
     }
   }
 
@@ -205,24 +214,59 @@ export class InfoGeneralComponent {
   }
 
   async ngAfterViewInit() {
-    // Arreglar problema de generacion de graficos, el problema esta en que no se espera lo suficiente a que todas los elementos se carguen y se eliminen los anteriores.
-    await lastValueFrom(this.isAllGraphicsRendered.changes.pipe(
-      map(()=>{
-        let indexs_field: any = [];
+    if(this.indexs_field.length > Object.keys(this.fields_for_graphics).length && this.index_year_selected < this.array_years.length-1){
+      this.indexs_field = [];
+    }
+    await concat(this.isYearGraphicsRendered.changes, this.isAllGraphicsRendered.changes).pipe(map(()=>{
+      this.ngForRendred();
+      this.updateAllGraphicValueDepartment();
+      if(this.index_year_selected > this.array_years.length-1){
         this.isAllGraphicsRendered.forEach((element: ElementRef) => {
-          indexs_field.push(element.nativeElement.id);
+          let id: string = element.nativeElement.id;
+          let id_department = Object.keys(this.all_graphic_value_department).indexOf(this.department_selected);
+          id = id.substring(0, id.length-1) + id_department;
+          this.indexs_field.push(id);
         });
-        indexs_field.forEach((val: any, i: any)=>{
-          indexs_field[i] = val.match(/(_\d)+[\d]?/g)[0].replace('_','');
+      }
+      else {
+        this.indexs_field = [];
+        this.isYearGraphicsRendered.forEach((element: ElementRef) => {
+          this.indexs_field.push(element.nativeElement.id);
         });
-        indexs_field = [...new Set(indexs_field)];
-        this.ngForRendred(indexs_field);
-        this.updateAllGraphicValueDepartment();
-      })
-    ));
+      }
+      const values: any = Object.values(Object.values(this.graphic_values_departments_by_year)[0])[0];
+      if(this.indexs_field.length !== Object.keys(values).length){
+        this.indexs_field.forEach((val: any, i: any)=>{
+          this.indexs_field[i] = val.match(/(_\d)+[\d]?/g)[0].replace('_','');
+        });
+      }
+      this.indexs_field = this.indexs_field.filter((val: any)=>val.length>1);
+      this.indexs_field = [...new Set(this.indexs_field)];
+      if(this.indexs_field.length > Object.keys(this.fields_for_graphics).length && this.index_year_selected < this.array_years.length-1){
+        const from_indexs_field = Object.keys(this.fields_for_graphics).length*this.index_year_selected;
+        const to_indexs_field = Object.keys(this.fields_for_graphics).length*(this.index_year_selected+1);
+        this.indexs_field = this.indexs_field.slice(from_indexs_field, to_indexs_field);
+      }
+    })).subscribe(()=>{
+      setTimeout(() => {
+        if(this.index_year_selected > this.array_years.length-1){
+          if(this.params_for_generate_graphics[this.params_for_generate_graphics.length -1][0] !== 'all'){
+            for (const field in this.all_graphic_value_department[this.department_selected]) {
+              if (Object.prototype.hasOwnProperty.call(this.all_graphic_value_department[this.department_selected], field)) {
+                this.params_for_generate_graphics.push(['all', field]);
+              }
+            }
+          }
+          this._loadGraphicsWithValues(this.indexs_field, -1);
+        }
+        else {
+          this._loadGraphicsWithValues(this.indexs_field, this.index_year_selected);
+        }
+      }, 1000);
+    });
   }
 
-  ngForRendred(indexs_field: Array<string>) {
+  ngForRendred() {
     const graphic_values_departments_by_year = this.graphic_values_departments_by_year;
     const year_selected: any = this.year_selected;
     const department_selected: any = this.department_selected;
@@ -250,7 +294,6 @@ export class InfoGeneralComponent {
         }
       }
     }
-    this._loadGraphicsWithValues(indexs_field);
   }
 
   ngAfterViewChecked() {
@@ -264,6 +307,7 @@ export class InfoGeneralComponent {
   }
 
   changeYearSelectedTab(index_year_selected: number){
+    this.index_year_selected = index_year_selected;
     setTimeout(() => {
       let indexs_field: any = [];
       $('.graphics_by_deparment').each((_: number, element: any) => {
@@ -273,7 +317,7 @@ export class InfoGeneralComponent {
         indexs_field[i] = val.match(/(_\d)+[\d]?/g)[0].replace('_','');
       });
       indexs_field = [...new Set(indexs_field)];
-      if(index_year_selected > this.array_years.length-1){
+      if(this.index_year_selected > this.array_years.length-1){
         if(this.params_for_generate_graphics[this.params_for_generate_graphics.length -1][0] !== 'all'){
           for (const field in this.all_graphic_value_department[this.department_selected]) {
             if (Object.prototype.hasOwnProperty.call(this.all_graphic_value_department[this.department_selected], field)) {
@@ -284,7 +328,7 @@ export class InfoGeneralComponent {
         this._loadGraphicsWithValues(indexs_field, -1);
       }
       else {
-        this._loadGraphicsWithValues(indexs_field, index_year_selected);
+        this._loadGraphicsWithValues(indexs_field, this.index_year_selected);
       }
     }, 1000);
   }
@@ -305,7 +349,6 @@ export class InfoGeneralComponent {
         year_selected = this.array_years[tab_index_year_selected];
       }
     }
-    console.log(this.params_for_generate_graphics);
     if(this.params_for_generate_graphics.length){
       let params_for_generate_graphics = this.params_for_generate_graphics.filter((element: any) => element[0] === year_selected);
       params_for_generate_graphics.forEach((element: any, index: number)=>{
@@ -315,8 +358,6 @@ export class InfoGeneralComponent {
         element.push(indexs_field[index]);
       });
       this.graphics_echart = [];
-      console.log(params_for_generate_graphics);
-      console.log(year_selected);
       for (let index = 0; index < params_for_generate_graphics.length; index++) {
         const params_for_generate_graphic = params_for_generate_graphics[index];
         let year,field,index_field;
@@ -379,19 +420,25 @@ export class InfoGeneralComponent {
       }
     }
     const title_id = year === 'all' ? `graphic_title_all_${index_field}` : `graphic_title_${index_field}`;
-    console.log(title_id);
     if(this.translate.currentLang === 'en' || !this.translate.currentLang){
       document.getElementById(title_id)!.innerHTML = this.translate_general_label[general_field];
     }
     else {
       document.getElementById(title_id)!.innerHTML = general_field;
     }
+    if(this.list_chart.length) {
+      this.list_chart = Array(this.array_name_graphics.length);
+    }
     for (let index = 0; index < this.array_name_graphics.length; index++) {
+      if(this.list_chart[index] != null && this.list_chart[index] != '' && this.list_chart[index] != undefined) {
+        this.list_chart[index].dispose();
+      }
       const type_graphic = this.array_name_graphics[index];
       const id_element_for_render = year === 'all' ? `graphic_${type_graphic}_all_${index_field}` : `graphic_${type_graphic}_${index_field}`;
       const chartDom: any = document.getElementById(id_element_for_render)!;
       if(chartDom) {
-        const myChart = init(chartDom);
+        let myChart: any = init(chartDom);
+        this.list_chart[index] = myChart;
         this.graphics_echart.push(myChart);
         let option: EChartsOption;
         if(type_graphic === 'lineChart') {

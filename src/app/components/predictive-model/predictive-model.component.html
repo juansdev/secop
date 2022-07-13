@@ -1,39 +1,24 @@
 <div class="p-3" style="background-color:#99C7CB;">
-    <div class="border border-1 border-dark">
-        <div class="bg-white text-center fw-bold py-3 px-5" style="border-bottom: 3px solid #003A4B;">
-            <h1 class="w-75 mx-auto" style="white-space:break-spaces;"><span class="fw-bold">{{"predictive_model.title" | translate}}</span></h1>
-        </div>
-        <div class="py-4 px-5" style="background-color: #EFF6F7;">
-            <form [formGroup]="form" (ngSubmit)="onSubmit(form)">
-                <div *ngFor="let contract of arrayContract;">
-                  <h1 class="m-0 py-3">{{"predictive_model.contract" | translate}}: {{contract}}</h1>
-                  <div class="container-main">
-                    <div *ngFor="let field of fields_predictive_model | keyvalue" [class]="!['Rango tiempo contratos', 'Rango val contratos'].includes(field.key) ? 'w-auto mobile-full':'w-100'">
-                      <h2 class="text-center m-0" *ngIf="field.key==='Departamento Ejecución'">
-                        <span class="fw-bold">{{"predictive_model.contract" | translate}}</span>
-                      </h2>
-                      <h2 class="text-center m-0" *ngIf="field.key==='Departamento Entidad'">
-                        <span class="fw-bold">{{"predictive_model.entity" | translate}}</span>
-                      </h2>
-                      <h2 class="text-center m-0" *ngIf="field.key==='Modalidad de contratacion'">
-                        <span class="fw-bold">{{"predictive_model.process" | translate}}</span>
-                      </h2>
-                      <mat-form-field *ngIf="!['Rango tiempo contratos', 'Rango val contratos'].includes(field.key)" appearance="fill" class="w-100 p-2" [hintLabel]="(translate.currentLang === 'es' ? (field.key+' es requerido') : (predictiveModelTranslationValue(translate_fields_predictive_model[field.key])+' is required'))">
-                          <mat-label>{{translate.currentLang === 'es' ? field.key : predictiveModelTranslationValue(translate_fields_predictive_model[field.key])}}</mat-label>
-                          <mat-select matNativeControl [attr.data-name]="contract+'_'+field.key" [formControlName]="contract+'_'+field.key">
-                            <div *ngIf="translate.currentLang !== 'es'">
-                              <mat-option *ngFor="let field_value of field.value.sort(); let field_index = index;" [value]="field_value">
-                                {{predictiveModelTranslationValue(translate_fields_predictive_model[field.key],field_value, false)}}
-                              </mat-option>
-                            </div>
-                            <div *ngIf="translate.currentLang === 'es'">
-                              <mat-option *ngFor="let field_value of field.value" [value]="field_value">
-                                {{field_value}}
-                              </mat-option>
-                            </div>
-                          </mat-select>
-                      </mat-form-field>
-                      <mat-form-field *ngIf="['Rango tiempo contratos', 'Rango val contratos'].includes(field.key)" appearance="fill" class="w-100 p-2" [hintLabel]="(translate.currentLang === 'es' ? (field.key+' es requerido') : (predictiveModelTranslationValue(translate_fields_predictive_model[field.key])+' is required'))">
+  <div class="border border-1 border-dark">
+      <div class="bg-white text-center fw-bold py-3 px-5" style="border-bottom: 3px solid #003A4B;">
+          <h1 class="w-75 mx-auto" style="white-space:break-spaces;"><span class="fw-bold">{{"predictive_model.title" | translate}}</span></h1>
+      </div>
+      <div class="py-4 px-5" style="background-color: #EFF6F7;">
+          <form [formGroup]="form" (ngSubmit)="onSubmit(form)">
+              <div *ngFor="let contract of arrayContract;">
+                <h1 class="m-0 py-3">{{"predictive_model.contract" | translate}}: {{contract}}</h1>
+                <div class="container-main">
+                  <div *ngFor="let field of fields_predictive_model | keyvalue" [class]="!['Rango tiempo contratos', 'Rango val contratos'].includes(field.key) ? 'w-auto mobile-full':'w-100'">
+                    <h2 class="text-center m-0" *ngIf="field.key==='Departamento Ejecución'">
+                      <span class="fw-bold">{{"predictive_model.contract" | translate}}</span>
+                    </h2>
+                    <h2 class="text-center m-0" *ngIf="field.key==='Departamento Entidad'">
+                      <span class="fw-bold">{{"predictive_model.entity" | translate}}</span>
+                    </h2>
+                    <h2 class="text-center m-0" *ngIf="field.key==='Modalidad de contratacion'">
+                      <span class="fw-bold">{{"predictive_model.process" | translate}}</span>
+                    </h2>
+                    <mat-form-field *ngIf="!['Rango tiempo contratos', 'Rango val contratos'].includes(field.key)" appearance="fill" class="w-100 p-2" [hintLabel]="(translate.currentLang === 'es' ? (field.key+' es requerido') : (predictiveModelTranslationValue(translate_fields_predictive_model[field.key])+' is required'))">
                         <mat-label>{{translate.currentLang === 'es' ? field.key : predictiveModelTranslationValue(translate_fields_predictive_model[field.key])}}</mat-label>
                         <mat-select matNativeControl [attr.data-name]="contract+'_'+field.key" [formControlName]="contract+'_'+field.key">
                           <div *ngIf="translate.currentLang !== 'es'">
@@ -42,30 +27,45 @@
                             </mat-option>
                           </div>
                           <div *ngIf="translate.currentLang === 'es'">
-                            <mat-option *ngFor="let field_value of field.value" [value]="field_value">
+                            <mat-option *ngFor="let field_value of field.value.sort()" [value]="field_value">
                               {{field_value}}
                             </mat-option>
                           </div>
                         </mat-select>
-                      </mat-form-field>
-                    </div>
+                    </mat-form-field>
+                    <mat-form-field *ngIf="['Rango tiempo contratos', 'Rango val contratos'].includes(field.key)" appearance="fill" class="w-100 p-2" [hintLabel]="(translate.currentLang === 'es' ? (field.key+' es requerido') : (predictiveModelTranslationValue(translate_fields_predictive_model[field.key])+' is required'))">
+                      <mat-label>{{translate.currentLang === 'es' ? field.key : predictiveModelTranslationValue(translate_fields_predictive_model[field.key])}}</mat-label>
+                      <mat-select matNativeControl [attr.data-name]="contract+'_'+field.key" [formControlName]="contract+'_'+field.key">
+                        <div *ngIf="translate.currentLang !== 'es'">
+                          <mat-option *ngFor="let field_value of field.value; let field_index = index;" [value]="field_value">
+                            {{predictiveModelTranslationValue(translate_fields_predictive_model[field.key],field_value, false)}}
+                          </mat-option>
+                        </div>
+                        <div *ngIf="translate.currentLang === 'es'">
+                          <mat-option *ngFor="let field_value of field.value" [value]="field_value">
+                            {{field_value}}
+                          </mat-option>
+                        </div>
+                      </mat-select>
+                    </mat-form-field>
                   </div>
-                    <button type="button" mat-raised-button color="accent" class="py-2 rounded-0 fw-bold" [disabled]="arrayContract.length===1" (click)="arrayContract.splice(arrayContract.indexOf(contract), 1)">{{'predictive_model.delete_contract' | translate}} {{contract}}</button>
-                    <hr>
                 </div>
-                <div class="text-center">
-                    <button type="submit" [disabled]="!form.valid" mat-raised-button color="accent" class="col-12 col-md-6 py-2 rounded-0 fw-bold">{{'predictive_model.generate_contract' | translate}}</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <button (click)="clickCountContract()" mat-raised-button color="accent" class="mt-3 w-100 py-2 rounded-0 fw-bold">{{'predictive_model.create_form' | translate}}</button>
-    <div class="d-flex flex-wrap">
-        <div class="pe-md-3 col-12 col-md-6">
-            <button mat-raised-button (click)="openDragDrop()" color="accent" class="w-100 d-block mt-3 py-2 rounded-0 fw-bold">{{"predictive_model.import_excel" | translate}}</button>
-        </div>
-        <div class="col-12 col-md-6">
-            <a mat-raised-button color="accent" class="w-100 d-block mt-3 py-2 rounded-0 fw-bold" href="https://ds4asecop7022596406.blob.core.windows.net/util/ContratosTemplate.xlsx" target="_blank" rel="noopener noreferrer" download="plantilla_excel_secop">{{"predictive_model.download_excel" | translate}}</a>
-        </div>
-    </div>
+                  <button type="button" mat-raised-button color="accent" class="py-2 rounded-0 fw-bold" [disabled]="arrayContract.length===1" (click)="arrayContract.splice(arrayContract.indexOf(contract), 1)">{{'predictive_model.delete_contract' | translate}} {{contract}}</button>
+                  <hr>
+              </div>
+              <div class="text-center">
+                  <button type="submit" [disabled]="!form.valid" mat-raised-button color="accent" class="col-12 col-md-6 py-2 rounded-0 fw-bold">{{'predictive_model.generate_contract' | translate}}</button>
+              </div>
+          </form>
+      </div>
+  </div>
+  <button (click)="clickCountContract()" mat-raised-button color="accent" class="mt-3 w-100 py-2 rounded-0 fw-bold">{{'predictive_model.create_form' | translate}}</button>
+  <div class="d-flex flex-wrap">
+      <div class="pe-md-3 col-12 col-md-6">
+          <button mat-raised-button (click)="openDragDrop()" color="accent" class="w-100 d-block mt-3 py-2 rounded-0 fw-bold">{{"predictive_model.import_excel" | translate}}</button>
+      </div>
+      <div class="col-12 col-md-6">
+          <a mat-raised-button color="accent" class="w-100 d-block mt-3 py-2 rounded-0 fw-bold" href="https://ds4asecop7022596406.blob.core.windows.net/util/ContratosTemplate.xlsx" target="_blank" rel="noopener noreferrer" download="plantilla_excel_secop">{{"predictive_model.download_excel" | translate}}</a>
+      </div>
+  </div>
 </div>

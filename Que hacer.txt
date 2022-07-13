@@ -1,15 +1,5 @@
 PENDIENTE:
 
-1. Arreglar graficos All. LISTO.
-
-2. Arreglar generacion de graficos cuando se selecciona año. LISTO.
-
-3. Arreglar Orden por ID en modelo predictivo. LISTO.
-
-4. Arreglar alto de sección Inicio. LISTO.
-
-5. Arreglar traducción en Dialog Result y en procesamiento de predicción en Excel. LISTO.
-
 6. Cambiar responsive a minimo tablet para cambiarse. Revisar el responsive en celular para que quede dinamico  y no se necesite recargar pagina para que quede.
 
 POSIBLE SOLUCIÓN A LO DE ABRIR MULTIPLES DIALOG AL ACTUALIZARSE ISHANDSET:

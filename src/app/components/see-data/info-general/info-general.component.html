@@ -1,4 +1,4 @@
-<div *ngIf="!department_selected" class="d-flex justify-content-center align-items-center overflow-auto h-100"
+<div *ngIf="!department_selected" class="d-flex justify-content-center align-items-center overflow-auto"
   style="resize: horizontal; background-color: #003a4b; border-left: 1px solid #003A4B;">
   <h1 class="text-center fw-bold p-3 m-0 text-white">{{"dashboard.info.title_info" | translate}}</h1>
 </div>
@@ -16,7 +16,7 @@
                   <mat-card-title [id]="'graphic_title_'+year_i+'_'+field_i+'_'+department_i"></mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
-                    <div #isAllGraphicsRendered *ngFor="let name_graphic of array_name_graphics; let last = last;" class="d-inline-block graphics_by_deparment" style="width: 100%; height: 500px;" [id]="'graphic_'+name_graphic+'_'+year_i+'_'+field_i+'_'+department_i">
+                    <div #isYearGraphicsRendered *ngFor="let name_graphic of array_name_graphics;" class="d-inline-block graphics_by_deparment" style="width: 100%; height: 500px;" [id]="'graphic_'+name_graphic+'_'+year_i+'_'+field_i+'_'+department_i">
                     </div>
                 </mat-card-content>
               </mat-card>
@@ -27,15 +27,17 @@
     </div>
     <mat-tab *ngIf="!year_selected && Object.keys(graphic_values_departments_by_year).length" [label]="'dashboard.info.show_all'| translate">
       <div *ngFor="let value_by_department of all_graphic_value_department | keyvalue; let department_i = index;">
-        <mat-card *ngFor="let value_by_field of value_by_department.value | keyvalue; let field_i = index;" style="resize: horizontal;" class="col-md-6 overflow-auto d-inline-block card_with_graphics">
-          <mat-card-header>
-            <mat-card-title [id]="'graphic_title_all_'+field_i+'_'+department_i"></mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-              <div *ngFor="let name_graphic of array_name_graphics; let last = last;" class="d-inline-block graphics_by_deparment" style="width: 100%; height: 500px;" [id]="'graphic_'+name_graphic+'_all_'+field_i+'_'+department_i">
-              </div>
-          </mat-card-content>
-        </mat-card>
+        <div *ngIf="value_by_department.key === department_selected">
+          <mat-card *ngFor="let value_by_field of value_by_department.value | keyvalue; let field_i = index;" style="resize: horizontal;" class="col-md-6 overflow-auto d-inline-block card_with_graphics">
+            <mat-card-header>
+              <mat-card-title [id]="'graphic_title_all_'+field_i+'_'+department_i"></mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div #isAllGraphicsRendered *ngFor="let name_graphic of array_name_graphics;" class="d-inline-block graphics_by_deparment" style="width: 100%; height: 500px;" [id]="'graphic_'+name_graphic+'_all_'+field_i+'_'+department_i">
+                </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
       </div>
     </mat-tab>
   </mat-tab-group>
