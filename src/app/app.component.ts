@@ -19,9 +19,7 @@ export class AppComponent {
   isHandset$: Observable<Boolean> = this.SharedFunctionsService.isHandset$;
 
   constructor(public translate: TranslateService, private router: Router, private SharedFunctionsService: SharedFunctionsService) {
-    // Register translation languages
     translate.addLangs(['en', 'es']);
-    // Set default language
     translate.setDefaultLang('en');
   }
 

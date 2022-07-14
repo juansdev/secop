@@ -8,7 +8,7 @@
     <!-- Menu - PC -->
     <img src="assets/img/logo2.webp" width="50px" alt="Logo Team 102" [class]="(isHandset$ | async) ? 'd-none' : 'me-3'">
     <!-- All -->
-    <span class="fw-bold">{{'navbar.title' | translate}}</span>
+    <span class="fw-bold text-wrap" style="font-size: 2vh; line-height: normal;">{{'navbar.title' | translate}}</span>
     <!-- Menu - PC -->
     <span class="spacer"></span>
     <div [class]="(isHandset$ | async) ? 'd-none' : ''">

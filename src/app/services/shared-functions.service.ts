@@ -1,4 +1,4 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { first, map, shareReplay } from 'rxjs/operators';
@@ -20,10 +20,13 @@ export class SharedFunctionsService {
   constructor(public translate: TranslateService , public dialog: MatDialog, private observer: BreakpointObserver, private _secopLocalService: SecopLocalService, private _secopService: SecopService) { }
 
   isHandset$: Observable<boolean> = this.observer.observe([Breakpoints.Handset, Breakpoints.Tablet])
-    .pipe(first(),
-      map(result => result.matches),
-      shareReplay()
-    );
+  .pipe(
+    map(result => result.matches),
+    shareReplay()
+  );
+
+  isHandset2$: Observable<BreakpointState> = this.observer.observe([Breakpoints.Handset, Breakpoints.Tablet]);
+  suscriptionIsHandset: any;
 
   camelize(str: string): string {
     return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
@@ -141,9 +144,13 @@ export class SharedFunctionsService {
   }
 
   async showMessagePredictive(array_contract: Array<string>, message_result: string, message_results: Array<string> = [], index_contract: number = 0) {
-    await lastValueFrom(this.isHandset$.pipe(map((isHandset) => {
-      const dialog = this.dialog.open(ResultDialog, {
-        width: isHandset ? '100%' : '75%',
+    this.suscriptionIsHandset = this.isHandset2$.subscribe(result => {
+      if(this.suscriptionIsHandset){
+        this.dialog.closeAll();
+        this.suscriptionIsHandset.unsubscribe();
+      }
+      this.dialog.open(ResultDialog, {
+        width: result.matches ? '100%' : '75%',
         height: index_contract ? '90%' : 'auto',
         data: {
           result: message_result.replace(' contract_name', ''),
@@ -152,7 +159,7 @@ export class SharedFunctionsService {
         }
       });
       index_contract = 0;
-    })));
+    });
   }
 
   async simulateProgressBar(dialogRef: MatDialogRef<CalculateDialog>, array_contract: Array<string>, results_prediction: Array<boolean> = [true]): Promise<void> {

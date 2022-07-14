@@ -1,12 +1,5 @@
 PENDIENTE:
 
-6. Cambiar responsive a minimo tablet para cambiarse. Revisar el responsive en celular para que quede dinamico  y no se necesite recargar pagina para que quede.
-
-POSIBLE SOLUCIÓN A LO DE ABRIR MULTIPLES DIALOG AL ACTUALIZARSE ISHANDSET:
-Eliminar vinculación con Shared-Function (En teoría se mantiene actualizando el componente ModelPredict debido a la vinculacion existente con el isHandset en sharedFuncion).
-
-7. Revisar publicación resultado de compartir página que quede la descripción que es. LISTO.
-
 8. Comentar código Fuente y README documentado.
 
 9. Convertir todos los CSS en SCSS.

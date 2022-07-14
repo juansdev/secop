@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, map, Observable, Subscription } from 'rxjs';
 import { SecopService } from 'src/app/services/secop/secop.service';
 import { SharedFunctionsService, ValueByFields } from '../../services/shared-functions.service';
 
@@ -151,6 +151,7 @@ export class PredictiveModelComponent implements OnInit {
   public countContract: string = '001';
   public arrayContract: Array<string> = [this.countContract];
   public form: FormGroup = new FormGroup({});
+  public suscriptionIsHandset: any;
 
   constructor(public translate: TranslateService, private dialog: MatDialog, private _secopService: SecopService, public sharedFunctionsService: SharedFunctionsService, private fb: FormBuilder) {
     this.fields_predictive_model = this.sharedFunctionsService.getDataLocalOrRam('FieldsPredictiveModel') ? JSON.parse(this.sharedFunctionsService.getDataLocalOrRam('FieldsPredictiveModel')) : {};
@@ -222,20 +223,32 @@ export class PredictiveModelComponent implements OnInit {
   }
 
   openProbabilityGenerator(results_prediction: Array<boolean> = [true]): void {
-    const dialogRef: MatDialogRef<CalculateDialog> = this.dialog.open(CalculateDialog, {
-      width: this.sharedFunctionsService.isHandset$ ? '100%' : '75%',
-      data: {
-        progress: 0,
-        progress_class: 'width: 0%',
-        number_form: this.arrayContract[0]
+    this.suscriptionIsHandset = this.sharedFunctionsService.isHandset2$.subscribe(result=>{
+      if(this.suscriptionIsHandset){
+        this.dialog.closeAll();
+        this.suscriptionIsHandset.unsubscribe();
       }
+      const dialogRef: MatDialogRef<CalculateDialog> = this.dialog.open(CalculateDialog, {
+        width: result.matches ? '100%' : '75%',
+        data: {
+          progress: 0,
+          progress_class: 'width: 0%',
+          number_form: this.arrayContract[0]
+        }
+      });
+      this.sharedFunctionsService.simulateProgressBar(dialogRef, this.arrayContract, results_prediction);
     });
-    this.sharedFunctionsService.simulateProgressBar(dialogRef, this.arrayContract, results_prediction);
   }
 
   openDragDrop(): void {
-    this.dialog.open(DragDropDialog, {
-      width: this.sharedFunctionsService.isHandset$ ? '100%' : '75%'
+    this.suscriptionIsHandset = this.sharedFunctionsService.isHandset2$.subscribe(result=>{
+      if(this.suscriptionIsHandset){
+        this.dialog.closeAll();
+        this.suscriptionIsHandset.unsubscribe();
+      }
+      this.dialog.open(DragDropDialog, {
+        width: result.matches ? '100%' : '75%'
+      });
     });
   }
 
@@ -251,6 +264,7 @@ export class DragDropDialog implements OnInit {
   @ViewChild("fileDropRef", { static: false }) fileDropEl: any = null;
   file: any;
   file_loaded: boolean = false;
+  public suscriptionIsHandset: any;
 
   constructor(
     private dialogRef: MatDialogRef<DragDropDialog>,
@@ -358,15 +372,21 @@ export class DragDropDialog implements OnInit {
     Object.values(excel_results_prediction).forEach((result: any)=> {
       results_prediction.push(!!parseInt(result));
     });
-    const dialogRef: MatDialogRef<CalculateDialog> = this.dialog.open(CalculateDialog, {
-      width: this.sharedFunctionsService.isHandset$ ? '100%' : '75%',
-      data: {
-        progress: 0,
-        progress_class: 'width: 0%',
-        number_form: contracts_excel
+    this.suscriptionIsHandset = this.sharedFunctionsService.isHandset2$.subscribe(result=>{
+      if(this.suscriptionIsHandset){
+        this.dialog.closeAll();
+        this.suscriptionIsHandset.unsubscribe();
       }
+      const dialogRef: MatDialogRef<CalculateDialog> = this.dialog.open(CalculateDialog, {
+        width: result.matches ? '100%' : '75%',
+        data: {
+          progress: 0,
+          progress_class: 'width: 0%',
+          number_form: contracts_excel
+        }
+      });
+      this.sharedFunctionsService.simulateProgressBar(dialogRef, contracts_excel, results_prediction);
     });
-    this.sharedFunctionsService.simulateProgressBar(dialogRef, contracts_excel, results_prediction);
   }
 
 }
