@@ -2,8 +2,8 @@
     <app-extension-panel [name_departments]="name_departments" (department_selected)="setDepartmentSelected($event)" id="accordion-vertical"></app-extension-panel>
     <div class="position-relative">
       <!-- Mostrar Años -->
-      <div class="position-absolute w-100 text-center d-block d-flex justify-content-start flex-column py-2 align-items-start flex-wrap" style="gap: 30px; padding-left: 15vh;">
-        <button mat-raised-button #loadDate color="warn" style="z-index: 3;" (click)="infoGeneral.loadAllInfoDepartmentsByYear(); updateLoadDate(year_selected?year_selected:'Todos');" [disabled]="loaded_date[year_selected?year_selected:'Todos']">
+      <div class="container-options-map position-absolute w-100 text-center d-block d-flex justify-content-start flex-column py-2 align-items-start flex-wrap" style="gap: 30px; padding-left: 15vh;">
+        <button mat-raised-button #loadDate color="warn" style="z-index: 3;" class="load-data-map" (click)="infoGeneral.loadAllInfoDepartmentsByYear(); updateLoadDate(year_selected?year_selected:'Todos');" [disabled]="loaded_date[year_selected?year_selected:'Todos']">
           {{year_selected?("dashboard.load_all_by_year" | translate)+' '+year_selected:("dashboard.load_all" | translate)}}
         </button>
         <mat-form-field appearance="fill" style="z-index: 3;">

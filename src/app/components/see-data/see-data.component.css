@@ -1,9 +1,21 @@
+@media (max-width: 576px) {
+  .load-data-map {
+    line-height: inherit;
+  }
+}
+
 @media (max-width: 768px) {
   .container-map-main {
     display: block;
   }
   #accordion-vertical {
     display: none;
+  }
+  .container-options-map {
+    padding: 0px 20vh 0px 1vh !important;
+    bottom: 0px;
+    left: 0px;
+    gap: initial !important;
   }
 }
 

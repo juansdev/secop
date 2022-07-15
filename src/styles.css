@@ -54,3 +54,17 @@ app-footer{
     overflow: auto !important;
   }
 }
+
+@media (max-width: 768px){
+  .container-options-map>mat-form-field {
+    width: 100%;
+    margin: auto;
+  }
+}
+
+
+.load-data-map .mat-button-wrapper {
+  white-space: normal;
+  font-size: 2vh;
+  text-align: left;
+}
